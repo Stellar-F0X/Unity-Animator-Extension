@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 8c62e13eaae31e74b9cd319f846830f5
+timeCreated: 1505231042
+licenseType: Store
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 135162
+  packageName: 3D Game Kit Lite
+  packageVersion: 1.8.2
+  assetPath: Assets/3DGamekitLite/Art/Shaders/Respawn.shader
+  uploadId: 462213

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 9d620787554a948e3876fe7dbdba24e8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 135162
+  packageName: 3D Game Kit Lite
+  packageVersion: 1.8.2
+  assetPath: Assets/3DGamekitLite/Prefabs/Characters/Ellen/Ellen.prefab
+  uploadId: 462213
