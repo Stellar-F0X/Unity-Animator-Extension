@@ -14,10 +14,7 @@ namespace AnimatorExpansion
 
         private void Awake()
         {
-            for (int i = 0; i < _animationEvents.Count; i++)
-            {
-                _animationEvents[i].eventHash = Utility.StringToHash(_animationEvents[i].eventName);
-            }
+            
         }
 
 
