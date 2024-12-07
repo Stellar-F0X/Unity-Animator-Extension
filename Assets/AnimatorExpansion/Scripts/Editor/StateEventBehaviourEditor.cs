@@ -33,13 +33,15 @@ namespace AnimatorExpansion.Editor
         private ReorderableList _animationEventList;
 
 
+        
         private void OnEnable()
         {
-            SerializedProperty property = serializedObject.FindProperty("animationEventList");
+            _animationEventList = new ReorderableList(serializedObject,  serializedObject.FindProperty("animationEventList"), true, true, false, false);
             
-            _animationEventList = new ReorderableList(serializedObject, property, true, true, false, false);
             _animationEventList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Animation Event List");
+            
             _animationEventList.elementHeightCallback = index => EditorGUIUtility.singleLineHeight * 3;
+            
             _animationEventList.drawElementCallback = this.DrawAnimationEventGUI;
         }
 
@@ -243,7 +245,8 @@ namespace AnimatorExpansion.Editor
             {
                 eventName = _newEventName,
                 eventHash = canUseHash ? 0 : Utility.StringToHash(_newEventName),
-                triggerTime = _previewNormalizedTime
+                triggerTime = _previewNormalizedTime,
+                repeatTriggerRange = new MinMax(_previewNormalizedTime, _previewNormalizedTime)
             };
 
             eventList.Add(animationEvent);

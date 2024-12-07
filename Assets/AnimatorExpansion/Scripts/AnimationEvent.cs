@@ -2,6 +2,7 @@ using System;
 using AnimatorExpansion.Parameters;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace AnimatorExpansion
 {
@@ -12,6 +13,10 @@ namespace AnimatorExpansion
         public int eventHash; 
         public float triggerTime;
         public SEventParameter parameter;
+        
+        public EEventSendType sendType;
+        public MinMax repeatTriggerRange;
+        
         public bool hasTriggered;
     }
 }
