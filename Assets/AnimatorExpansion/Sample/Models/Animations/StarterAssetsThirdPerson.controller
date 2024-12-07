@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventName: OnJump
-  triggerTime: 0.631
+  triggerTime: 0.473
 --- !u!114 &-8404588960376802524
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -27,7 +27,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventName: 
-  triggerTime: 1
+  triggerTime: 0.5
 --- !u!1102 &-7469282255733588732
 AnimatorState:
   serializedVersion: 6

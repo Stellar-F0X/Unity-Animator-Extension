@@ -10,7 +10,7 @@ namespace AnimatorExpansion.Editor
     public static class AnimationEditorUtility
     {
         private const BindingFlags _BINDING_FLAGS = BindingFlags.NonPublic | BindingFlags.Instance;
-        
+
 
         public static ChildAnimatorState FindMatchingStateRecursion(AnimatorStateMachine stateMachine, StateMachineBehaviour behaviour)
         {
@@ -48,12 +48,12 @@ namespace AnimatorExpansion.Editor
 
                 foreach (var motion in blendTree.children)
                 {
-                    if (motion.threshold <= targetWeight && (lowerNeighbor == null || motion.threshold > lowerNeighbor.Value.threshold))
+                    if (motion.threshold <= targetWeight && (lowerNeighbor is null || motion.threshold > lowerNeighbor.Value.threshold))
                     {
                         lowerNeighbor = motion;
                     }
 
-                    if (motion.threshold >= targetWeight && (upperNeighbor == null || motion.threshold < upperNeighbor.Value.threshold))
+                    if (motion.threshold >= targetWeight && (upperNeighbor is null || motion.threshold < upperNeighbor.Value.threshold))
                     {
                         upperNeighbor = motion;
                     }
@@ -63,13 +63,11 @@ namespace AnimatorExpansion.Editor
                 {
                     if (Mathf.Approximately(child.threshold, lowerNeighbor.Value.threshold))
                     {
-                        weight = 1.0f - Mathf.InverseLerp(lowerNeighbor.Value.threshold, upperNeighbor.Value.threshold,
-                            targetWeight);
+                        weight = 1.0f - Mathf.InverseLerp(lowerNeighbor.Value.threshold, upperNeighbor.Value.threshold, targetWeight);
                     }
                     else if (Mathf.Approximately(child.threshold, upperNeighbor.Value.threshold))
                     {
-                        weight = Mathf.InverseLerp(lowerNeighbor.Value.threshold, upperNeighbor.Value.threshold,
-                            targetWeight);
+                        weight = Mathf.InverseLerp(lowerNeighbor.Value.threshold, upperNeighbor.Value.threshold, targetWeight);
                     }
                 }
                 else
@@ -97,7 +95,7 @@ namespace AnimatorExpansion.Editor
 
         public static void EnforceTPose(Animator animator)
         {
-            if (animator == null || animator.avatar == null)
+            if (animator is null || animator.avatar is null)
             {
                 return;
             }
@@ -159,7 +157,7 @@ namespace AnimatorExpansion.Editor
             {
                 return blendTree.children
                     .Select(child => GetAnimationClipFromMotionOrNull(child.motion))
-                    .FirstOrDefault(childClip => childClip != null);
+                    .FirstOrDefault(childClip => childClip is not null);
             }
 
             return null;
@@ -170,9 +168,9 @@ namespace AnimatorExpansion.Editor
         {
             matchingState = animatorController.layers
                 .Select(layer => FindMatchingStateRecursion(layer.stateMachine, behaviour))
-                .FirstOrDefault(state => state.state != null);
+                .FirstOrDefault(state => state.state is not null);
 
-            if (matchingState.state == null)
+            if (matchingState.state is null)
             {
                 return false;
             }
@@ -181,17 +179,17 @@ namespace AnimatorExpansion.Editor
                 return true;
             }
         }
-        
+
 
         public static void GetCurrentAnimatorAndController(out AnimatorController controller, out Animator animator)
         {
             Type animatorWindowType = Type.GetType("UnityEditor.Graphs.AnimatorControllerTool, UnityEditor.Graphs");
-            
+
             EditorWindow window = EditorWindow.GetWindow(animatorWindowType);
 
             FieldInfo animatorField = animatorWindowType.GetField("m_PreviewAnimator", _BINDING_FLAGS);
             FieldInfo controllerField = animatorWindowType.GetField("m_AnimatorController", _BINDING_FLAGS);
-            
+
             animator = animatorField.GetValue(window) as Animator;
             controller = controllerField.GetValue(window) as AnimatorController;
         }

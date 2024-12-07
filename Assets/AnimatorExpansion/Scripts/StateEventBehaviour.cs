@@ -15,13 +15,6 @@ namespace AnimatorExpansion
         private int _eventHash;
         private bool _hasTriggered;
 
-
-        private void Awake()
-        {
-            _eventHash = Utility.StringToHash(eventName);
-        }
-
-
         
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {

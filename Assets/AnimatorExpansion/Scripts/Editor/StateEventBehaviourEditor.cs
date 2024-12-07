@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor.Animations;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
+using UnityEngine.UIElements;
 
 namespace AnimatorExpansion.Editor
 {
@@ -21,6 +22,12 @@ namespace AnimatorExpansion.Editor
         private AnimationMixerPlayable _previewMixer;
 
 
+        public override VisualElement CreatePreview(VisualElement inspectorPreviewWindow)
+        {
+            return base.CreatePreview(inspectorPreviewWindow);
+        }
+
+
         public override void OnInspectorGUI()
         {
             using (new GUIDisableScope(Application.isPlaying))
@@ -29,11 +36,11 @@ namespace AnimatorExpansion.Editor
 
                 var eventSender = (StateEventBehaviour)target;
 
-                if (_controller == null || _animator == null)
+                if (_controller is null || _animator is null)
                 {
                     AnimationEditorUtility.GetCurrentAnimatorAndController(out _controller, out _animator);
 
-                    if (_animator == null)
+                    if (_animator is null)
                     {
                         EditorGUILayout.HelpBox("Please click the Animator GameObject.", MessageType.Error, true);
                         return;
@@ -158,7 +165,7 @@ namespace AnimatorExpansion.Editor
             {
                 _previewAnimationClip = AnimationEditorUtility.GetAnimationClipFromMotionOrNull(matchingState.state?.motion);
 
-                if (_previewAnimationClip == null)
+                if (_previewAnimationClip is null)
                 {
                     return false;
                 }
