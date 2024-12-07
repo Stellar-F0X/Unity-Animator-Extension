@@ -9,34 +9,8 @@ namespace AnimatorExpansion.Editor
 {
     public static class AnimationEditorUtility
     {
-        public static bool TryGetValidAnimatorController(out AnimatorController animator, out string errorMessage)
-        {
-            animator = null;
-            errorMessage = string.Empty;
-            GameObject targetGameObject = Selection.activeGameObject;
-
-            if (ReferenceEquals(targetGameObject, null))
-            {
-                errorMessage = "Please select a GameObject with an Animator to preview.";
-                return false;
-            }
-
-            if (targetGameObject.TryGetComponent(out Animator anim) == false)
-            {
-                errorMessage = "The selected GameObject does not have an Animator component.";
-                return false;
-            }
-
-            if (anim.runtimeAnimatorController is not AnimatorController animatorController)
-            {
-                errorMessage = "The selected Animator does not have a valid AnimatorController.";
-                return false;
-            }
-
-            animator = animatorController;
-            return true;
-        }
-
+        private const BindingFlags _BINDING_FLAGS = BindingFlags.NonPublic | BindingFlags.Instance;
+        
 
         public static ChildAnimatorState FindMatchingStateRecursion(AnimatorStateMachine stateMachine, StateMachineBehaviour behaviour)
         {
@@ -74,14 +48,12 @@ namespace AnimatorExpansion.Editor
 
                 foreach (var motion in blendTree.children)
                 {
-                    if (motion.threshold <= targetWeight &&
-                        (lowerNeighbor == null || motion.threshold > lowerNeighbor.Value.threshold))
+                    if (motion.threshold <= targetWeight && (lowerNeighbor == null || motion.threshold > lowerNeighbor.Value.threshold))
                     {
                         lowerNeighbor = motion;
                     }
 
-                    if (motion.threshold >= targetWeight &&
-                        (upperNeighbor == null || motion.threshold < upperNeighbor.Value.threshold))
+                    if (motion.threshold >= targetWeight && (upperNeighbor == null || motion.threshold < upperNeighbor.Value.threshold))
                     {
                         upperNeighbor = motion;
                     }
@@ -123,11 +95,9 @@ namespace AnimatorExpansion.Editor
         }
 
 
-        public static void EnforceTPose()
+        public static void EnforceTPose(Animator animator)
         {
-            GameObject selected = Selection.activeGameObject;
-
-            if (!selected || !selected.TryGetComponent(out Animator animator) || !animator.avatar)
+            if (animator == null || animator.avatar == null)
             {
                 return;
             }
@@ -166,8 +136,7 @@ namespace AnimatorExpansion.Editor
 
         public static float GetBlendParameterValue(BlendTree blendTree, string parameterName)
         {
-            var methodInfo =
-                typeof(BlendTree).GetMethod("GetInputBlendValue", BindingFlags.NonPublic | BindingFlags.Instance);
+            var methodInfo = typeof(BlendTree).GetMethod("GetInputBlendValue", _BINDING_FLAGS);
 
             if (methodInfo == null)
             {
@@ -211,6 +180,20 @@ namespace AnimatorExpansion.Editor
             {
                 return true;
             }
+        }
+        
+
+        public static void GetCurrentAnimatorAndController(out AnimatorController controller, out Animator animator)
+        {
+            Type animatorWindowType = Type.GetType("UnityEditor.Graphs.AnimatorControllerTool, UnityEditor.Graphs");
+            
+            EditorWindow window = EditorWindow.GetWindow(animatorWindowType);
+
+            FieldInfo animatorField = animatorWindowType.GetField("m_PreviewAnimator", _BINDING_FLAGS);
+            FieldInfo controllerField = animatorWindowType.GetField("m_AnimatorController", _BINDING_FLAGS);
+            
+            animator = animatorField.GetValue(window) as Animator;
+            controller = controllerField.GetValue(window) as AnimatorController;
         }
     }
 }
