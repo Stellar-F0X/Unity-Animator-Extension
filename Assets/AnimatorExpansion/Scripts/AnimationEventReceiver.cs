@@ -9,8 +9,7 @@ namespace AnimatorExpansion
 {
     public sealed class AnimationEventReceiver : MonoBehaviour
     {
-        [SerializeField]
-        private List<AnimationEvent> _animationEvents = new List<AnimationEvent>();
+        
 
 
         private void Awake()

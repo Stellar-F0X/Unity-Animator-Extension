@@ -15,7 +15,27 @@ MonoBehaviour:
   animationEventList:
   - eventName: 
     eventHash: 0
+    triggerTime: 0.65
+    sendType: 1
+    repeatTriggerRange:
+      min: 0
+      max: 0
+    hasTriggered: 0
+  - eventName: 
+    eventHash: 0
     triggerTime: 0
+    sendType: 5
+    repeatTriggerRange:
+      min: 0.592
+      max: 0.915
+    hasTriggered: 0
+  - eventName: 
+    eventHash: 0
+    triggerTime: 0.41
+    sendType: 4
+    repeatTriggerRange:
+      min: 0.351
+      max: 0.726
     hasTriggered: 0
   _initialized: 0
   _receiverSearchType: 0
@@ -31,7 +51,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18af2ec660677944c852056699f54797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationEventList: []
+  animationEventList:
+  - eventName: 
+    eventHash: 0
+    triggerTime: 0.487
+    sendType: 0
+    repeatTriggerRange:
+      min: 0.487
+      max: 0.487
+    hasTriggered: 0
+  - eventName: 
+    eventHash: 0
+    triggerTime: 0.487
+    sendType: 0
+    repeatTriggerRange:
+      min: 0.487
+      max: 0.487
+    hasTriggered: 0
   _initialized: 0
   _receiverSearchType: 0
 --- !u!1102 &-7469282255733588732

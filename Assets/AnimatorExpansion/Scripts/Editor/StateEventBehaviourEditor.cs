@@ -33,13 +33,15 @@ namespace AnimatorExpansion.Editor
         private ReorderableList _animationEventList;
 
 
+        
         private void OnEnable()
         {
-            SerializedProperty property = serializedObject.FindProperty("animationEventList");
+            _animationEventList = new ReorderableList(serializedObject,  serializedObject.FindProperty("animationEventList"), true, true, false, false);
             
-            _animationEventList = new ReorderableList(serializedObject, property, true, true, false, false);
             _animationEventList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Animation Event List");
+            
             _animationEventList.elementHeightCallback = index => EditorGUIUtility.singleLineHeight * 3;
+            
             _animationEventList.drawElementCallback = this.DrawAnimationEventGUI;
         }
 
@@ -174,9 +176,6 @@ namespace AnimatorExpansion.Editor
 
             using (new EditorGUILayout.VerticalScope(GUI.skin.window))
             {
-                _newEventName = EditorGUILayout.TextField("Event Name", _newEventName);
-                _previewNormalizedTime = EditorGUILayout.Slider("Trigger Time", _previewNormalizedTime, 0f, 1f);
-
                 if (_isPreviewing)
                 {
                     if (GUILayout.Button("Stop Preview"))
@@ -230,7 +229,7 @@ namespace AnimatorExpansion.Editor
             }
             
             SerializedProperty element = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
-
+            
             EditorGUI.PropertyField(rect, element, true);
         }
 
@@ -243,7 +242,8 @@ namespace AnimatorExpansion.Editor
             {
                 eventName = _newEventName,
                 eventHash = canUseHash ? 0 : Utility.StringToHash(_newEventName),
-                triggerTime = _previewNormalizedTime
+                triggerTime = _previewNormalizedTime,
+                repeatTriggerRange = new MinMax(_previewNormalizedTime, _previewNormalizedTime)
             };
 
             eventList.Add(animationEvent);
