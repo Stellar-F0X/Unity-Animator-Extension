@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AnimatorExpansion.Parameters;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -18,18 +19,9 @@ namespace AnimatorExpansion
         }
 
 
-        public void TriggerEvent(int eventHash)
+        public void TriggerEvent(int eventHash, SEventParameter sEventParameter)
         {
-            var animationEvent = _animationEvents.FirstOrDefault(se => se.eventHash == eventHash);
-
-            if (animationEvent != null)
-            {
-                animationEvent.animationEvent?.Invoke();
-            }
-            else
-            {
-                Debug.LogError("not");
-            }
+            
         }
     }
 }

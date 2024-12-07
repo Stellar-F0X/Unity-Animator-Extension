@@ -1,24 +1,51 @@
 using System;
+using System.Collections.Generic;
+using AnimatorExpansion.Parameters;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 
 namespace AnimatorExpansion
 {
     public class StateEventBehaviour : StateMachineBehaviour
     {
-        public string eventName;
+        public List<AnimationEvent> animationEventList = new List<AnimationEvent>();
+        
+        private AnimationEventReceiver _receiver;
+        
+        [SerializeField]
+        private bool _initialized;
+        
+        [SerializeField]
+        private ESearchType _receiverSearchType;
 
-        [Range(0f, 1f)] 
-        public float triggerTime;
-
-        private int _eventHash;
-        private bool _hasTriggered;
-
+        
+        
         
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            _hasTriggered = false;
+            if (_initialized == false)
+            {
+                _initialized = true;
+                
+                switch (_receiverSearchType)
+                {
+                    case ESearchType.Parent: _receiver = animator.GetComponentInParent<AnimationEventReceiver>(); break;
+                    
+                    case ESearchType.Sibling: _receiver = animator.GetComponent<AnimationEventReceiver>(); break;
+                    
+                    case ESearchType.Child: _receiver = animator.GetComponentInChildren<AnimationEventReceiver>(); break;
+                }
+
+                Debug.Assert(_receiver != null, "There are no Receivers on this object or its hierarchy.");
+            }
+            
+            foreach (var animationEvent in animationEventList)
+            {
+                animationEvent.hasTriggered = false;
+            }
         }
 
         
@@ -27,10 +54,21 @@ namespace AnimatorExpansion
         {
             float currentTime = stateInfo.normalizedTime % 1f;
 
-            if (!_hasTriggered && currentTime >= triggerTime)
+            foreach (var animationEvent in animationEventList)
             {
-                this.NotifyEventToReceiver(animator);
-                this._hasTriggered = true;
+                if (!animationEvent.hasTriggered && currentTime >= animationEvent.triggerTime)
+                {
+                    if (animationEvent.parameter.hasParameter)
+                    {
+                        _receiver.TriggerEvent(animationEvent.eventHash, animationEvent.parameter);
+
+                        animationEvent.hasTriggered = true;
+                    }
+                    else
+                    {
+                        Debug.LogError("There are no parameters to pass from this event.");
+                    }
+                }
             }
         }
 
@@ -39,19 +77,6 @@ namespace AnimatorExpansion
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             
-        }
-
-
-        private void NotifyEventToReceiver(Animator animator)
-        {
-            if (animator.TryGetComponent<AnimationEventReceiver>(out var receiver))
-            {
-                receiver.TriggerEvent(_eventHash);
-            }
-            else
-            {
-                Debug.LogError("No Animation Event Receiver");
-            }
         }
     }
 }

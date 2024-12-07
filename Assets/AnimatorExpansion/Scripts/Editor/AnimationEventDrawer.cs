@@ -8,6 +8,8 @@ namespace AnimatorExpansion.Editor
     {
         private float _verticalPosition = 0;
 
+        private bool _foldOut;
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             using (new EditorGUI.PropertyScope(position, label, property))
@@ -16,43 +18,47 @@ namespace AnimatorExpansion.Editor
 
                 SerializedProperty eventName = property.FindPropertyRelative("eventName");
                 SerializedProperty eventHash = property.FindPropertyRelative("eventHash");
-                SerializedProperty unityEvent = property.FindPropertyRelative("animationEvent");
+                SerializedProperty triggerTime = property.FindPropertyRelative("triggerTime");
 
-                _verticalPosition = EditorGUIUtility.singleLineHeight;
-                Rect stateNameRect = new Rect(position.x, _verticalPosition, position.width, EditorGUIUtility.singleLineHeight);
-                _verticalPosition += EditorGUIUtility.singleLineHeight + 4;
-                Rect stateHashRect = new Rect(position.x, position.y + _verticalPosition, position.width, EditorGUIUtility.singleLineHeight);
-                _verticalPosition += EditorGUIUtility.singleLineHeight + 4;
-                Rect stateEventRect = new Rect(position.x, position.y + _verticalPosition, position.width, EditorGUI.GetPropertyHeight(unityEvent));
-                _verticalPosition += EditorGUI.GetPropertyHeight(unityEvent);
+                float nameWidth = position.width * 0.7f;
+                float hashWidth = position.width * 0.3f;
+
+                _verticalPosition = 5f;
+                Rect stateNameRect = new Rect(position.x,                 position.y + _verticalPosition, nameWidth,     EditorGUIUtility.singleLineHeight);
+                Rect stateHashRect = new Rect(position.x + nameWidth + 5, position.y + _verticalPosition, hashWidth - 5, EditorGUIUtility.singleLineHeight);
+                _verticalPosition += EditorGUIUtility.singleLineHeight;
+                
+                Rect stateEventRect = new Rect(position.x,                position.y + _verticalPosition, position.width, EditorGUIUtility.singleLineHeight);
+                _verticalPosition += EditorGUIUtility.singleLineHeight;
 
                 #endregion
 
-                #region Draw PropertyFields
-
-                EditorGUI.PropertyField(stateNameRect, eventName);
-
-                GUI.enabled = false;
                 
-                if (string.IsNullOrEmpty(eventName.stringValue) || string.IsNullOrWhiteSpace(eventName.stringValue))
+                #region Draw PropertyFields
+                
+                eventName.stringValue = EditorGUI.TextField(stateNameRect, eventName.stringValue);
+                
+                using (new EditorGUI.DisabledScope(true))
                 {
-                    eventHash.intValue = 0;
+                    if (string.IsNullOrEmpty(eventName.stringValue) || string.IsNullOrWhiteSpace(eventName.stringValue))
+                    {
+                        eventHash.intValue = 0;
+                    }
+                    else
+                    {
+                        eventHash.intValue = Utility.StringToHash(eventName.stringValue);
+                    }
+
+                    EditorGUI.PropertyField(stateHashRect, eventHash, GUIContent.none);
                 }
-                else
-                {
-                    eventHash.intValue = Utility.StringToHash(eventName.stringValue);
-                }
 
-                EditorGUI.PropertyField(stateHashRect, eventHash);
-                GUI.enabled = true;
-
-                EditorGUI.PropertyField(stateEventRect, unityEvent);
-
+                EditorGUI.Slider(stateEventRect, triggerTime, 0f, 1f, GUIContent.none);
+                
                 #endregion
             }
         }
 
-        
+
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             return _verticalPosition;

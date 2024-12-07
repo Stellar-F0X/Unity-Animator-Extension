@@ -12,8 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18af2ec660677944c852056699f54797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventName: OnJump
-  triggerTime: 0.473
+  animationEventList:
+  - eventName: 
+    eventHash: 0
+    triggerTime: 0
+    hasTriggered: 0
+  _initialized: 0
+  _receiverSearchType: 0
 --- !u!114 &-8404588960376802524
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -26,8 +31,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18af2ec660677944c852056699f54797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventName: 
-  triggerTime: 0.5
+  animationEventList: []
+  _initialized: 0
+  _receiverSearchType: 0
 --- !u!1102 &-7469282255733588732
 AnimatorState:
   serializedVersion: 6
