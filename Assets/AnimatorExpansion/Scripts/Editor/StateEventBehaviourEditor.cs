@@ -176,9 +176,6 @@ namespace AnimatorExpansion.Editor
 
             using (new EditorGUILayout.VerticalScope(GUI.skin.window))
             {
-                _newEventName = EditorGUILayout.TextField("Event Name", _newEventName);
-                _previewNormalizedTime = EditorGUILayout.Slider("Trigger Time", _previewNormalizedTime, 0f, 1f);
-
                 if (_isPreviewing)
                 {
                     if (GUILayout.Button("Stop Preview"))
@@ -232,7 +229,7 @@ namespace AnimatorExpansion.Editor
             }
             
             SerializedProperty element = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
-
+            
             EditorGUI.PropertyField(rect, element, true);
         }
 

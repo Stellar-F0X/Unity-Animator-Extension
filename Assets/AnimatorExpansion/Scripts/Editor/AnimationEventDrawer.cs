@@ -38,11 +38,11 @@ namespace AnimatorExpansion.Editor
 
                 if ((EEventSendType)sendType.enumValueIndex == EEventSendType.Range)
                 {
-                    DrawRangeTrigger(position, property);
+                    this.DrawRangeTrigger(position, property);
                 }
                 else if ((EEventSendType)sendType.enumValueIndex == EEventSendType.Specific)
                 {
-                    DrawSpecificTrigger(position, property);
+                    this.DrawSpecificTrigger(position, property);
                 }
             }
         }
@@ -60,9 +60,10 @@ namespace AnimatorExpansion.Editor
             Rect maxSliderFieldRect = GetRect(position, 0, _verticalPosition, offsetX: position.width - 60, width: 50);
             EditorGUI.FloatField(maxSliderFieldRect, GUIContent.none, max.floatValue);
 
+            
             float minFloatValue = min.floatValue;
             float maxFloatValue = max.floatValue;
-            float sliderWidth = position.width - 70 - (position.x + position.width * 0.15f + 20);
+            float sliderWidth = position.width - (position.x + position.width * 0.15f + 90);
             Rect sliderFieldRect = GetRect(position, 0, _verticalPosition, offsetX: position.width * 0.15f + 65, width: sliderWidth);
             EditorGUI.MinMaxSlider(sliderFieldRect, ref minFloatValue, ref maxFloatValue, 0f, 1f);
             min.floatValue = (float)Math.Round(minFloatValue, 3);
