@@ -7,10 +7,9 @@ namespace AnimatorExpansion.Editor
 {
     public class AnimationEventDrawer
     {
-        public Action<int> onFocusedRangeSlider;
+        public Action<SChangedValue, SChangedValue> onFocusedRangeSlider;
         public Action<int> onFocusedPointSlider;
-
-        private const string _RANGE_SLIDER_FOCUS_NAME_ = "__range_slider_field__";
+        
         private const string _POINT_SLIDER_FOCUS_NAME_ = "__point_slider_field__";
 
 
@@ -22,12 +21,12 @@ namespace AnimatorExpansion.Editor
 
             if ((EEventSendType)sendType.enumValueIndex == EEventSendType.Range)
             {
-                SerializedProperty triggerTime = property.FindPropertyRelative("repeatTriggerRange");
+                SerializedProperty triggerTime = property.FindPropertyRelative("rangeTriggerTime");
                 SerializedProperty min = triggerTime.FindPropertyRelative("min");
                 SerializedProperty max = triggerTime.FindPropertyRelative("max");
 
-                Rect minSliderFieldRect = CalculateConstantRect(position, 50, position.width * 0.15f, 10, 0);
-                Rect maxSliderFieldRect = CalculateConstantRect(position, 50, position.width - 50, 10, 0);
+                Rect minSliderFieldRect = CalculateConstantRect(position, 50, position.width * 0.15f, 10);
+                Rect maxSliderFieldRect = CalculateConstantRect(position, 50, position.width - 50, 10);
 
                 EditorGUI.FloatField(minSliderFieldRect, GUIContent.none, min.floatValue);
                 EditorGUI.FloatField(maxSliderFieldRect, GUIContent.none, max.floatValue);
@@ -39,13 +38,18 @@ namespace AnimatorExpansion.Editor
                 float sliderWidth = position.width - sliderOffset - 50;
 
                 Rect rangeSliderFieldRect = CalculateConstantRect(position, sliderWidth, sliderOffset, 25);
-
-                GUI.SetNextControlName(_RANGE_SLIDER_FOCUS_NAME_);
                 EditorGUI.MinMaxSlider(rangeSliderFieldRect, ref minFloatValue, ref maxFloatValue, 0f, 1f);
-                this.CheckFocusFieldAndCallAction(GUI.GetNameOfFocusedControl(), _RANGE_SLIDER_FOCUS_NAME_, index, onFocusedRangeSlider);
 
+                bool minValueChanged = Mathf.Approximately(min.floatValue, minFloatValue) == false;
+                bool maxValueChanged = Mathf.Approximately(max.floatValue, maxFloatValue) == false;
+                
                 min.floatValue = (float)Math.Round(minFloatValue, 3);
                 max.floatValue = (float)Math.Round(maxFloatValue, 3);
+
+                if (minValueChanged || maxValueChanged)
+                {
+                    onFocusedRangeSlider.Invoke(new SChangedValue(minValueChanged, minFloatValue), new SChangedValue(maxValueChanged, maxFloatValue));
+                }
             }
             else if ((EEventSendType)sendType.enumValueIndex == EEventSendType.Point)
             {
@@ -54,7 +58,17 @@ namespace AnimatorExpansion.Editor
 
                 GUI.SetNextControlName(_POINT_SLIDER_FOCUS_NAME_);
                 EditorGUI.Slider(pointSliderFieldRect, triggerTime, 0f, 1f, GUIContent.none);
-                this.CheckFocusFieldAndCallAction(GUI.GetNameOfFocusedControl(), _POINT_SLIDER_FOCUS_NAME_, index, onFocusedPointSlider);
+                string focusPropertyName = GUI.GetNameOfFocusedControl();
+                
+                if (string.IsNullOrEmpty(focusPropertyName) || string.IsNullOrWhiteSpace(focusPropertyName))
+                {
+                    return;
+                }
+
+                if (string.Compare(focusPropertyName, _POINT_SLIDER_FOCUS_NAME_, StringComparison.Ordinal) == 0)
+                {
+                    onFocusedPointSlider?.Invoke(index);
+                }
             }
         }
 
@@ -89,20 +103,6 @@ namespace AnimatorExpansion.Editor
             float width = Mathf.Clamp(fieldWidth - beforeEmpty - subtractWidth, 0, position.width);
 
             return new Rect(position.x + beforeEmpty + horizontalOffset, position.y, width, EditorGUIUtility.singleLineHeight);
-        }
-
-
-        private void CheckFocusFieldAndCallAction(in string focusPropertyName, in string targetName, int index, Action<int> aciton)
-        {
-            if (string.IsNullOrEmpty(focusPropertyName) || string.IsNullOrWhiteSpace(focusPropertyName))
-            {
-                return;
-            }
-
-            if (string.Compare(focusPropertyName, targetName, StringComparison.Ordinal) == 0)
-            {
-                aciton?.Invoke(index);
-            }
         }
     }
 }
