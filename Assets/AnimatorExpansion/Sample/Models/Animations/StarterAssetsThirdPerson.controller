@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationEventList:
-  - eventName: Print
-    eventHash: 1588554917
-    triggerTime: 0
+  - eventName: Log
+    eventHash: 1502599712
+    triggerTime: 0.067
     sendType: 0
     rangeTriggerTime:
       min: 0
@@ -24,7 +24,7 @@ MonoBehaviour:
   - eventName: Print
     eventHash: 1588554917
     triggerTime: 0
-    sendType: 0
+    sendType: 4
     rangeTriggerTime:
       min: 0
       max: 0
@@ -43,7 +43,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18af2ec660677944c852056699f54797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationEventList: []
+  animationEventList:
+  - eventName: Print
+    eventHash: 1588554917
+    triggerTime: 0
+    sendType: 0
+    rangeTriggerTime:
+      min: 0
+      max: 0
+    hasTriggered: 0
   _initialized: 0
   _receiverSearchType: 0
 --- !u!1102 &-7469282255733588732
@@ -100,9 +108,9 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 10, y: 330, z: 0}
+  m_AnyStatePosition: {x: 20, y: 330, z: 0}
   m_EntryPosition: {x: 220, y: 330, z: 0}
-  m_ExitPosition: {x: 680, y: 260, z: 0}
+  m_ExitPosition: {x: 410, y: 330, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 6904719651407550685}
 --- !u!1101 &-5554260563948360725

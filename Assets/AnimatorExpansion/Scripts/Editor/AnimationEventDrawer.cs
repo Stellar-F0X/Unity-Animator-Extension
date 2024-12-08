@@ -12,6 +12,27 @@ namespace AnimatorExpansion.Editor
         
         private const string _POINT_SLIDER_FOCUS_NAME_ = "__point_slider_field__";
 
+        
+        public float OnFocusRangeSliderField(SChangedValue min, SChangedValue max)
+        {
+            GUI.FocusControl(string.Empty);
+
+            if (min.isChanged && max.isChanged)
+            {
+                return (min.changedValue + max.changedValue) * 0.5f;
+            }
+            else if (min.isChanged)
+            {
+                return min.changedValue;
+            }
+            else if (max.isChanged)
+            {
+                return max.changedValue;
+            }
+
+            return 0;
+        }
+        
 
         public void DrawDropdownSliderField(Rect position, SerializedProperty property, int index)
         {
@@ -73,23 +94,16 @@ namespace AnimatorExpansion.Editor
         }
 
 
-        public void DrawStringHashField(Rect position, SerializedProperty property, EventReceiveInfo[] infos)
+        public void DrawStringHashField(Rect position, SerializedProperty property, string[] eventNames)
         {
             SerializedProperty eventName = property.FindPropertyRelative("eventName");
             SerializedProperty eventHash = property.FindPropertyRelative("eventHash");
-
-            string[] popupNames = new string[infos.Length];
             
-            for (int i = 0; i < infos.Length; ++i)
-            {
-                popupNames[i] = infos[i].eventName;
-            }
-            
-            int selectedIndex = Array.IndexOf(popupNames, eventName.stringValue);
+            int selectedIndex = Array.IndexOf(eventNames, eventName.stringValue);
             
             Rect stateNameRect = this.CalculateVariableRect(position, 0.7f, 5, subtractWidth: 5);
-            selectedIndex = EditorGUI.Popup(stateNameRect, selectedIndex, popupNames);
-            eventName.stringValue = selectedIndex < 0 || selectedIndex >= infos.Length ?  "" : infos[selectedIndex].eventName;
+            selectedIndex = EditorGUI.Popup(stateNameRect, selectedIndex, eventNames);
+            eventName.stringValue = selectedIndex < 0 || selectedIndex >= eventNames.Length ?  "" : eventNames[selectedIndex];
 
             using (new EditorGUI.DisabledScope(true))
             {
