@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AnimatorExpansion.Editor
 {
-    public class AnimationEventDrawer
+    internal class AnimationEventDrawer
     {
         public Action<SChangedValue, SChangedValue> onFocusedRangeSlider;
         public Action<int> onFocusedPointSlider;
@@ -73,17 +73,27 @@ namespace AnimatorExpansion.Editor
         }
 
 
-        public void DrawStringHashField(Rect position, SerializedProperty property)
+        public void DrawStringHashField(Rect position, SerializedProperty property, EventReceiveInfo[] infos)
         {
             SerializedProperty eventName = property.FindPropertyRelative("eventName");
             SerializedProperty eventHash = property.FindPropertyRelative("eventHash");
 
+            string[] popupNames = new string[infos.Length];
+            
+            for (int i = 0; i < infos.Length; ++i)
+            {
+                popupNames[i] = infos[i].eventName;
+            }
+            
+            int selectedIndex = Array.IndexOf(popupNames, eventName.stringValue);
+            
             Rect stateNameRect = this.CalculateVariableRect(position, 0.7f, 5, subtractWidth: 5);
-            eventName.stringValue = EditorGUI.TextField(stateNameRect, eventName.stringValue);
+            selectedIndex = EditorGUI.Popup(stateNameRect, selectedIndex, popupNames);
+            eventName.stringValue = selectedIndex < 0 || selectedIndex >= infos.Length ?  "" : infos[selectedIndex].eventName;
 
             using (new EditorGUI.DisabledScope(true))
             {
-                eventHash.intValue = string.IsNullOrWhiteSpace(eventName.stringValue) ? 0 : Utility.StringToHash(eventName.stringValue);
+                eventHash.intValue = Utility.StringToHash(eventName.stringValue);
                 Rect stateHashRect = this.CalculateVariableRect(position, 0.3f, position.width * 0.7f, 5);
                 EditorGUI.PropertyField(stateHashRect, eventHash, GUIContent.none);
             }

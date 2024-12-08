@@ -13,21 +13,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationEventList:
-  - eventName: 
-    eventHash: 0
-    triggerTime: 0.421
-    sendType: 4
+  - eventName: Print
+    eventHash: 1588554917
+    triggerTime: 0
+    sendType: 0
     rangeTriggerTime:
       min: 0
       max: 0
     hasTriggered: 0
-  - eventName: Effect
-    eventHash: 2083219487
-    triggerTime: 0.526
-    sendType: 5
+  - eventName: Print
+    eventHash: 1588554917
+    triggerTime: 0
+    sendType: 0
     rangeTriggerTime:
-      min: 0.207
-      max: 0.689
+      min: 0
+      max: 0
     hasTriggered: 0
   _initialized: 0
   _receiverSearchType: 0
@@ -43,15 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18af2ec660677944c852056699f54797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationEventList:
-  - eventName: 
-    eventHash: 0
-    triggerTime: 0.525
-    sendType: 4
-    rangeTriggerTime:
-      min: 0
-      max: 0
-    hasTriggered: 0
+  animationEventList: []
   _initialized: 0
   _receiverSearchType: 0
 --- !u!1102 &-7469282255733588732
