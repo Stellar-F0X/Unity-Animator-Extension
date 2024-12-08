@@ -26,23 +26,27 @@ namespace AnimatorExpansion.Editor
 
         private Animator _animator;
         private AnimatorController _controller;
-        private AnimationClip _previewAnimationClip;
-
-        private PlayableGraph _playableGraph;
-        private AnimationMixerPlayable _previewMixer;
         private ReorderableList _animationEventList;
+        private AnimationSamplePlayer _animationSamplePlayer;
+        private AnimationEventDrawer _animationEventDrawer;
 
 
-        
+
         private void OnEnable()
         {
-            _animationEventList = new ReorderableList(serializedObject,  serializedObject.FindProperty("animationEventList"), true, true, false, false);
-            
+            _animationEventList = new ReorderableList(serializedObject, serializedObject.FindProperty("animationEventList"), true, true, false, false);
+
             _animationEventList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Animation Event List");
-            
+
             _animationEventList.elementHeightCallback = index => EditorGUIUtility.singleLineHeight * 3;
-            
+
             _animationEventList.drawElementCallback = this.DrawAnimationEventGUI;
+
+            AnimationEditorUtility.GetCurrentAnimatorAndController(out _controller, out _animator);
+
+            _animationSamplePlayer = new AnimationSamplePlayer(_animator, _controller);
+
+            _animationEventDrawer = new AnimationEventDrawer();
         }
 
 
@@ -54,23 +58,15 @@ namespace AnimatorExpansion.Editor
 
                 if (_controller == null || _animator == null)
                 {
-                    AnimationEditorUtility.GetCurrentAnimatorAndController(out _controller, out _animator);
-
-                    if (_animator == null)
-                    {
-                        EditorGUILayout.HelpBox("Please click the Animator GameObject.", MessageType.Error, true);
-                        return;
-                    }
+                    EditorGUILayout.HelpBox("Please click the Animator GameObject.", MessageType.Error, true);
+                    return;
                 }
 
-                if (this.Validate(eventSender))
+                if (this.Validate(eventSender, out var clip))
                 {
-                    if (_playableGraph.IsValid())
-                    {
-                        _playableGraph.Destroy();
-                    }
+                    _animationSamplePlayer.TryDestroyPlayableGraph();
 
-                    this.DrawEventStateBehaviourGUI(eventSender);
+                    this.DrawEventStateBehaviourGUI(eventSender, clip);
 
                     this.serializedObject.ApplyModifiedProperties();
                 }
@@ -82,94 +78,24 @@ namespace AnimatorExpansion.Editor
         }
 
 
-        private void PreviewAnimationClip(StateEventBehaviour behaviour)
+        private bool Validate(StateEventBehaviour behaviour, out AnimationClip previewClip)
         {
             if (AnimationEditorUtility.TryGetChildAnimatorState(_controller, behaviour, out var matchingState))
             {
-                switch (matchingState.state.motion)
-                {
-                    case BlendTree blendTree:
-                        this.SampleBlendTreeAnimation(behaviour, _previewNormalizedTime);
-                        break;
+                previewClip = AnimationEditorUtility.GetAnimationClipFromMotionOrNull(matchingState.state?.motion);
 
-                    case AnimationClip clip:
-                        //triggerTime은 0 ~ 1 비율이므로 시간과 곱하여 특정 타이밍을 고를 수 있음.
-                        AnimationMode.SampleAnimationClip(_animator.gameObject, clip, _previewNormalizedTime * clip.length);
-                        break;
-                }
-            }
-        }
-
-
-        private void SampleBlendTreeAnimation(StateEventBehaviour behaviour, float normalizedTime)
-        {
-            _playableGraph = PlayableGraph.Create("BlendTreePreviewGraph");
-            _previewMixer = AnimationMixerPlayable.Create(_playableGraph, 1, true);
-
-            var output = AnimationPlayableOutput.Create(_playableGraph, "Animation", _animator);
-            output.SetSourcePlayable(_previewMixer);
-
-            if (AnimationEditorUtility.TryGetChildAnimatorState(_controller, behaviour, out var matchingState))
-            {
-                if (matchingState.state.motion is BlendTree blendTree)
-                {
-                    AnimationClipPlayable[] clipPlayables = new AnimationClipPlayable[blendTree.children.Length];
-
-                    float maxThreshold = blendTree.children.Max(child => child.threshold);
-                    float[] weights = new float[blendTree.children.Length];
-                    float totalWeight = 0f;
-                    
-                    float targetWeight = Mathf.Clamp(normalizedTime * maxThreshold, blendTree.minThreshold, maxThreshold);
-
-                    for (int i = 0; i < blendTree.children.Length; i++)
-                    {
-                        float weight = AnimationEditorUtility.CalculateWeightForChild(blendTree, blendTree.children[i], targetWeight);
-
-                        AnimationClip clip = AnimationEditorUtility.GetAnimationClipFromMotionOrNull(blendTree.children[i].motion);
-
-                        totalWeight += weight;
-                        weights[i] = weight;
-
-                        clipPlayables[i] = AnimationClipPlayable.Create(_playableGraph, clip);
-                    }
-
-                    // Normalize weights so they sum to 1
-                    for (int i = 0; i < weights.Length; i++)
-                    {
-                        weights[i] /= totalWeight;
-                    }
-
-                    _previewMixer.SetInputCount(clipPlayables.Length);
-
-                    for (int i = 0; i < clipPlayables.Length; i++)
-                    {
-                        _previewMixer.ConnectInput(i, clipPlayables[i], 0);
-                        _previewMixer.SetInputWeight(i, weights[i]);
-                    }
-
-                    AnimationMode.SamplePlayableGraph(_playableGraph, 0, normalizedTime);
-                }
-            }
-        }
-
-
-        private bool Validate(StateEventBehaviour behaviour)
-        {
-            if (AnimationEditorUtility.TryGetChildAnimatorState(_controller, behaviour, out var matchingState))
-            {
-                _previewAnimationClip = AnimationEditorUtility.GetAnimationClipFromMotionOrNull(matchingState.state?.motion);
-
-                if (_previewAnimationClip is null)
+                if (previewClip is null)
                 {
                     return false;
                 }
             }
 
+            previewClip = null;
             return true;
         }
 
 
-        private void DrawEventStateBehaviourGUI(StateEventBehaviour behaviour)
+        private void DrawEventStateBehaviourGUI(StateEventBehaviour behaviour, AnimationClip previewClip)
         {
             GUILayout.Space(10);
             serializedObject.Update();
@@ -180,13 +106,13 @@ namespace AnimatorExpansion.Editor
                 {
                     if (GUILayout.Button("Stop Preview"))
                     {
-                        AnimationEditorUtility.EnforceTPose(_animator);
                         _isPreviewing = false;
+                        AnimationEditorUtility.EnforceTPose(_animator);
                         AnimationMode.StopAnimationMode();
                     }
                     else
                     {
-                        this.PreviewAnimationClip(behaviour);
+                        _animationSamplePlayer.PreviewAnimationClip(behaviour, _previewNormalizedTime);
                     }
                 }
                 else if (GUILayout.Button("Preview"))
@@ -213,8 +139,9 @@ namespace AnimatorExpansion.Editor
             }
         }
 
+        private float _verticalPosition = 0f;
 
-        private void DrawAnimationEventGUI(Rect rect, int index, bool isActive, bool isFocused)
+        private void DrawAnimationEventGUI(Rect position, int index, bool isActive, bool isFocused)
         {
             StateEventBehaviour behaviour = (StateEventBehaviour)target;
 
@@ -227,10 +154,13 @@ namespace AnimatorExpansion.Editor
             {
                 _currentFocusIndexInList = index;
             }
-            
-            SerializedProperty element = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
-            
-            EditorGUI.PropertyField(rect, element, true);
+
+            SerializedProperty property = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
+
+            position.y += 5;
+            _animationEventDrawer.DrawStringHashField(position, property);
+            position.y += EditorGUIUtility.singleLineHeight + 8;
+            _animationEventDrawer.DrawDropdownSliderField(position, property);
         }
 
 
