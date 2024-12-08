@@ -13,8 +13,14 @@ public class Logger : MonoBehaviour
     }
 
 
-    [AnimationEvent("Log", EParameterType.Int)]
+    [AnimationEvent("Log1", EParameterType.Int)]
     public void Log()
+    {
+        
+    }
+
+    [AnimationEvent("Log2", EParameterType.Int)]
+    public void Log2()
     {
         
     }

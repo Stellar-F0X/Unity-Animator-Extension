@@ -1,18 +1,84 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEditor;
 using UnityEditor.Animations;
-using UnityEngine;
+using UnityEditor.Callbacks;
 
 namespace AnimatorExpansion.Editor
 {
-    public static class AnimationEditorUtility
+    public static class AnimationUtility
     {
-        private const BindingFlags _BINDING_FLAGS = BindingFlags.NonPublic | BindingFlags.Instance;
+        private const BindingFlags _ANIMATOR_BINDING_FLAGS = BindingFlags.NonPublic | BindingFlags.Instance;
+        
+        private const BindingFlags _EVENT_BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        
+        private readonly static Type _SearchAttributeType = typeof(AnimationEventAttribute);
+
+        private readonly static Dictionary<Type, Func<MonoBehaviour, IEnumerable<string>>> _MethodCache = new Dictionary<Type, Func<MonoBehaviour, IEnumerable<string>>>();
+
+        private readonly static Lazy<List<string>> _CachedEventName = new Lazy<List<string>>(() => new List<string>());
+        
+        private readonly static Lazy<List<string>> _TempCachedEventNames = new Lazy<List<string>>(() => new List<string>());
+        
+        
+        [DidReloadScripts]
+        private static void OnReloadScripts()
+        {
+            _MethodCache.Clear();
+            _CachedEventName.Value.Clear();
+            _TempCachedEventNames.Value.Clear();
+        }
+        
+
+        public static void GetAnimationEventNames(AnimationEventReceiver receiver, out string[] nameList)
+        {
+            var components = receiver.GetComponentsInChildren<MonoBehaviour>(true);
+
+            OnReloadScripts();
+            
+            if (components == null || components.Length == 0)
+            {
+                nameList = null;
+                return;
+            }
+            
+            _CachedEventName.Value.Add("None");
+
+            foreach (var component in components)
+            {
+                Type type = component.GetType();
+                
+                if (_MethodCache.TryGetValue(type, out var getMethodNames) == false)
+                {
+                    getMethodNames = CreateMethodDelegate(type);
+                    _MethodCache[type] = getMethodNames;
+                }
+
+                _CachedEventName.Value.AddRange(getMethodNames(component));
+            }
+
+            nameList = _CachedEventName.Value.ToArray();
+        }
 
 
-        public static ChildAnimatorState FindMatchingStateRecursion(AnimatorStateMachine stateMachine, StateMachineBehaviour behaviour)
+        private static Func<MonoBehaviour, IEnumerable<string>> CreateMethodDelegate(Type type)
+        {
+            foreach (var method in type.GetMethods(_EVENT_BINDING_FLAGS))
+            {
+                if (method.GetCustomAttribute(_SearchAttributeType) is AnimationEventAttribute attribute)
+                {
+                    _TempCachedEventNames.Value.Add(attribute.eventName);
+                }
+            }
+
+            return _ => _TempCachedEventNames.Value;
+        }
+        
+
+        private static ChildAnimatorState FindMatchingStateRecursion(AnimatorStateMachine stateMachine, StateMachineBehaviour behaviour)
         {
             foreach (var state in stateMachine.states)
             {
@@ -76,8 +142,7 @@ namespace AnimatorExpansion.Editor
                     weight = Mathf.Approximately(targetWeight, child.threshold) ? 1f : 0f;
                 }
             }
-            else if (blendTree.blendType == BlendTreeType.FreeformCartesian2D ||
-                     blendTree.blendType == BlendTreeType.FreeformDirectional2D)
+            else if (blendTree.blendType == BlendTreeType.FreeformCartesian2D || blendTree.blendType == BlendTreeType.FreeformDirectional2D)
             {
                 Vector2 targetPos = new Vector2
                 {
@@ -134,7 +199,7 @@ namespace AnimatorExpansion.Editor
 
         public static float GetBlendParameterValue(BlendTree blendTree, string parameterName)
         {
-            var methodInfo = typeof(BlendTree).GetMethod("GetInputBlendValue", _BINDING_FLAGS);
+            var methodInfo = typeof(BlendTree).GetMethod("GetInputBlendValue", _ANIMATOR_BINDING_FLAGS);
 
             if (methodInfo == null)
             {
@@ -187,8 +252,8 @@ namespace AnimatorExpansion.Editor
 
             EditorWindow window = EditorWindow.GetWindow(animatorWindowType);
 
-            FieldInfo animatorField = animatorWindowType.GetField("m_PreviewAnimator", _BINDING_FLAGS);
-            FieldInfo controllerField = animatorWindowType.GetField("m_AnimatorController", _BINDING_FLAGS);
+            FieldInfo animatorField = animatorWindowType.GetField("m_PreviewAnimator", _ANIMATOR_BINDING_FLAGS);
+            FieldInfo controllerField = animatorWindowType.GetField("m_AnimatorController", _ANIMATOR_BINDING_FLAGS);
 
             animator = animatorField.GetValue(window) as Animator;
             controller = controllerField.GetValue(window) as AnimatorController;
