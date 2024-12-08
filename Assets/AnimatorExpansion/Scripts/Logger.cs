@@ -11,4 +11,11 @@ public class Logger : MonoBehaviour
     {
         Debug.Log(logMessage);
     }
+
+
+    [AnimationEvent("Log", EParameterType.Int)]
+    public void Log()
+    {
+        
+    }
 }

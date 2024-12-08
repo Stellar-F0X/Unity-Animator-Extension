@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEditorInternal;
 using AnimatorController = UnityEditor.Animations.AnimatorController;
@@ -17,6 +20,8 @@ namespace AnimatorExpansion.Editor
         private bool _isPreviewing;
         private int _currentFocusIndexInList;
 
+        private string[] _eventNameList;
+
         private Animator _animator;
         private AnimatorController _controller;
         private ReorderableList _animationEventList;
@@ -24,52 +29,35 @@ namespace AnimatorExpansion.Editor
         private AnimationSamplePlayer _animationSamplePlayer;
 
         private StateEventBehaviour _behaviour;
-        private AnimationEventReceiver _receiver;
-
 
 
         private void OnEnable()
         {
             SerializedProperty property = serializedObject.FindProperty("animationEventList");
-            
-            Debug.Assert(property != null, "animationEventList Property load failed.");
-            
-            _animationEventList = new ReorderableList(serializedObject, property, true, true, false, false);
-
-            _animationEventList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Animation Event List");
-            _animationEventList.elementHeightCallback = index => EditorGUIUtility.singleLineHeight * 3;
-            _animationEventList.drawElementCallback = this.DrawAnimationEventGUI;
 
             AnimationEditorUtility.GetCurrentAnimatorAndController(out _controller, out _animator);
 
-            _animationSamplePlayer = new AnimationSamplePlayer(_animator, _controller);
-            _animationEventDrawer = new AnimationEventDrawer();
-
-            _behaviour = (StateEventBehaviour)target;
-
-            _receiver = _animator.GetComponent<AnimationEventReceiver>();
-
-            Debug.Assert(_behaviour != null, "StateEventBehaviour load failed.");
-
-            _animationEventDrawer.onFocusedPointSlider = i => _previewNormalizedTime = _behaviour.animationEventList[i].triggerTime;
-
-            _animationEventDrawer.onFocusedRangeSlider = (min, max) =>
+            if (_controller != null && _animator != null)
             {
-                GUI.FocusControl(string.Empty);
+                _animationEventList = new ReorderableList(serializedObject, property, true, true, false, false);
 
-                if (min.isChanged && max.isChanged)
+                _animationEventList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Animation Event List");
+                _animationEventList.elementHeightCallback = index => EditorGUIUtility.singleLineHeight * 3;
+                _animationEventList.drawElementCallback = this.DrawAnimationEventGUI;
+
+                _animationSamplePlayer = new AnimationSamplePlayer(_animator, _controller);
+                _animationEventDrawer = new AnimationEventDrawer();
+
+                _behaviour = (StateEventBehaviour)target;
+
+                _animationEventDrawer.onFocusedPointSlider = i => _previewNormalizedTime = _behaviour.animationEventList[i].triggerTime;
+                _animationEventDrawer.onFocusedRangeSlider = (min, max) => _previewNormalizedTime = _animationEventDrawer.OnFocusRangeSliderField(min, max);
+
+                if (_animator.TryGetComponent(out AnimationEventReceiver receiver))
                 {
-                    _previewNormalizedTime = (min.changedValue + max.changedValue) * 0.5f;
+                    ReflectionUtility.GetAnimationEventNames(receiver, out _eventNameList);
                 }
-                else if (min.isChanged)
-                {
-                    _previewNormalizedTime = min.changedValue;
-                }
-                else if (max.isChanged)
-                {
-                    _previewNormalizedTime = max.changedValue;
-                }
-            };
+            }
         }
 
 
@@ -86,9 +74,7 @@ namespace AnimatorExpansion.Editor
                 if (this.Validate(_behaviour))
                 {
                     _animationSamplePlayer.TryDestroyPlayableGraph();
-
                     this.DrawEventStateBehaviourGUI(_behaviour);
-
                     this.serializedObject.ApplyModifiedProperties();
                 }
                 else
@@ -103,10 +89,13 @@ namespace AnimatorExpansion.Editor
         {
             _isPreviewing = false;
 
-            _animationSamplePlayer?.TryDestroyPlayableGraph();
+            if (_animator != null)
+            {
+                _animationSamplePlayer?.TryDestroyPlayableGraph();
 
-            AnimationEditorUtility.EnforceTPose(_animator);
-            AnimationMode.StopAnimationMode();
+                AnimationEditorUtility.EnforceTPose(_animator);
+                AnimationMode.StopAnimationMode();
+            }
         }
 
 
@@ -190,9 +179,9 @@ namespace AnimatorExpansion.Editor
             }
 
             SerializedProperty property = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
-            
+
             position.y += 5;
-            _animationEventDrawer.DrawStringHashField(position, property, _receiver.eventReceiveInfoList.Values.ToArray());
+            _animationEventDrawer.DrawStringHashField(position, property, _eventNameList);
             position.y += EditorGUIUtility.singleLineHeight + 8;
             _animationEventDrawer.DrawDropdownSliderField(position, property, index);
         }
