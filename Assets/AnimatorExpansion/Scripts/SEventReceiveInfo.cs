@@ -4,7 +4,7 @@ using AnimatorExpansion.Parameters;
 
 namespace AnimatorExpansion
 {
-    public struct EventReceiveInfo
+    public struct SEventReceiveInfo
     {
         public string eventName;
         public int eventHash;

@@ -25,17 +25,17 @@ namespace AnimatorExpansion.Editor
         private Animator _animator;
         private AnimatorController _controller;
         private ReorderableList _animationEventList;
+        private StateEventBehaviour _behaviour;
         private AnimationEventDrawer _animationEventDrawer;
         private AnimationSamplePlayer _animationSamplePlayer;
 
-        private StateEventBehaviour _behaviour;
 
 
         private void OnEnable()
         {
             SerializedProperty property = serializedObject.FindProperty("animationEventList");
 
-            AnimationEditorUtility.GetCurrentAnimatorAndController(out _controller, out _animator);
+            AnimationUtility.GetCurrentAnimatorAndController(out _controller, out _animator);
 
             if (_controller != null && _animator != null)
             {
@@ -55,7 +55,7 @@ namespace AnimatorExpansion.Editor
 
                 if (_animator.TryGetComponent(out AnimationEventReceiver receiver))
                 {
-                    ReflectionUtility.GetAnimationEventNames(receiver, out _eventNameList);
+                    AnimationUtility.GetAnimationEventNames(receiver, out _eventNameList);
                 }
             }
         }
@@ -93,7 +93,7 @@ namespace AnimatorExpansion.Editor
             {
                 _animationSamplePlayer?.TryDestroyPlayableGraph();
 
-                AnimationEditorUtility.EnforceTPose(_animator);
+                AnimationUtility.EnforceTPose(_animator);
                 AnimationMode.StopAnimationMode();
             }
         }
@@ -106,9 +106,9 @@ namespace AnimatorExpansion.Editor
                 return false;
             }
 
-            if (AnimationEditorUtility.TryGetChildAnimatorState(_controller, behaviour, out var matchingState))
+            if (AnimationUtility.TryGetChildAnimatorState(_controller, behaviour, out var matchingState))
             {
-                var previewClip = AnimationEditorUtility.GetAnimationClipFromMotionOrNull(matchingState.state?.motion);
+                var previewClip = AnimationUtility.GetAnimationClipFromMotionOrNull(matchingState.state?.motion);
 
                 if (previewClip is null)
                 {

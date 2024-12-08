@@ -13,17 +13,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationEventList:
-  - eventName: Log
-    eventHash: 1502599712
-    triggerTime: 0.067
-    sendType: 0
+  - eventName: Log2
+    eventHash: 1178975366
+    triggerTime: 0.25
+    sendType: 5
+    rangeTriggerTime:
+      min: 0.373
+      max: 0.43
+    hasTriggered: 0
+  - eventName: Log1
+    eventHash: 1582259893
+    triggerTime: 0
+    sendType: 5
     rangeTriggerTime:
       min: 0
       max: 0
     hasTriggered: 0
-  - eventName: Print
-    eventHash: 1588554917
-    triggerTime: 0
+  - eventName: Log2
+    eventHash: 1178975366
+    triggerTime: 0.32
     sendType: 4
     rangeTriggerTime:
       min: 0
@@ -44,13 +52,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationEventList:
-  - eventName: Print
-    eventHash: 1588554917
-    triggerTime: 0
-    sendType: 0
+  - eventName: None
+    eventHash: 1414246128
+    triggerTime: 0.335
+    sendType: 4
     rangeTriggerTime:
-      min: 0
-      max: 0
+      min: 0.195
+      max: 0.441
     hasTriggered: 0
   _initialized: 0
   _receiverSearchType: 0

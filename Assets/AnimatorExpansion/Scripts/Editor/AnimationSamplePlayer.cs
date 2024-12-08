@@ -34,7 +34,7 @@ namespace AnimatorExpansion.Editor
         
         public void PreviewAnimationClip(StateEventBehaviour behaviour, float normalizedTime)
         {
-            if (AnimationEditorUtility.TryGetChildAnimatorState(_controller, behaviour, out var matchingState))
+            if (AnimationUtility.TryGetChildAnimatorState(_controller, behaviour, out var matchingState))
             {
                 switch (matchingState.state.motion)
                 {
@@ -59,7 +59,7 @@ namespace AnimatorExpansion.Editor
             var output = AnimationPlayableOutput.Create(_playableGraph, "Animation", _animator);
             output.SetSourcePlayable(_previewMixer);
 
-            if (AnimationEditorUtility.TryGetChildAnimatorState(_controller, behaviour, out var matchingState))
+            if (AnimationUtility.TryGetChildAnimatorState(_controller, behaviour, out var matchingState))
             {
                 if (matchingState.state.motion is BlendTree blendTree)
                 {
@@ -73,9 +73,9 @@ namespace AnimatorExpansion.Editor
 
                     for (int i = 0; i < blendTree.children.Length; i++)
                     {
-                        float weight = AnimationEditorUtility.CalculateWeightForChild(blendTree, blendTree.children[i], targetWeight);
+                        float weight = AnimationUtility.CalculateWeightForChild(blendTree, blendTree.children[i], targetWeight);
 
-                        AnimationClip clip = AnimationEditorUtility.GetAnimationClipFromMotionOrNull(blendTree.children[i].motion);
+                        AnimationClip clip = AnimationUtility.GetAnimationClipFromMotionOrNull(blendTree.children[i].motion);
 
                         totalWeight += weight;
                         weights[i] = weight;

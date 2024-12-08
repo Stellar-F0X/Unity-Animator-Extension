@@ -7,11 +7,11 @@ namespace AnimatorExpansion.Editor
 {
     internal class AnimationEventDrawer
     {
-        public Action<SChangedValue, SChangedValue> onFocusedRangeSlider;
-        public Action<int> onFocusedPointSlider;
-        
         private const string _POINT_SLIDER_FOCUS_NAME_ = "__point_slider_field__";
-
+        
+        public Action<int> onFocusedPointSlider;
+        public Action<SChangedValue, SChangedValue> onFocusedRangeSlider;
+        
         
         public float OnFocusRangeSliderField(SChangedValue min, SChangedValue max)
         {
@@ -103,7 +103,7 @@ namespace AnimatorExpansion.Editor
             
             Rect stateNameRect = this.CalculateVariableRect(position, 0.7f, 5, subtractWidth: 5);
             selectedIndex = EditorGUI.Popup(stateNameRect, selectedIndex, eventNames);
-            eventName.stringValue = selectedIndex < 0 || selectedIndex >= eventNames.Length ?  "" : eventNames[selectedIndex];
+            eventName.stringValue = selectedIndex < 0 || selectedIndex >= eventNames.Length ? eventNames[0] : eventNames[selectedIndex];
 
             using (new EditorGUI.DisabledScope(true))
             {
@@ -112,6 +112,14 @@ namespace AnimatorExpansion.Editor
                 EditorGUI.PropertyField(stateHashRect, eventHash, GUIContent.none);
             }
         }
+
+
+
+        public void DrawParameterField(Rect position, SerializedProperty property, EParameterType type)
+        {
+            
+        }
+        
 
 
         private Rect CalculateVariableRect(Rect position, float widthPercentage, float horizontalOffset = 0, float beforeEmpty = 0, float subtractWidth = 0)

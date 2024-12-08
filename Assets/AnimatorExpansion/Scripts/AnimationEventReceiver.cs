@@ -7,7 +7,7 @@ namespace AnimatorExpansion
     [RequireComponent(typeof(Animator))]
     public sealed class AnimationEventReceiver : MonoBehaviour
     {
-        public Dictionary<int, EventReceiveInfo> eventReceiveInfoList = new Dictionary<int, EventReceiveInfo>();
+        public Dictionary<int, SEventReceiveInfo> eventReceiveInfoList = new Dictionary<int, SEventReceiveInfo>();
         
         
         private void Awake()
