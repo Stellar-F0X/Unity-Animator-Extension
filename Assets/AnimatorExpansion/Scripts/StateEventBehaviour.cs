@@ -9,7 +9,7 @@ using UnityEngine.Serialization;
 
 namespace AnimatorExpansion
 {
-    public class StateEventBehaviour : StateMachineBehaviour
+    internal class StateEventBehaviour : StateMachineBehaviour
     {
         public List<AnimationEvent> animationEventList = new List<AnimationEvent>();
         
@@ -60,7 +60,7 @@ namespace AnimatorExpansion
                 {
                     if (animationEvent.parameter.hasParameter)
                     {
-                        _receiver.TriggerEvent(animationEvent.eventHash, animationEvent.parameter);
+                        _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
 
                         animationEvent.hasTriggered = true;
                     }

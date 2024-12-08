@@ -7,6 +7,11 @@ namespace AnimatorExpansion
     {
         public static int StringToHash(string sentence)
         {
+            if (string.IsNullOrEmpty(sentence) || string.IsNullOrWhiteSpace(sentence))
+            {
+                return 0;
+            }
+            
             return sentence.GetHashCode(StringComparison.Ordinal);
         }
     }

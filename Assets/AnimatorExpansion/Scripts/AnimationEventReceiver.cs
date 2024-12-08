@@ -1,24 +1,22 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using AnimatorExpansion.Parameters;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace AnimatorExpansion
 {
+    [RequireComponent(typeof(Animator))]
     public sealed class AnimationEventReceiver : MonoBehaviour
     {
+        public Dictionary<int, EventReceiveInfo> eventReceiveInfoList = new Dictionary<int, EventReceiveInfo>();
         
-
-
+        
         private void Awake()
         {
             
         }
 
 
-        public void TriggerEvent(int eventHash, SEventParameter sEventParameter)
+        public void ReceiveEvent(int eventHash, SEventParameter sEventParameter)
         {
             
         }

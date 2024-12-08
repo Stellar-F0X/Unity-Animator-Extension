@@ -7,7 +7,7 @@ using UnityEngine.Playables;
 
 namespace AnimatorExpansion.Editor
 {
-    public class AnimationSamplePlayer
+    internal class AnimationSamplePlayer
     {
         public AnimationSamplePlayer(Animator animator, AnimatorController controller)
         {
