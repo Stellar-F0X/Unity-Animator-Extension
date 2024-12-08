@@ -8,7 +8,7 @@ namespace AnimatorExpansion.Parameters
         Enter,
         Update,
         Exit,
-        Specific,
+        Point,
         Range
     };
 }

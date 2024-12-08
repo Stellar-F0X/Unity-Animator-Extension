@@ -27,8 +27,10 @@ namespace AnimatorExpansion.Editor
         private Animator _animator;
         private AnimatorController _controller;
         private ReorderableList _animationEventList;
-        private AnimationSamplePlayer _animationSamplePlayer;
         private AnimationEventDrawer _animationEventDrawer;
+        private AnimationSamplePlayer _animationSamplePlayer;
+
+        private StateEventBehaviour _behaviour;
 
 
 
@@ -37,16 +39,18 @@ namespace AnimatorExpansion.Editor
             _animationEventList = new ReorderableList(serializedObject, serializedObject.FindProperty("animationEventList"), true, true, false, false);
 
             _animationEventList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Animation Event List");
-
             _animationEventList.elementHeightCallback = index => EditorGUIUtility.singleLineHeight * 3;
-
             _animationEventList.drawElementCallback = this.DrawAnimationEventGUI;
 
             AnimationEditorUtility.GetCurrentAnimatorAndController(out _controller, out _animator);
 
             _animationSamplePlayer = new AnimationSamplePlayer(_animator, _controller);
-
             _animationEventDrawer = new AnimationEventDrawer();
+
+            _behaviour = (StateEventBehaviour)target;
+
+            _animationEventDrawer.onFocusedRangeSlider = i => _previewNormalizedTime = _behaviour.animationEventList[i].triggerTime;
+            _animationEventDrawer.onFocusedPointSlider = i => _previewNormalizedTime = _behaviour.animationEventList[i].triggerTime;
         }
 
 
@@ -54,7 +58,6 @@ namespace AnimatorExpansion.Editor
         {
             using (new EditorGUI.DisabledScope(Application.isPlaying))
             {
-                var eventSender = (StateEventBehaviour)target;
 
                 if (_controller == null || _animator == null)
                 {
@@ -62,11 +65,11 @@ namespace AnimatorExpansion.Editor
                     return;
                 }
 
-                if (this.Validate(eventSender, out var clip))
+                if (this.Validate(_behaviour, out var clip))
                 {
                     _animationSamplePlayer.TryDestroyPlayableGraph();
 
-                    this.DrawEventStateBehaviourGUI(eventSender, clip);
+                    this.DrawEventStateBehaviourGUI(_behaviour, clip);
 
                     this.serializedObject.ApplyModifiedProperties();
                 }
@@ -131,7 +134,10 @@ namespace AnimatorExpansion.Editor
                     this.RemoveAnimationEvent(behaviour.animationEventList, _currentFocusIndexInList);
                 }
 
-                GUILayout.Label($"Previewing at {_previewNormalizedTime:F2}s", EditorStyles.helpBox);
+                if (_isPreviewing)
+                {
+                    GUILayout.Label($"Previewing at {_previewNormalizedTime:F2}s", EditorStyles.helpBox);
+                }
 
                 GUILayout.Space(10);
 
@@ -139,13 +145,10 @@ namespace AnimatorExpansion.Editor
             }
         }
 
-        private float _verticalPosition = 0f;
 
         private void DrawAnimationEventGUI(Rect position, int index, bool isActive, bool isFocused)
         {
-            StateEventBehaviour behaviour = (StateEventBehaviour)target;
-
-            if (behaviour.animationEventList.Count <= index)
+            if (_behaviour.animationEventList.Count <= index)
             {
                 return;
             }
@@ -160,7 +163,7 @@ namespace AnimatorExpansion.Editor
             position.y += 5;
             _animationEventDrawer.DrawStringHashField(position, property);
             position.y += EditorGUIUtility.singleLineHeight + 8;
-            _animationEventDrawer.DrawDropdownSliderField(position, property);
+            _animationEventDrawer.DrawDropdownSliderField(position, property, index);
         }
 
 
@@ -185,6 +188,10 @@ namespace AnimatorExpansion.Editor
             if (removeIndex >= 0 && eventList.Count > removeIndex)
             {
                 eventList.RemoveAt(removeIndex);
+            }
+            else
+            {
+                Debug.Log("<color=green>[Animation Event]</color> There are no elements to delete.");
             }
         }
     }
