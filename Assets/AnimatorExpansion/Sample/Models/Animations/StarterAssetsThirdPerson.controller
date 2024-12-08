@@ -15,19 +15,19 @@ MonoBehaviour:
   animationEventList:
   - eventName: 
     eventHash: 0
-    triggerTime: 0.391
+    triggerTime: 0.421
     sendType: 4
-    repeatTriggerRange:
+    rangeTriggerTime:
       min: 0
       max: 0
     hasTriggered: 0
   - eventName: Effect
     eventHash: 2083219487
-    triggerTime: 0
+    triggerTime: 0.526
     sendType: 5
-    repeatTriggerRange:
-      min: 0.315
-      max: 0.847
+    rangeTriggerTime:
+      min: 0.207
+      max: 0.689
     hasTriggered: 0
   _initialized: 0
   _receiverSearchType: 0
@@ -46,9 +46,9 @@ MonoBehaviour:
   animationEventList:
   - eventName: 
     eventHash: 0
-    triggerTime: 0
+    triggerTime: 0.525
     sendType: 4
-    repeatTriggerRange:
+    rangeTriggerTime:
       min: 0
       max: 0
     hasTriggered: 0

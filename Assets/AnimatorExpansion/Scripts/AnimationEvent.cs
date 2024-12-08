@@ -15,7 +15,8 @@ namespace AnimatorExpansion
         public SEventParameter parameter;
         
         public EEventSendType sendType;
-        public MinMax repeatTriggerRange;
+        [FormerlySerializedAs("repeatTriggerRange")]
+        public MinMax rangeTriggerTime;
         
         public bool hasTriggered;
     }

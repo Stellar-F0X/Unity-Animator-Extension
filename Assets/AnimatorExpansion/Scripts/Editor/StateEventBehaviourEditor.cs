@@ -49,8 +49,27 @@ namespace AnimatorExpansion.Editor
 
             _behaviour = (StateEventBehaviour)target;
 
-            _animationEventDrawer.onFocusedRangeSlider = i => _previewNormalizedTime = _behaviour.animationEventList[i].triggerTime;
+            Debug.Assert(_behaviour != null, "StateEventBehaviour load failed.");
+            
             _animationEventDrawer.onFocusedPointSlider = i => _previewNormalizedTime = _behaviour.animationEventList[i].triggerTime;
+            
+            _animationEventDrawer.onFocusedRangeSlider = (min, max) =>
+            {
+                GUI.FocusControl(string.Empty);
+                
+                if (min.isChanged && max.isChanged)
+                {
+                    _previewNormalizedTime = (min.changedValue + max.changedValue) * 0.5f;
+                }
+                else if (min.isChanged)
+                {
+                    _previewNormalizedTime = min.changedValue;
+                }
+                else if (max.isChanged)
+                {
+                    _previewNormalizedTime = max.changedValue;
+                }
+            };
         }
 
 
@@ -58,7 +77,6 @@ namespace AnimatorExpansion.Editor
         {
             using (new EditorGUI.DisabledScope(Application.isPlaying))
             {
-
                 if (_controller == null || _animator == null)
                 {
                     EditorGUILayout.HelpBox("Please click the Animator GameObject.", MessageType.Error, true);
@@ -78,6 +96,17 @@ namespace AnimatorExpansion.Editor
                     EditorGUILayout.HelpBox("No valid AnimationClip found for the current state.", MessageType.Error, true);
                 }
             }
+        }
+        
+
+        public void OnDisable()
+        {
+            _isPreviewing = false;
+            
+            _animationSamplePlayer.TryDestroyPlayableGraph();
+            
+            AnimationEditorUtility.EnforceTPose(_animator);
+            AnimationMode.StopAnimationMode();
         }
 
 
@@ -109,9 +138,7 @@ namespace AnimatorExpansion.Editor
                 {
                     if (GUILayout.Button("Stop Preview"))
                     {
-                        _isPreviewing = false;
-                        AnimationEditorUtility.EnforceTPose(_animator);
-                        AnimationMode.StopAnimationMode();
+                        this.OnDisable();
                     }
                     else
                     {
@@ -176,7 +203,7 @@ namespace AnimatorExpansion.Editor
                 eventName = _newEventName,
                 eventHash = canUseHash ? 0 : Utility.StringToHash(_newEventName),
                 triggerTime = _previewNormalizedTime,
-                repeatTriggerRange = new MinMax(_previewNormalizedTime, _previewNormalizedTime)
+                rangeTriggerTime = new MinMax(_previewNormalizedTime, _previewNormalizedTime)
             };
 
             eventList.Add(animationEvent);
@@ -185,14 +212,12 @@ namespace AnimatorExpansion.Editor
 
         private void RemoveAnimationEvent(List<AnimationEvent> eventList, int removeIndex)
         {
-            if (removeIndex >= 0 && eventList.Count > removeIndex)
+            if (removeIndex < 0 || eventList.Count <= removeIndex)
             {
-                eventList.RemoveAt(removeIndex);
+                return;
             }
-            else
-            {
-                Debug.Log("<color=green>[Animation Event]</color> There are no elements to delete.");
-            }
+
+            eventList.RemoveAt(removeIndex);
         }
     }
 }
