@@ -8,11 +8,11 @@ namespace AnimatorExpansion.Editor
     internal class AnimationEventDrawer
     {
         private const string _POINT_SLIDER_FOCUS_NAME_ = "__point_slider_field__";
-        
+
         public Action<int> onFocusedPointSlider;
         public Action<SChangedValue, SChangedValue> onFocusedRangeSlider;
-        
-        
+
+
         public float OnFocusRangeSliderField(SChangedValue min, SChangedValue max)
         {
             GUI.FocusControl(string.Empty);
@@ -32,7 +32,7 @@ namespace AnimatorExpansion.Editor
 
             return 0;
         }
-        
+
 
         public void DrawDropdownSliderField(Rect position, SerializedProperty property, int index)
         {
@@ -49,11 +49,16 @@ namespace AnimatorExpansion.Editor
                 Rect minSliderFieldRect = CalculateConstantRect(position, 50, position.width * 0.15f, 10);
                 Rect maxSliderFieldRect = CalculateConstantRect(position, 50, position.width - 50, 10);
 
-                EditorGUI.FloatField(minSliderFieldRect, GUIContent.none, min.floatValue);
-                EditorGUI.FloatField(maxSliderFieldRect, GUIContent.none, max.floatValue);
+                min.floatValue = EditorGUI.FloatField(minSliderFieldRect, GUIContent.none, min.floatValue);
+                max.floatValue = EditorGUI.FloatField(maxSliderFieldRect, GUIContent.none, max.floatValue);
 
-                float minFloatValue = min.floatValue;
-                float maxFloatValue = max.floatValue;
+                if (min.floatValue > max.floatValue)
+                {
+                    max.floatValue = min.floatValue;
+                }
+
+                float minFloatValue = Mathf.Clamp01(min.floatValue);
+                float maxFloatValue = Mathf.Clamp01(max.floatValue);
 
                 float sliderOffset = stateSendTypeRect.width + minSliderFieldRect.width;
                 float sliderWidth = position.width - sliderOffset - 50;
@@ -63,7 +68,7 @@ namespace AnimatorExpansion.Editor
 
                 bool minValueChanged = Mathf.Approximately(min.floatValue, minFloatValue) == false;
                 bool maxValueChanged = Mathf.Approximately(max.floatValue, maxFloatValue) == false;
-                
+
                 min.floatValue = (float)Math.Round(minFloatValue, 3);
                 max.floatValue = (float)Math.Round(maxFloatValue, 3);
 
@@ -80,7 +85,7 @@ namespace AnimatorExpansion.Editor
                 GUI.SetNextControlName(_POINT_SLIDER_FOCUS_NAME_);
                 EditorGUI.Slider(pointSliderFieldRect, triggerTime, 0f, 1f, GUIContent.none);
                 string focusPropertyName = GUI.GetNameOfFocusedControl();
-                
+
                 if (string.IsNullOrEmpty(focusPropertyName) || string.IsNullOrWhiteSpace(focusPropertyName))
                 {
                     return;
@@ -98,9 +103,9 @@ namespace AnimatorExpansion.Editor
         {
             SerializedProperty eventName = property.FindPropertyRelative("eventName");
             SerializedProperty eventHash = property.FindPropertyRelative("eventHash");
-            
+
             int selectedIndex = Array.IndexOf(eventNames, eventName.stringValue);
-            
+
             Rect stateNameRect = this.CalculateVariableRect(position, 0.7f, 5, subtractWidth: 5);
             selectedIndex = EditorGUI.Popup(stateNameRect, selectedIndex, eventNames);
             eventName.stringValue = selectedIndex < 0 || selectedIndex >= eventNames.Length ? eventNames[0] : eventNames[selectedIndex];
@@ -117,9 +122,9 @@ namespace AnimatorExpansion.Editor
 
         public void DrawParameterField(Rect position, SerializedProperty property, EParameterType type)
         {
-            
+
         }
-        
+
 
 
         private Rect CalculateVariableRect(Rect position, float widthPercentage, float horizontalOffset = 0, float beforeEmpty = 0, float subtractWidth = 0)
