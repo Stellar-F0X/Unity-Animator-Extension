@@ -34,4 +34,11 @@ public class EventLogger : MonoBehaviour
     {
         Debug.Log(a);
     }
+
+    
+    [AnimationEvent("GetQuaternion", EParameterType.Quaternion)]
+    public void ASDADADSA(Quaternion a)
+    {
+        Debug.Log(a);
+    }
 }
