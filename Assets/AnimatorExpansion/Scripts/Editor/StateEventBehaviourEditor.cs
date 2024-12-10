@@ -92,6 +92,7 @@ namespace AnimatorExpansion.Editor
         public void OnDisable()
         {
             _isPreviewing = false;
+            _previewNormalizedTime = 0;
 
             if (_animator != null)
             {
@@ -160,11 +161,14 @@ namespace AnimatorExpansion.Editor
 
                 if (_isPreviewing)
                 {
-                    GUILayout.Label($"Previewing at {_previewNormalizedTime:F2}s", EditorStyles.helpBox);
+                    Rect lastRect = GUILayoutUtility.GetLastRect();
+                    lastRect.y += EditorGUIUtility.singleLineHeight + 5;
+
+                    string previewMsg = $"{_previewNormalizedTime * 100f:F2}%";
+                    EditorGUI.ProgressBar(lastRect, _previewNormalizedTime, previewMsg);
                 }
 
-                GUILayout.Space(10);
-
+                GUILayout.Space(_isPreviewing ? 30 : 10);
                 _animationEventList.DoLayoutList();
             }
         }
