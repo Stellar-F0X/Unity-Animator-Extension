@@ -44,7 +44,7 @@ MonoBehaviour:
   animationEventList:
   - eventName: Log0
     eventHash: 16175952
-    triggerTime: 0.5
+    triggerTime: 0.3
     sendType: 4
     rangeTriggerTime:
       min: 0
@@ -52,19 +52,19 @@ MonoBehaviour:
     hasTriggered: 0
   - eventName: Log1
     eventHash: 1582259893
-    triggerTime: 0
-    sendType: 5
+    triggerTime: 0.6
+    sendType: 4
     rangeTriggerTime:
       min: 0.461
       max: 1
     hasTriggered: 0
-  - eventName: Log2
-    eventHash: 1178975366
+  - eventName: None
+    eventHash: 1414246128
     triggerTime: 0
-    sendType: 2
+    sendType: 5
     rangeTriggerTime:
-      min: 0
-      max: 0
+      min: 0.5
+      max: 1
     hasTriggered: 0
 --- !u!1102 &-7469282255733588732
 AnimatorState:
