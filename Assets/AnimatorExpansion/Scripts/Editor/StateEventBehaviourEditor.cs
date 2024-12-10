@@ -59,7 +59,7 @@ namespace AnimatorExpansion.Editor
 
                 if (_animator.TryGetComponent(out AnimationEventReceiver receiver))
                 {
-                    AnimationUtility.GetAnimationEventNames(receiver, out _eventNameList);
+                    AnimationUtility.GetAnimationEventNames(receiver, out _eventNameList, out _parameterTypeList);
                 }
             }
         }
@@ -185,11 +185,11 @@ namespace AnimatorExpansion.Editor
             SerializedProperty property = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
 
             position.y += 5;
-            _animationEventDrawer.DrawStringHashField(position, property, _eventNameList);
+            int selectedIndex =_animationEventDrawer.DrawStringHashField(position, property, _eventNameList);
             position.y += EditorGUIUtility.singleLineHeight + 8;
             _animationEventDrawer.DrawDropdownSliderField(position, property, index);
             position.y += EditorGUIUtility.singleLineHeight + 8;
-            _animationEventDrawer.DrawParameterField(position, property);
+            _animationEventDrawer.DrawParameterField(position, property, _parameterTypeList[selectedIndex]);
         }
 
 
