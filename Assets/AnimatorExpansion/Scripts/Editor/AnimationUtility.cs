@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using AnimatorExpansion.Parameters;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -11,6 +12,18 @@ namespace AnimatorExpansion.Editor
 {
     public static class AnimationUtility
     {
+        private struct SEventInfo
+        {
+            public SEventInfo(string eventName, EParameterType paramType)
+            {
+                this.eventName = eventName;
+                this.paramType = paramType;
+            }
+            
+            public string eventName;
+            public EParameterType paramType;
+        }
+        
         private const BindingFlags _ANIMATOR_BINDING_FLAGS = BindingFlags.NonPublic | BindingFlags.Instance;
         
         private const BindingFlags _EVENT_BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;

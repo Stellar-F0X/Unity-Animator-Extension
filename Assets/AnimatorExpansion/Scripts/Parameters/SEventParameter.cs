@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace AnimatorExpansion.Parameters
 {
+    [Serializable]
     public struct SEventParameter
     {
         public EParameterType parameterType;

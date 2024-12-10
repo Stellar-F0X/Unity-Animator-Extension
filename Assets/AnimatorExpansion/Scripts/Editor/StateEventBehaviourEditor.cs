@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AnimatorExpansion.Parameters;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -23,6 +24,7 @@ namespace AnimatorExpansion.Editor
         private int _currentFocusIndexInList;
 
         private string[] _eventNameList;
+        private EParameterType[] _parameterTypeList;
 
         private Animator _animator;
         private AnimatorController _controller;
@@ -44,7 +46,7 @@ namespace AnimatorExpansion.Editor
                 _animationEventList = new ReorderableList(serializedObject, property, true, true, false, false);
 
                 _animationEventList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Animation Event List");
-                _animationEventList.elementHeightCallback = index => EditorGUIUtility.singleLineHeight * 3;
+                _animationEventList.elementHeightCallback = index => EditorGUIUtility.singleLineHeight * 4 + 5f;
                 _animationEventList.drawElementCallback = this.DrawAnimationEventGUI;
 
                 _animationSamplePlayer = new AnimationSamplePlayer(_animator, _controller);
@@ -186,6 +188,8 @@ namespace AnimatorExpansion.Editor
             _animationEventDrawer.DrawStringHashField(position, property, _eventNameList);
             position.y += EditorGUIUtility.singleLineHeight + 8;
             _animationEventDrawer.DrawDropdownSliderField(position, property, index);
+            position.y += EditorGUIUtility.singleLineHeight + 8;
+            _animationEventDrawer.DrawParameterField(position, property);
         }
 
 
