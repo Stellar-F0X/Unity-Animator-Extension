@@ -30,11 +30,11 @@ namespace AnimatorExpansion.Editor
         
         private readonly static Type _SearchAttributeType = typeof(AnimationEventAttribute);
 
-        private readonly static Dictionary<Type, Func<MonoBehaviour, IEnumerable<string>>> _MethodCache = new Dictionary<Type, Func<MonoBehaviour, IEnumerable<string>>>();
+        private readonly static Dictionary<Type, Func<MonoBehaviour, IEnumerable<SEventInfo>>> _MethodCache = new Dictionary<Type, Func<MonoBehaviour, IEnumerable<SEventInfo>>>();
 
-        private readonly static Lazy<List<string>> _CachedEventName = new Lazy<List<string>>(() => new List<string>());
+        private readonly static Lazy<List<SEventInfo>> _CachedEventName = new Lazy<List<SEventInfo>>(() => new List<SEventInfo>());
         
-        private readonly static Lazy<List<string>> _TempCachedEventNames = new Lazy<List<string>>(() => new List<string>());
+        private readonly static Lazy<List<SEventInfo>> _TempCachedEventNames = new Lazy<List<SEventInfo>>(() => new List<SEventInfo>());
         
         
         [DidReloadScripts]
@@ -46,7 +46,7 @@ namespace AnimatorExpansion.Editor
         }
         
 
-        public static void GetAnimationEventNames(AnimationEventReceiver receiver, out string[] nameList)
+        public static void GetAnimationEventNames(AnimationEventReceiver receiver, out string[] nameList, out EParameterType[] paramTypeList)
         {
             var components = receiver.GetComponentsInChildren<MonoBehaviour>(true);
 
@@ -55,10 +55,11 @@ namespace AnimatorExpansion.Editor
             if (components == null || components.Length == 0)
             {
                 nameList = null;
+                paramTypeList = null;
                 return;
             }
             
-            _CachedEventName.Value.Add("None");
+            _CachedEventName.Value.Add(new SEventInfo("None", EParameterType.Void));
 
             foreach (var component in components)
             {
@@ -73,17 +74,18 @@ namespace AnimatorExpansion.Editor
                 _CachedEventName.Value.AddRange(getMethodNames(component));
             }
 
-            nameList = _CachedEventName.Value.ToArray();
+            nameList = _CachedEventName.Value.Select(info => info.eventName).ToArray();
+            paramTypeList = _CachedEventName.Value.Select(info => info.paramType).ToArray();
         }
 
 
-        private static Func<MonoBehaviour, IEnumerable<string>> CreateMethodDelegate(Type type)
+        private static Func<MonoBehaviour, IEnumerable<SEventInfo>> CreateMethodDelegate(Type type)
         {
             foreach (var method in type.GetMethods(_EVENT_BINDING_FLAGS))
             {
                 if (method.GetCustomAttribute(_SearchAttributeType) is AnimationEventAttribute attribute)
                 {
-                    _TempCachedEventNames.Value.Add(attribute.eventName);
+                    _TempCachedEventNames.Value.Add(new SEventInfo(attribute.eventName, attribute.parameterType));
                 }
             }
 

@@ -99,7 +99,7 @@ namespace AnimatorExpansion.Editor
         }
 
 
-        public void DrawStringHashField(Rect position, SerializedProperty property, string[] eventNames)
+        public int DrawStringHashField(Rect position, SerializedProperty property, string[] eventNames)
         {
             SerializedProperty eventName = property.FindPropertyRelative("eventName");
             SerializedProperty eventHash = property.FindPropertyRelative("eventHash");
@@ -116,21 +116,28 @@ namespace AnimatorExpansion.Editor
                 Rect stateHashRect = this.CalculateVariableRect(position, 0.3f, position.width * 0.7f, 5);
                 EditorGUI.PropertyField(stateHashRect, eventHash, GUIContent.none);
             }
+
+            return selectedIndex;
         }
 
 
 
-        public void DrawParameterField(Rect position, SerializedProperty property)
+        public void DrawParameterField(Rect position, SerializedProperty property, EParameterType parameterTypes)
         {
             SerializedProperty parameter = property.FindPropertyRelative("parameter");
             SerializedProperty parameterType = parameter.FindPropertyRelative("parameterType");
 
             Rect paramTypeRect = this.CalculateVariableRect(position, 0.15f, beforeEmpty: 5);
-            EditorGUI.PropertyField(paramTypeRect, parameterType, GUIContent.none);
-            
             Rect parameterRect = this.CalculateVariableRect(position, 0.85f, position.width * 0.15f, 10);
+            
+            parameterType.enumValueIndex = (int)parameterTypes;
+            
+            using (new EditorGUI.DisabledScope(true))
+            {
+                EditorGUI.PropertyField(paramTypeRect, parameterType, GUIContent.none);
+            }
 
-            switch ((EParameterType)parameterType.enumValueIndex)
+            switch (parameterTypes)
             {
                 case EParameterType.Int: 
                     SerializedProperty intProp = parameter.FindPropertyRelative("intValue");

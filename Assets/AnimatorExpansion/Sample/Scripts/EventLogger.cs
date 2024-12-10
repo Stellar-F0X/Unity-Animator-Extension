@@ -28,4 +28,10 @@ public class EventLogger : MonoBehaviour
     {
         Debug.Log(log2Message);
     }
+
+    [AnimationEvent("LogMessage", EParameterType.Int)]
+    public void LogIntMessage(int a)
+    {
+        Debug.Log(a);
+    }
 }
