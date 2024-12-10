@@ -166,8 +166,8 @@ namespace AnimatorExpansion.Editor
 
                 case EParameterType.Quaternion:
                     SerializedProperty quaternionProp = parameter.FindPropertyRelative("quaternionValue");
-                    Quaternion quaterValue = quaternionProp.quaternionValue;
-                    Vector4 vector4 = new Vector4(quaterValue.x, quaterValue.y, quaterValue.z, quaterValue.w);
+                    Quaternion quaternion = quaternionProp.quaternionValue;
+                    Vector4 vector4 = new Vector4(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
                     vector4 = EditorGUI.Vector4Field(parameterRect, GUIContent.none, vector4);
                     quaternionProp.quaternionValue = new Quaternion(vector4.x, vector4.y, vector4.z, vector4.w);
                     break;

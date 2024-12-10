@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationEventList:
-  - eventName: Log1
-    eventHash: 1582259893
-    triggerTime: 0.571
+  - eventName: get position
+    eventHash: -594658637
+    triggerTime: 0.499
     parameter:
-      parameterType: 0
+      parameterType: 5
       hasParameter: 0
       intValue: 0
       charValue: 0
@@ -26,36 +26,14 @@ MonoBehaviour:
       floatValue: 0
       colorValue: {r: 0, g: 0, b: 0, a: 0}
       vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 0, z: 0}
+      vector3Value: {x: 0, y: 10, z: 0}
       quaternionValue: {x: 0, y: 0, z: 0, w: 0}
       gameObjectValue: {fileID: 0}
       transformValue: {fileID: 0}
-    sendType: 5
+    sendType: 4
     rangeTriggerTime:
-      min: 0.279
-      max: 0.698
-    hasTriggered: 0
-  - eventName: None
-    eventHash: 1414246128
-    triggerTime: 0.6983894
-    parameter:
-      parameterType: 0
-      hasParameter: 0
-      intValue: 0
-      charValue: 0
-      boolValue: 0
-      stringValue: 
-      floatValue: 0
-      colorValue: {r: 0, g: 0, b: 0, a: 0}
-      vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 0, z: 0}
-      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
-      gameObjectValue: {fileID: 0}
-      transformValue: {fileID: 0}
-    sendType: 0
-    rangeTriggerTime:
-      min: 0.6983894
-      max: 0.6983894
+      min: 0
+      max: 0
     hasTriggered: 0
 --- !u!114 &-8404588960376802524
 MonoBehaviour:
@@ -69,29 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18af2ec660677944c852056699f54797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationEventList:
-  - eventName: GetQuaternion
-    eventHash: 483699270
-    triggerTime: 0
-    parameter:
-      parameterType: 6
-      hasParameter: 0
-      intValue: 30907
-      charValue: 0
-      boolValue: 0
-      stringValue: 
-      floatValue: 0
-      colorValue: {r: 0, g: 0, b: 0, a: 0}
-      vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 0, z: 0}
-      quaternionValue: {x: 1, y: 2, z: 3, w: 4}
-      gameObjectValue: {fileID: 0}
-      transformValue: {fileID: 0}
-    sendType: 1
-    rangeTriggerTime:
-      min: 0.5
-      max: 1
-    hasTriggered: 0
+  animationEventList: []
 --- !u!1102 &-7469282255733588732
 AnimatorState:
   serializedVersion: 6

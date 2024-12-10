@@ -9,24 +9,10 @@ public class EventLogger : MonoBehaviour
     public string log2Message;
     
     
-    [AnimationEvent("Log0", EParameterType.Void)]
+    [AnimationEvent("Log", EParameterType.Void)]
     public void Print()
     {
         Debug.Log(log0Message);
-    }
-
-
-    [AnimationEvent("Log1", EParameterType.Void)]
-    public void Log1()
-    {
-        Debug.Log(log1Message);
-    }
-
-    
-    [AnimationEvent("Log2", EParameterType.Void)]
-    public void Log2()
-    {
-        Debug.Log(log2Message);
     }
 
     [AnimationEvent("LogMessage", EParameterType.Int)]
@@ -37,7 +23,14 @@ public class EventLogger : MonoBehaviour
 
     
     [AnimationEvent("GetQuaternion", EParameterType.Quaternion)]
-    public void ASDADADSA(Quaternion a)
+    public void GetQuaternion(Quaternion a)
+    {
+        Debug.Log(a);
+    }
+
+
+    [AnimationEvent("get position", EParameterType.Vector3)]
+    public void GetPosition(Vector3 a)
     {
         Debug.Log(a);
     }
