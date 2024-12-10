@@ -23,10 +23,17 @@ namespace AnimatorExpansion
         }
         
         
-        public bool Invoke(int eventHash, SEventParameter parameter)
+        public bool Invoke(int eventHash, SEventParameter parameter, out string errorMessage)
         {
             if (eventList.TryGetValue(eventHash, out var callback) == false)
             {
+                errorMessage = "Event not found";
+                return false;
+            }
+
+            if (callback.parameterType != parameter.parameterType)
+            {
+                errorMessage = $" Event parameter type mismatch. {callback.parameterType} != {parameter.parameterType}";
                 return false;
             }
 
@@ -49,6 +56,7 @@ namespace AnimatorExpansion
                 case EParameterType.Quaternion: GetEventAction<Quaternion>(callback).Invoke(parameter.quaternionValue); break;
             }
 
+            errorMessage = "";
             return true;
         }
 
