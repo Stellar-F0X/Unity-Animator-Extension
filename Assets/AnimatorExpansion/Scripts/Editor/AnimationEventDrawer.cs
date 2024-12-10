@@ -19,15 +19,15 @@ namespace AnimatorExpansion.Editor
 
             if (min.isChanged && max.isChanged)
             {
-                return (min.changedValue + max.changedValue) * 0.5f;
+                return (min.value + max.value) * 0.5f;
             }
             else if (min.isChanged)
             {
-                return min.changedValue;
+                return min.value;
             }
             else if (max.isChanged)
             {
-                return max.changedValue;
+                return max.value;
             }
 
             return 0;

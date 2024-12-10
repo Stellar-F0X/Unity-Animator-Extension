@@ -12,71 +12,96 @@ namespace AnimatorExpansion
     internal class StateEventBehaviour : StateMachineBehaviour
     {
         public List<AnimationEvent> animationEventList = new List<AnimationEvent>();
+
+        private bool _initialized;
         
         private AnimationEventReceiver _receiver;
         
-        [SerializeField]
-        private bool _initialized;
-        
-        [SerializeField]
-        private ESearchType _receiverSearchType;
 
-        
-        
-        
+
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             if (_initialized == false)
             {
                 _initialized = true;
-                
-                switch (_receiverSearchType)
-                {
-                    case ESearchType.Parent: _receiver = animator.GetComponentInParent<AnimationEventReceiver>(); break;
-                    
-                    case ESearchType.Sibling: _receiver = animator.GetComponent<AnimationEventReceiver>(); break;
-                    
-                    case ESearchType.Child: _receiver = animator.GetComponentInChildren<AnimationEventReceiver>(); break;
-                }
 
-                Debug.Assert(_receiver != null, "There are no Receivers on this object or its hierarchy.");
+                bool foundReceiver = animator.TryGetComponent(out _receiver);
+
+                Debug.Assert(foundReceiver, "There are no Receivers on this object or its hierarchy.");
             }
-            
+
             foreach (var animationEvent in animationEventList)
             {
-                animationEvent.hasTriggered = false;
+                if (animationEvent.sendType == EEventSendType.Enter)
+                {
+                    _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
+                    animationEvent.hasTriggered = true;
+                }
+                else
+                {
+                    animationEvent.hasTriggered = false;
+                }
             }
         }
 
-        
-        
+
+
         public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            if (animationEventList.Count == 0)
+            {
+                return;
+            }
+
             float currentTime = stateInfo.normalizedTime % 1f;
 
             foreach (var animationEvent in animationEventList)
             {
-                if (!animationEvent.hasTriggered && currentTime >= animationEvent.triggerTime)
+                if (animationEvent.hasTriggered || animationEvent.sendType == EEventSendType.None)
                 {
-                    if (animationEvent.parameter.hasParameter)
+                    continue;
+                }
+
+                if (animationEvent.sendType == EEventSendType.Update)
+                {
+                    _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
+                    animationEvent.hasTriggered = true;
+                }
+                else if (animationEvent.sendType == EEventSendType.Point)
+                {
+                    if (currentTime >= animationEvent.triggerTime)
                     {
                         _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
-
                         animationEvent.hasTriggered = true;
                     }
-                    else
+                }
+                else if (animationEvent.sendType == EEventSendType.Range)
+                {
+                    MinMax rangeTriggerTime = animationEvent.rangeTriggerTime;
+
+                    if (currentTime >= rangeTriggerTime.min && currentTime <= rangeTriggerTime.max)
                     {
-                        Debug.LogError("There are no parameters to pass from this event.");
+                        _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
+                    }
+                    else if (currentTime > rangeTriggerTime.max)
+                    {
+                        animationEvent.hasTriggered = true;
                     }
                 }
             }
         }
 
-
-        // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
+        
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            
+            foreach (var animationEvent in animationEventList)
+            {
+                if (animationEvent.sendType == EEventSendType.Exit)
+                {
+                    _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
+                    animationEvent.hasTriggered = true;
+                }
+            }
         }
     }
 }

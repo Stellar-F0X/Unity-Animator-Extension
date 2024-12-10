@@ -13,32 +13,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationEventList:
-  - eventName: Log2
-    eventHash: 1178975366
-    triggerTime: 0.25
-    sendType: 5
-    rangeTriggerTime:
-      min: 0.373
-      max: 0.43
-    hasTriggered: 0
   - eventName: Log1
     eventHash: 1582259893
-    triggerTime: 0
+    triggerTime: 0.571
     sendType: 5
     rangeTriggerTime:
-      min: 0
-      max: 0
+      min: 0.279
+      max: 0.698
     hasTriggered: 0
-  - eventName: Log2
-    eventHash: 1178975366
-    triggerTime: 0.32
-    sendType: 4
+  - eventName: None
+    eventHash: 1414246128
+    triggerTime: 0.6983894
+    sendType: 0
     rangeTriggerTime:
-      min: 0
-      max: 0
+      min: 0.6983894
+      max: 0.6983894
     hasTriggered: 0
-  _initialized: 0
-  _receiverSearchType: 0
 --- !u!114 &-8404588960376802524
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -52,16 +42,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationEventList:
-  - eventName: None
-    eventHash: 1414246128
-    triggerTime: 0.335
+  - eventName: Log0
+    eventHash: 16175952
+    triggerTime: 0.5
     sendType: 4
     rangeTriggerTime:
-      min: 0.195
-      max: 0.441
+      min: 0
+      max: 0
     hasTriggered: 0
-  _initialized: 0
-  _receiverSearchType: 0
+  - eventName: Log1
+    eventHash: 1582259893
+    triggerTime: 0
+    sendType: 1
+    rangeTriggerTime:
+      min: 0
+      max: 0
+    hasTriggered: 0
+  - eventName: Log2
+    eventHash: 1178975366
+    triggerTime: 0
+    sendType: 2
+    rangeTriggerTime:
+      min: 0
+      max: 0
+    hasTriggered: 0
 --- !u!1102 &-7469282255733588732
 AnimatorState:
   serializedVersion: 6
@@ -528,7 +532,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Idle Walk Run Blend
-  m_Speed: 1
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -4639224020698590961}
@@ -539,7 +543,7 @@ AnimatorState:
   m_IKOnFeet: 1
   m_WriteDefaultValues: 1
   m_Mirror: 0
-  m_SpeedParameterActive: 1
+  m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0

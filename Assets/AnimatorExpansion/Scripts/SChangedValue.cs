@@ -2,13 +2,13 @@ namespace AnimatorExpansion
 {
     public struct SChangedValue
     {
-        public SChangedValue(bool isChanged, float changedValue)
+        public SChangedValue(bool isChanged, float value)
         {
             this.isChanged = isChanged;
-            this.changedValue = changedValue;
+            this.value = value;
         }
         
-        public bool isChanged;
-        public float changedValue;
+        public readonly bool isChanged;
+        public readonly float value;
     }
 }

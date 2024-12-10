@@ -7,10 +7,8 @@ namespace AnimatorExpansion.Parameters
         Float,
         Bool,
         String,
-        Vector2,
         Vector3,
         Quaternion,
-        Transform,
         GameObject,
         Color
     };

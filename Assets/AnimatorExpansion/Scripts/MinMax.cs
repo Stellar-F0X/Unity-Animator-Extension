@@ -26,6 +26,7 @@ namespace AnimatorExpansion
             this.min = min;
             this.max = max;
         }
+        
         public MinMax Flip()
         {
             return new MinMax(max, min);
