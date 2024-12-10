@@ -120,9 +120,61 @@ namespace AnimatorExpansion.Editor
 
 
 
-        public void DrawParameterField(Rect position, SerializedProperty property, EParameterType type)
+        public void DrawParameterField(Rect position, SerializedProperty property)
         {
+            SerializedProperty parameter = property.FindPropertyRelative("parameter");
+            SerializedProperty parameterType = parameter.FindPropertyRelative("parameterType");
 
+            Rect paramTypeRect = this.CalculateVariableRect(position, 0.15f, beforeEmpty: 5);
+            EditorGUI.PropertyField(paramTypeRect, parameterType, GUIContent.none);
+            
+            Rect parameterRect = this.CalculateVariableRect(position, 0.85f, position.width * 0.15f, 10);
+
+            switch ((EParameterType)parameterType.enumValueIndex)
+            {
+                case EParameterType.Int: 
+                    SerializedProperty intProp = parameter.FindPropertyRelative("intValue");
+                    intProp.intValue = EditorGUI.IntField(parameterRect, intProp.intValue);
+                    break;
+
+                case EParameterType.Float:
+                    SerializedProperty floatProp = parameter.FindPropertyRelative("floatValue");
+                    floatProp.floatValue = EditorGUI.FloatField(parameterRect, floatProp.floatValue);
+                    break;
+
+                case EParameterType.Bool:
+                    SerializedProperty boolProp = parameter.FindPropertyRelative("boolValue");
+                    boolProp.boolValue = EditorGUI.Toggle(parameterRect, boolProp.boolValue);
+                    break;
+
+                case EParameterType.String:
+                    SerializedProperty stringProp = parameter.FindPropertyRelative("stringValue");
+                    stringProp.stringValue = EditorGUI.TextField(parameterRect, stringProp.stringValue);
+                    break;
+
+                case EParameterType.Vector3:
+                    SerializedProperty vector3Prop = parameter.FindPropertyRelative("vector3Value");
+                    vector3Prop.vector3Value = EditorGUI.Vector3Field(parameterRect, GUIContent.none, vector3Prop.vector3Value);
+                    break;
+
+                case EParameterType.Quaternion:
+                    SerializedProperty quaternionProp = parameter.FindPropertyRelative("quaternionValue");
+                    Quaternion quaterValue = quaternionProp.quaternionValue;
+                    Vector4 vector4 = new Vector4(quaterValue.x, quaterValue.y, quaterValue.z, quaterValue.w);
+                    vector4 = EditorGUI.Vector4Field(parameterRect, GUIContent.none, vector4);
+                    quaternionProp.quaternionValue = new Quaternion(vector4.x, vector4.y, vector4.z, vector4.w);
+                    break;
+
+                case EParameterType.GameObject:
+                    SerializedProperty gameObjectProp = parameter.FindPropertyRelative("gameObjectValue");
+                    gameObjectProp.objectReferenceValue = EditorGUI.ObjectField(parameterRect, GUIContent.none, gameObjectProp.objectReferenceValue, typeof(GameObject), true);
+                    break;
+
+                case EParameterType.Color:
+                    SerializedProperty colorProp = parameter.FindPropertyRelative("colorValue");
+                    colorProp.colorValue = EditorGUI.ColorField(parameterRect, GUIContent.none, colorProp.colorValue);
+                    break;
+            }
         }
 
 
