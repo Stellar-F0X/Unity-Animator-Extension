@@ -1,11 +1,6 @@
-using System;
+using UnityEngine;
 using System.Collections.Generic;
 using AnimatorExpansion.Parameters;
-using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.Animations;
-using UnityEngine.Playables;
-using UnityEngine.Serialization;
 
 namespace AnimatorExpansion
 {
@@ -14,13 +9,17 @@ namespace AnimatorExpansion
         public List<AnimationEvent> animationEventList = new List<AnimationEvent>();
 
         private bool _initialized;
-        
+
         private AnimationEventReceiver _receiver;
-        
+
+        private int _loopCount;
+
 
 
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            _loopCount = 1;
+            
             if (_initialized == false)
             {
                 _initialized = true;
@@ -30,17 +29,17 @@ namespace AnimatorExpansion
                 Debug.Assert(foundReceiver, "There are no Receivers on this object or its hierarchy.");
             }
 
-            foreach (var animationEvent in animationEventList)
+            for (int i = 0; i < animationEventList.Count; i++)
             {
-                if (animationEvent.sendType == EEventSendType.Enter)
+                var animationEvent = animationEventList[i];
+                
+                if (animationEvent.sendType != EEventSendType.Enter)
                 {
-                    _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
-                    animationEvent.hasTriggered = true;
+                    continue;
                 }
-                else
-                {
-                    animationEvent.hasTriggered = false;
-                }
+
+                _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
+                animationEvent.hasTriggered = true;
             }
         }
 
@@ -52,53 +51,93 @@ namespace AnimatorExpansion
             {
                 return;
             }
+            
+            this.TryInitializeEvent(stateInfo);
 
             float currentTime = stateInfo.normalizedTime % 1f;
 
-            foreach (var animationEvent in animationEventList)
+            for (int i = 0; i < animationEventList.Count; i++)
             {
-                if (animationEvent.hasTriggered || animationEvent.sendType == EEventSendType.None)
+                var animationEvent = animationEventList[i];
+                
+                if (animationEvent.sendType == EEventSendType.None)
                 {
                     continue;
                 }
 
-                if (animationEvent.sendType == EEventSendType.Update)
+                this.NotifyEvents(animationEvent, currentTime);
+            }
+        }
+
+
+
+        public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            for (int i = 0; i < animationEventList.Count; i++)
+            {
+                var animationEvent = animationEventList[i];
+                
+                if (animationEvent.sendType == EEventSendType.Exit)
                 {
                     _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
                     animationEvent.hasTriggered = true;
                 }
-                else if (animationEvent.sendType == EEventSendType.Point)
-                {
-                    if (currentTime >= animationEvent.triggerTime)
-                    {
-                        _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
-                        animationEvent.hasTriggered = true;
-                    }
-                }
-                else if (animationEvent.sendType == EEventSendType.Range)
-                {
-                    MinMax rangeTriggerTime = animationEvent.rangeTriggerTime;
+            }
+        }
+        
+        
+        
+        
+        private void TryInitializeEvent(AnimatorStateInfo stateInfo)
+        {
+            if ((int)stateInfo.normalizedTime >= _loopCount)
+            {
+                _loopCount++;
 
-                    if (currentTime >= rangeTriggerTime.min && currentTime <= rangeTriggerTime.max)
+                for (int i = 0; i < animationEventList.Count; i++)
+                {
+                    animationEventList[i].hasTriggered = false;
+                }
+            }
+        }
+        
+        
+        
+        private void NotifyEvents(AnimationEvent animationEvent, float currentTime)
+        {
+            if (animationEvent.sendType == EEventSendType.Update)
+            {
+                _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
+                
+                animationEvent.hasTriggered = true;
+            }
+            else if (animationEvent.sendType == EEventSendType.Range)
+            {
+                MinMax rangeTriggerTime = animationEvent.rangeTriggerTime;
+
+                if (currentTime >= rangeTriggerTime.min)
+                {
+                    if (currentTime <= rangeTriggerTime.max)
                     {
                         _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
                     }
-                    else if (currentTime > rangeTriggerTime.max)
+                    else
                     {
                         animationEvent.hasTriggered = true;
                     }
                 }
             }
-        }
-
-        
-        public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        {
-            foreach (var animationEvent in animationEventList)
+            else if (animationEvent.sendType == EEventSendType.Point)
             {
-                if (animationEvent.sendType == EEventSendType.Exit)
+                if (animationEvent.hasTriggered)
+                {
+                    return;
+                }
+                
+                if (currentTime > animationEvent.triggerTime)
                 {
                     _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
+                    
                     animationEvent.hasTriggered = true;
                 }
             }

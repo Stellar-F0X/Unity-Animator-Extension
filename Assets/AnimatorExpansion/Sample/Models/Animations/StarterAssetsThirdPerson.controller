@@ -53,10 +53,10 @@ MonoBehaviour:
   - eventName: Log1
     eventHash: 1582259893
     triggerTime: 0
-    sendType: 1
+    sendType: 5
     rangeTriggerTime:
-      min: 0
-      max: 0
+      min: 0.461
+      max: 1
     hasTriggered: 0
   - eventName: Log2
     eventHash: 1178975366

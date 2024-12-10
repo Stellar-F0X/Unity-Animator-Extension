@@ -11,13 +11,13 @@ namespace AnimatorExpansion
     public sealed class AnimationEventReceiver : MonoBehaviour
     {
         public bool debug = false;
-            
+
         private readonly static Type _SearchAttributeType = typeof(AnimationEventAttribute);
-        
+
         private readonly EventContainer _eventContainer = new EventContainer();
 
         private const BindingFlags _EVENT_BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-        
+
 
 
 
@@ -96,18 +96,11 @@ namespace AnimatorExpansion
 
         public void ReceiveEvent(int eventHash, SEventParameter sEventParameter)
         {
-            bool succeed = _eventContainer.Invoke(eventHash, sEventParameter);
+            bool succeed = _eventContainer.Invoke(eventHash, sEventParameter, out string errorMessage);
 
-            if (debug)
+            if (debug && !succeed)
             {
-                if (succeed == false)
-                {
-                    Debug.Log("<color=magenta>[Animation Event Receiver]</color> EventHash not found");
-                }
-                else
-                {
-                    Debug.Log("<color=green>[Animation Event Receiver]</color> EventHash found");
-                }
+                Debug.Log($"<color=magenta>[Animation Event Receiver]</color> {errorMessage}");
             }
         }
     }
