@@ -13,9 +13,7 @@ namespace AnimatorExpansion
         public int eventHash; 
         public float triggerTime;
         public SEventParameter parameter;
-        
         public EEventSendType sendType;
-        [FormerlySerializedAs("repeatTriggerRange")]
         public MinMax rangeTriggerTime;
         
         public bool hasTriggered;

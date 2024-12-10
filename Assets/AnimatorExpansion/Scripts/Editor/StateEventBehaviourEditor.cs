@@ -6,7 +6,9 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEditorInternal;
+using UnityEngine.UIElements;
 using AnimatorController = UnityEditor.Animations.AnimatorController;
+using Object = System.Object;
 
 namespace AnimatorExpansion.Editor
 {
@@ -33,11 +35,11 @@ namespace AnimatorExpansion.Editor
 
         private void OnEnable()
         {
-            SerializedProperty property = serializedObject.FindProperty("animationEventList");
+            SerializedProperty property = serializedObject?.FindProperty("animationEventList");
 
             AnimationUtility.GetCurrentAnimatorAndController(out _controller, out _animator);
 
-            if (_controller != null && _animator != null)
+            if (property != null && _controller != null && _animator != null)
             {
                 _animationEventList = new ReorderableList(serializedObject, property, true, true, false, false);
 
