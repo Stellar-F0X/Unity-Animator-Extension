@@ -70,55 +70,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationEventList:
-  - eventName: Log0
-    eventHash: 16175952
-    triggerTime: 0.3
-    parameter:
-      parameterType: 0
-      hasParameter: 0
-      intValue: 0
-      charValue: 0
-      boolValue: 0
-      stringValue: 
-      floatValue: 0
-      colorValue: {r: 0, g: 0, b: 0, a: 0}
-      vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 0, z: 0}
-      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
-      gameObjectValue: {fileID: 0}
-      transformValue: {fileID: 0}
-    sendType: 4
-    rangeTriggerTime:
-      min: 0
-      max: 0
-    hasTriggered: 0
-  - eventName: Log1
-    eventHash: 1582259893
-    triggerTime: 0.6
-    parameter:
-      parameterType: 0
-      hasParameter: 0
-      intValue: 0
-      charValue: 0
-      boolValue: 0
-      stringValue: 
-      floatValue: 0
-      colorValue: {r: 0, g: 0, b: 0, a: 0}
-      vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 0, z: 0}
-      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
-      gameObjectValue: {fileID: 0}
-      transformValue: {fileID: 0}
-    sendType: 4
-    rangeTriggerTime:
-      min: 0.461
-      max: 1
-    hasTriggered: 0
-  - eventName: LogMessage
-    eventHash: -246315601
+  - eventName: GetQuaternion
+    eventHash: 483699270
     triggerTime: 0
     parameter:
-      parameterType: 1
+      parameterType: 6
       hasParameter: 0
       intValue: 30907
       charValue: 0
@@ -128,7 +84,7 @@ MonoBehaviour:
       colorValue: {r: 0, g: 0, b: 0, a: 0}
       vector2Value: {x: 0, y: 0}
       vector3Value: {x: 0, y: 0, z: 0}
-      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
+      quaternionValue: {x: 1, y: 2, z: 3, w: 4}
       gameObjectValue: {fileID: 0}
       transformValue: {fileID: 0}
     sendType: 1

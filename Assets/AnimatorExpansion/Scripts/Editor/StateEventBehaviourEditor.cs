@@ -189,7 +189,15 @@ namespace AnimatorExpansion.Editor
             position.y += EditorGUIUtility.singleLineHeight + 8;
             _animationEventDrawer.DrawDropdownSliderField(position, property, index);
             position.y += EditorGUIUtility.singleLineHeight + 8;
-            _animationEventDrawer.DrawParameterField(position, property, _parameterTypeList[selectedIndex]);
+
+            if (selectedIndex >= 0 && selectedIndex < _eventNameList.Length)
+            {
+                _animationEventDrawer.DrawParameterField(position, property, _parameterTypeList[selectedIndex]);
+            }
+            else
+            {
+                GUILayout.Label($"Previewing at {_previewNormalizedTime:F2}s", EditorStyles.helpBox);
+            }
         }
 
 
