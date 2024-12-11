@@ -28,10 +28,11 @@ namespace AnimatorExpansion.Editor
 
         private const BindingFlags _EVENT_BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
+        private readonly static Type _animatorWindowType = Type.GetType("UnityEditor.Graphs.AnimatorControllerTool, UnityEditor.Graphs");
+        
         private readonly static Type _SearchAttributeType = typeof(AnimationEventAttribute);
 
-        private readonly static Dictionary<Type, Func<MonoBehaviour, IEnumerable<SEventInfo>>> _MethodCache =
-            new Dictionary<Type, Func<MonoBehaviour, IEnumerable<SEventInfo>>>();
+        private readonly static Dictionary<Type, Func<MonoBehaviour, IEnumerable<SEventInfo>>> _MethodCache = new ();
 
         private readonly static Lazy<List<SEventInfo>> _CachedEventName = new Lazy<List<SEventInfo>>(() => new List<SEventInfo>());
 
@@ -49,6 +50,13 @@ namespace AnimatorExpansion.Editor
 
         public static void GetAnimationEventNames(AnimationEventReceiver receiver, out string[] nameList, out EParameterType[] paramTypeList)
         {
+            if (receiver == null)
+            {
+                nameList = null;
+                paramTypeList = null;
+                return;
+            }
+            
             var components = receiver.GetComponentsInChildren<MonoBehaviour>(true);
 
             OnReloadScripts();
@@ -260,5 +268,17 @@ namespace AnimatorExpansion.Editor
                 return true;
             }
         }
+        
+        
+        public static void GetAnimatorAndController(out Animator animator, out AnimatorController controller)
+        {
+            EditorWindow window = EditorWindow.GetWindow(_animatorWindowType);
+
+            FieldInfo animatorField = _animatorWindowType.GetField("m_PreviewAnimator", ANIMATOR_BINDING_FLAGS);
+            FieldInfo controllerField = _animatorWindowType.GetField("m_AnimatorController", ANIMATOR_BINDING_FLAGS);
+
+            animator = animatorField.GetValue(window) as Animator;
+            controller = controllerField.GetValue(window) as AnimatorController;
+        } 
     }
 }

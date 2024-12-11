@@ -13,33 +13,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationEventList:
-  - eventName: get position
-    eventHash: -594658637
-    triggerTime: 0.499
+  - eventName: None
+    eventHash: 1414246128
+    triggerTime: 0.5
     parameter:
-      parameterType: 5
-      hasParameter: 0
-      intValue: 0
-      charValue: 0
-      boolValue: 0
-      stringValue: 
-      floatValue: 0
-      colorValue: {r: 0, g: 0, b: 0, a: 0}
-      vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 10, z: 0}
-      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
-      gameObjectValue: {fileID: 0}
-      transformValue: {fileID: 0}
-    sendType: 5
-    rangeTriggerTime:
-      min: 0.277
-      max: 0.672
-    hasTriggered: 0
-  - eventName: LogMessage
-    eventHash: -246315601
-    triggerTime: 0.639
-    parameter:
-      parameterType: 1
+      parameterType: 0
       hasParameter: 0
       intValue: 0
       charValue: 0
@@ -54,8 +32,8 @@ MonoBehaviour:
       transformValue: {fileID: 0}
     sendType: 4
     rangeTriggerTime:
-      min: 0.46672183
-      max: 0.46672183
+      min: 0.44
+      max: 0.44
     hasTriggered: 0
 --- !u!114 &-8404588960376802524
 MonoBehaviour:
@@ -69,7 +47,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18af2ec660677944c852056699f54797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationEventList: []
+  animationEventList:
+  - eventName: None
+    eventHash: 1414246128
+    triggerTime: 0
+    parameter:
+      parameterType: 0
+      hasParameter: 0
+      intValue: 0
+      charValue: 0
+      boolValue: 0
+      stringValue: 
+      floatValue: 0
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      vector2Value: {x: 0, y: 0}
+      vector3Value: {x: 0, y: 0, z: 0}
+      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
+      gameObjectValue: {fileID: 0}
+      transformValue: {fileID: 0}
+    sendType: 0
+    rangeTriggerTime:
+      min: 0
+      max: 0
+    hasTriggered: 0
 --- !u!1102 &-7469282255733588732
 AnimatorState:
   serializedVersion: 6
@@ -98,6 +98,29 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &-6726242626955902500
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8dacf4e3aa16544a91cf51cf8319308, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedInfos:
+  - parameterName: 
+    controlRange:
+      min: 0
+      max: 0
+    speedCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
 --- !u!1107 &-5602963042399094863
 AnimatorStateMachine:
   serializedVersion: 6
@@ -543,6 +566,7 @@ AnimatorState:
   - {fileID: 8635457214972911529}
   m_StateMachineBehaviours:
   - {fileID: -8404588960376802524}
+  - {fileID: -6726242626955902500}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 1
   m_WriteDefaultValues: 1
@@ -554,7 +578,7 @@ AnimatorState:
   m_Motion: {fileID: 8571049798372811705}
   m_Tag: 
   m_SpeedParameter: MotionSpeed
-  m_MirrorParameter: 
+  m_MirrorParameter: Jump
   m_CycleOffsetParameter: 
   m_TimeParameter: Speed
 --- !u!1101 &7604687646627025577

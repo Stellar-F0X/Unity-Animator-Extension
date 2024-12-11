@@ -9,11 +9,10 @@ namespace AnimatorExpansion
         public List<AnimationEvent> animationEventList = new List<AnimationEvent>();
 
         private bool _initialized;
-
-        private AnimationEventReceiver _receiver;
-
+        
         private int _loopCount;
 
+        private AnimationEventReceiver _receiver;
 
 
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

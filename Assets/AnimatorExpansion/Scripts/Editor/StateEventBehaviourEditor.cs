@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using AnimatorExpansion.Parameters;
 using UnityEditor;
-using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEditorInternal;
-using UnityEngine.UIElements;
 using AnimatorController = UnityEditor.Animations.AnimatorController;
-using Object = System.Object;
 
 namespace AnimatorExpansion.Editor
 {
@@ -37,15 +33,7 @@ namespace AnimatorExpansion.Editor
 
         private void GetAnimatorAndControllerOfReceiver(out AnimationEventReceiver receiver)
         {
-            Type animatorWindowType = Type.GetType("UnityEditor.Graphs.AnimatorControllerTool, UnityEditor.Graphs");
-
-            EditorWindow window = EditorWindow.GetWindow(animatorWindowType);
-
-            FieldInfo animatorField = animatorWindowType.GetField("m_PreviewAnimator", AnimationUtility.ANIMATOR_BINDING_FLAGS);
-            FieldInfo controllerField = animatorWindowType.GetField("m_AnimatorController", AnimationUtility.ANIMATOR_BINDING_FLAGS);
-
-            _animator = animatorField.GetValue(window) as Animator;
-            _controller = controllerField.GetValue(window) as AnimatorController;
+            AnimationUtility.GetAnimatorAndController(out _animator, out _controller);
             
             if (_controller != null && _animator == null)
             {
@@ -90,7 +78,7 @@ namespace AnimatorExpansion.Editor
                 _behaviour = (StateEventBehaviour)target;
 
                 _animationEventDrawer.onFocusedPointSlider = i => _previewNormalizedTime = _behaviour.animationEventList[i].triggerTime;
-                _animationEventDrawer.onFocusedRangeSlider = (min, max) => _previewNormalizedTime = _animationEventDrawer.OnFocusRangeSliderField(min, max);
+                _animationEventDrawer.onFocusedRangeSlider = t => _previewNormalizedTime = t;
             }
         }
 
