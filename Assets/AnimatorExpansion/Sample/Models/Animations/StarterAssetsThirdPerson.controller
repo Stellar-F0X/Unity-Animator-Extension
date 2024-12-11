@@ -30,10 +30,32 @@ MonoBehaviour:
       quaternionValue: {x: 0, y: 0, z: 0, w: 0}
       gameObjectValue: {fileID: 0}
       transformValue: {fileID: 0}
+    sendType: 5
+    rangeTriggerTime:
+      min: 0.277
+      max: 0.672
+    hasTriggered: 0
+  - eventName: LogMessage
+    eventHash: -246315601
+    triggerTime: 0.639
+    parameter:
+      parameterType: 1
+      hasParameter: 0
+      intValue: 0
+      charValue: 0
+      boolValue: 0
+      stringValue: 
+      floatValue: 0
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      vector2Value: {x: 0, y: 0}
+      vector3Value: {x: 0, y: 0, z: 0}
+      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
+      gameObjectValue: {fileID: 0}
+      transformValue: {fileID: 0}
     sendType: 4
     rangeTriggerTime:
-      min: 0
-      max: 0
+      min: 0.46672183
+      max: 0.46672183
     hasTriggered: 0
 --- !u!114 &-8404588960376802524
 MonoBehaviour:
