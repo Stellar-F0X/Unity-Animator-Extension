@@ -8,33 +8,25 @@ namespace AnimatorExpansion
     [Serializable]
     public struct MinMax : IEquatable<MinMax>
     {
-        public float min;
-        public float max;
-
-        public bool HasValue
-        {
-            get { return min != 0 || max != 0; }
-        }
-
-        public Vector2 Vector
-        {
-            get { return new Vector2(min, max); }
-        }
-
         public MinMax(float min, float max)
         {
             this.min = min;
             this.max = max;
         }
         
-        public MinMax Flip()
-        {
-            return new MinMax(max, min);
-        }
+        public float min;
+        public float max;
 
-        public override string ToString()
+
+        public float middle
         {
-            return $"({min}, {max})";
+            get { return (min + max) * 0.5f; }
+        }
+        
+
+        public void Flip()
+        {
+            this = new MinMax(max, min);
         }
 
         public bool Equals(MinMax other)

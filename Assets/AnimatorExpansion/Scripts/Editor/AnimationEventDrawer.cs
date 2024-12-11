@@ -10,28 +10,7 @@ namespace AnimatorExpansion.Editor
         private const string _POINT_SLIDER_FOCUS_NAME_ = "__point_slider_field__";
 
         public Action<int> onFocusedPointSlider;
-        public Action<SChangedValue, SChangedValue> onFocusedRangeSlider;
-
-
-        public float OnFocusRangeSliderField(SChangedValue min, SChangedValue max)
-        {
-            GUI.FocusControl(string.Empty);
-
-            if (min.isChanged && max.isChanged)
-            {
-                return (min.value + max.value) * 0.5f;
-            }
-            else if (min.isChanged)
-            {
-                return min.value;
-            }
-            else if (max.isChanged)
-            {
-                return max.value;
-            }
-
-            return 0;
-        }
+        public Action<float> onFocusedRangeSlider;
 
 
         public void DrawDropdownSliderField(Rect position, SerializedProperty property, int index)
@@ -74,7 +53,20 @@ namespace AnimatorExpansion.Editor
 
                 if (minValueChanged || maxValueChanged)
                 {
-                    onFocusedRangeSlider.Invoke(new SChangedValue(minValueChanged, minFloatValue), new SChangedValue(maxValueChanged, maxFloatValue));
+                    GUI.FocusControl(string.Empty);
+
+                    if (minValueChanged && maxValueChanged)
+                    {
+                        onFocusedRangeSlider.Invoke((minFloatValue + maxFloatValue) * 0.5f);
+                    }
+                    else if (minValueChanged)
+                    {
+                        onFocusedRangeSlider.Invoke(minFloatValue);
+                    }
+                    else if (maxValueChanged)
+                    {
+                        onFocusedRangeSlider.Invoke(maxFloatValue);
+                    }
                 }
             }
             else if ((EEventSendType)sendType.enumValueIndex == EEventSendType.Point)
@@ -129,9 +121,9 @@ namespace AnimatorExpansion.Editor
 
             Rect paramTypeRect = this.CalculateVariableRect(position, 0.15f, beforeEmpty: 5);
             Rect parameterRect = this.CalculateVariableRect(position, 0.85f, position.width * 0.15f, 10);
-            
+
             parameterType.enumValueIndex = (int)parameterTypes;
-            
+
             using (new EditorGUI.DisabledScope(true))
             {
                 EditorGUI.PropertyField(paramTypeRect, parameterType, GUIContent.none);
@@ -139,7 +131,7 @@ namespace AnimatorExpansion.Editor
 
             switch (parameterTypes)
             {
-                case EParameterType.Int: 
+                case EParameterType.Int:
                     SerializedProperty intProp = parameter.FindPropertyRelative("intValue");
                     intProp.intValue = EditorGUI.IntField(parameterRect, intProp.intValue);
                     break;
@@ -174,7 +166,9 @@ namespace AnimatorExpansion.Editor
 
                 case EParameterType.GameObject:
                     SerializedProperty gameObjectProp = parameter.FindPropertyRelative("gameObjectValue");
-                    gameObjectProp.objectReferenceValue = EditorGUI.ObjectField(parameterRect, GUIContent.none, gameObjectProp.objectReferenceValue, typeof(GameObject), true);
+                    gameObjectProp.objectReferenceValue =
+                        EditorGUI.ObjectField(parameterRect, GUIContent.none, gameObjectProp.objectReferenceValue, typeof(GameObject), true);
+
                     break;
 
                 case EParameterType.Color:
