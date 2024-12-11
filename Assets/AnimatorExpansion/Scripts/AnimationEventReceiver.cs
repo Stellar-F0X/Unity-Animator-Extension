@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using AnimatorExpansion.Parameters;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -16,9 +17,20 @@ namespace AnimatorExpansion
 
         private readonly EventContainer _eventContainer = new EventContainer();
 
+        private Animator _cachedAnimator;
+
         private const BindingFlags _EVENT_BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
 
+        public Animator animator
+        {
+            get { return _cachedAnimator ??= GetComponent<Animator>(); }
+        }
+
+        public AnimatorController controller
+        {
+            get { return animator.runtimeAnimatorController as AnimatorController; }
+        }
 
 
         private void Awake()

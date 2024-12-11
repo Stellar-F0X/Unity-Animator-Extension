@@ -35,18 +35,53 @@ namespace AnimatorExpansion.Editor
 
 
 
+        private void GetAnimatorAndControllerOfReceiver(out AnimationEventReceiver receiver)
+        {
+            Type animatorWindowType = Type.GetType("UnityEditor.Graphs.AnimatorControllerTool, UnityEditor.Graphs");
+
+            EditorWindow window = EditorWindow.GetWindow(animatorWindowType);
+
+            FieldInfo animatorField = animatorWindowType.GetField("m_PreviewAnimator", AnimationUtility.ANIMATOR_BINDING_FLAGS);
+            FieldInfo controllerField = animatorWindowType.GetField("m_AnimatorController", AnimationUtility.ANIMATOR_BINDING_FLAGS);
+
+            _animator = animatorField.GetValue(window) as Animator;
+            _controller = controllerField.GetValue(window) as AnimatorController;
+            
+            if (_controller != null && _animator == null)
+            {
+                FindObjectsSortMode sortMode = FindObjectsSortMode.None;
+                FindObjectsInactive inactiveMode = FindObjectsInactive.Exclude;
+
+                receiver = FindObjectsByType<AnimationEventReceiver>(inactiveMode, sortMode)
+                    .FirstOrDefault(receive => receive.controller == _controller);
+
+                _animator = receiver?.animator;
+            }
+            else
+            {
+                receiver = _animator?.GetComponent<AnimationEventReceiver>();
+            }
+        }
+        
+
+
         private void OnEnable()
         {
             SerializedProperty property = serializedObject?.FindProperty("animationEventList");
 
-            AnimationUtility.GetCurrentAnimatorAndController(out _controller, out _animator);
+            if (_animator == null)
+            {
+                this.GetAnimatorAndControllerOfReceiver(out AnimationEventReceiver receiver);
+                
+                AnimationUtility.GetAnimationEventNames(receiver, out _eventNameList, out _parameterTypeList);
+            }
 
             if (property != null && _controller != null && _animator != null)
             {
                 _animationEventList = new ReorderableList(serializedObject, property, true, true, false, false);
 
                 _animationEventList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Animation Event List");
-                _animationEventList.elementHeightCallback = index => EditorGUIUtility.singleLineHeight * 4 + 5f;
+                _animationEventList.elementHeightCallback = index => EditorGUIUtility.singleLineHeight * 4f;
                 _animationEventList.drawElementCallback = this.DrawAnimationEventGUI;
 
                 _animationSamplePlayer = new AnimationSamplePlayer(_animator, _controller);
@@ -56,11 +91,6 @@ namespace AnimatorExpansion.Editor
 
                 _animationEventDrawer.onFocusedPointSlider = i => _previewNormalizedTime = _behaviour.animationEventList[i].triggerTime;
                 _animationEventDrawer.onFocusedRangeSlider = (min, max) => _previewNormalizedTime = _animationEventDrawer.OnFocusRangeSliderField(min, max);
-
-                if (_animator.TryGetComponent(out AnimationEventReceiver receiver))
-                {
-                    AnimationUtility.GetAnimationEventNames(receiver, out _eventNameList, out _parameterTypeList);
-                }
             }
         }
 
@@ -190,9 +220,9 @@ namespace AnimatorExpansion.Editor
 
             position.y += 5;
             int selectedIndex =_animationEventDrawer.DrawStringHashField(position, property, _eventNameList);
-            position.y += EditorGUIUtility.singleLineHeight + 8;
+            position.y += EditorGUIUtility.singleLineHeight + 5;
             _animationEventDrawer.DrawDropdownSliderField(position, property, index);
-            position.y += EditorGUIUtility.singleLineHeight + 8;
+            position.y += EditorGUIUtility.singleLineHeight + 5;
 
             if (selectedIndex >= 0 && selectedIndex < _eventNameList.Length)
             {

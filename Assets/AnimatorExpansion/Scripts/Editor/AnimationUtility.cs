@@ -19,24 +19,25 @@ namespace AnimatorExpansion.Editor
                 this.eventName = eventName;
                 this.paramType = paramType;
             }
-            
+
             public string eventName;
             public EParameterType paramType;
         }
-        
-        private const BindingFlags _ANIMATOR_BINDING_FLAGS = BindingFlags.NonPublic | BindingFlags.Instance;
-        
+
+        public const BindingFlags ANIMATOR_BINDING_FLAGS = BindingFlags.NonPublic | BindingFlags.Instance;
+
         private const BindingFlags _EVENT_BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-        
+
         private readonly static Type _SearchAttributeType = typeof(AnimationEventAttribute);
 
-        private readonly static Dictionary<Type, Func<MonoBehaviour, IEnumerable<SEventInfo>>> _MethodCache = new Dictionary<Type, Func<MonoBehaviour, IEnumerable<SEventInfo>>>();
+        private readonly static Dictionary<Type, Func<MonoBehaviour, IEnumerable<SEventInfo>>> _MethodCache =
+            new Dictionary<Type, Func<MonoBehaviour, IEnumerable<SEventInfo>>>();
 
         private readonly static Lazy<List<SEventInfo>> _CachedEventName = new Lazy<List<SEventInfo>>(() => new List<SEventInfo>());
-        
+
         private readonly static Lazy<List<SEventInfo>> _TempCachedEventNames = new Lazy<List<SEventInfo>>(() => new List<SEventInfo>());
-        
-        
+
+
         [DidReloadScripts]
         private static void OnReloadScripts()
         {
@@ -44,27 +45,27 @@ namespace AnimatorExpansion.Editor
             _CachedEventName.Value.Clear();
             _TempCachedEventNames.Value.Clear();
         }
-        
+
 
         public static void GetAnimationEventNames(AnimationEventReceiver receiver, out string[] nameList, out EParameterType[] paramTypeList)
         {
             var components = receiver.GetComponentsInChildren<MonoBehaviour>(true);
 
             OnReloadScripts();
-            
+
             if (components == null || components.Length == 0)
             {
                 nameList = null;
                 paramTypeList = null;
                 return;
             }
-            
+
             _CachedEventName.Value.Add(new SEventInfo("None", EParameterType.Void));
 
             foreach (var component in components)
             {
                 Type type = component.GetType();
-                
+
                 if (_MethodCache.TryGetValue(type, out var getMethodNames) == false)
                 {
                     getMethodNames = CreateMethodDelegate(type);
@@ -91,7 +92,7 @@ namespace AnimatorExpansion.Editor
 
             return _ => _TempCachedEventNames.Value;
         }
-        
+
 
         private static ChildAnimatorState FindMatchingStateRecursion(AnimatorStateMachine stateMachine, StateMachineBehaviour behaviour)
         {
@@ -214,7 +215,7 @@ namespace AnimatorExpansion.Editor
 
         public static float GetBlendParameterValue(BlendTree blendTree, string parameterName)
         {
-            var methodInfo = typeof(BlendTree).GetMethod("GetInputBlendValue", _ANIMATOR_BINDING_FLAGS);
+            var methodInfo = typeof(BlendTree).GetMethod("GetInputBlendValue", ANIMATOR_BINDING_FLAGS);
 
             if (methodInfo == null)
             {
@@ -258,20 +259,6 @@ namespace AnimatorExpansion.Editor
             {
                 return true;
             }
-        }
-
-
-        public static void GetCurrentAnimatorAndController(out AnimatorController controller, out Animator animator)
-        {
-            Type animatorWindowType = Type.GetType("UnityEditor.Graphs.AnimatorControllerTool, UnityEditor.Graphs");
-
-            EditorWindow window = EditorWindow.GetWindow(animatorWindowType);
-
-            FieldInfo animatorField = animatorWindowType.GetField("m_PreviewAnimator", _ANIMATOR_BINDING_FLAGS);
-            FieldInfo controllerField = animatorWindowType.GetField("m_AnimatorController", _ANIMATOR_BINDING_FLAGS);
-
-            animator = animatorField.GetValue(window) as Animator;
-            controller = controllerField.GetValue(window) as AnimatorController;
         }
     }
 }
