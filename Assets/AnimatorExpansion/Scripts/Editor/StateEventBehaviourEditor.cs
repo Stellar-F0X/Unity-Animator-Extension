@@ -228,7 +228,7 @@ namespace AnimatorExpansion.Editor
             AnimationEvent animationEvent = new AnimationEvent()
             {
                 eventName = _newEventName,
-                eventHash = Utility.StringToHash(_newEventName),
+                eventHash = Extension.StringToHash(_newEventName),
                 triggerTime = _previewNormalizedTime,
                 rangeTriggerTime = new MinMax(_previewNormalizedTime, _previewNormalizedTime)
             };
