@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: 7d2e783b9498f4741938773b5271e489
+labels:
+- Animation
 AssemblyDefinitionImporter:
   externalObjects: {}
   userData: 

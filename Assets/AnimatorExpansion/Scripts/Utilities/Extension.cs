@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AnimatorExpansion
 {
-    public static class Utility
+    public static class Extension
     {
         public static int StringToHash(string sentence)
         {
@@ -13,6 +13,12 @@ namespace AnimatorExpansion
             }
             
             return sentence.GetHashCode(StringComparison.Ordinal);
+        }
+
+        
+        public static Animator BindAction(this Animator animator)
+        {
+            return animator;
         }
     }
 }

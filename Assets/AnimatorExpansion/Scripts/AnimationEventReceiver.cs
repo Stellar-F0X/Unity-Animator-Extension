@@ -45,7 +45,7 @@ namespace AnimatorExpansion
                 {
                     if (methodInfo.GetCustomAttribute(_SearchAttributeType) is AnimationEventAttribute attribute)
                     {
-                        int eventHash = Utility.StringToHash(attribute.eventName);
+                        int eventHash = Extension.StringToHash(attribute.eventName);
                         EParameterType parameter = attribute.parameterType;
                         this.RegisterEvent(eventHash, parameter, methodInfo, component);
                     }
