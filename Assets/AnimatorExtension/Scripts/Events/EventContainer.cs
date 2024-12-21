@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using AnimatorExpansion.Parameters;
+using AnimatorExtension.Parameters;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace AnimatorExpansion
+namespace AnimatorExtension
 {
     public class EventContainer
     {

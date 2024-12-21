@@ -1,10 +1,10 @@
 using System;
-using AnimatorExpansion.Parameters;
+using AnimatorExtension.Parameters;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
-namespace AnimatorExpansion
+namespace AnimatorExtension
 {
     [Serializable]
     public class AnimationEvent

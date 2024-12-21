@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
 
-namespace AnimatorExpansion.Editor
+namespace AnimatorExtension.Editor
 {
     internal class AnimationSamplePlayer
     {

@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
-using AnimatorExpansion.Parameters;
+using AnimatorExtension.Parameters;
 
-namespace AnimatorExpansion
+namespace AnimatorExtension
 {
     internal class StateEventBehaviour : StateMachineBehaviour
     {

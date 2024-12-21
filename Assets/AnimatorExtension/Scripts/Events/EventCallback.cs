@@ -1,6 +1,6 @@
-using AnimatorExpansion.Parameters;
+using AnimatorExtension.Parameters;
 
-namespace AnimatorExpansion
+namespace AnimatorExtension
 {
     public abstract class EventCallback
     {

@@ -2,13 +2,13 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
-using AnimatorExpansion.Parameters;
+using AnimatorExtension.Parameters;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEditor.Callbacks;
 
-namespace AnimatorExpansion.Editor
+namespace AnimatorExtension.Editor
 {
     public static class AnimationUtility
     {

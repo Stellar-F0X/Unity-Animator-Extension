@@ -1,4 +1,4 @@
-namespace AnimatorExpansion.Parameters
+namespace AnimatorExtension.Parameters
 {
     public enum EParameterType
     {

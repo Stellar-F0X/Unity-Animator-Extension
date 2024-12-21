@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace AnimatorExpansion.Editor
+namespace AnimatorExtension.Editor
 {
     public static class CustomEditorUtility
     {

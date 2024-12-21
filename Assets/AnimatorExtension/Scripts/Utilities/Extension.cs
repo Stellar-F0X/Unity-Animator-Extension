@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace AnimatorExpansion
+namespace AnimatorExtension
 {
     public static class Extension
     {

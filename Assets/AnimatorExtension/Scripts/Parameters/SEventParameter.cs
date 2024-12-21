@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace AnimatorExpansion.Parameters
+namespace AnimatorExtension.Parameters
 {
     [Serializable]
     public struct SEventParameter

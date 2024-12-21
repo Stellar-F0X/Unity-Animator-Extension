@@ -7,7 +7,7 @@ using UnityEngine;
 using AnimatorController = UnityEditor.Animations.AnimatorController;
 using AnimatorControllerParameterType = UnityEngine.AnimatorControllerParameterType;
 
-namespace AnimatorExpansion.Editor
+namespace AnimatorExtension.Editor
 {
     using Editor = UnityEditor.Editor;
 
@@ -106,6 +106,11 @@ namespace AnimatorExpansion.Editor
                 float offset = position.width * 0.2f;
                 Rect curveRect = CustomEditorUtility.CalculateConstantRect(position, position.width - offset, offset, 10);
                 speedCurve.animationCurveValue = EditorGUI.CurveField(curveRect, speedCurve.animationCurveValue);
+
+                if (speedCurve.animationCurveValue == null || speedCurve.animationCurveValue.length == 0)
+                {
+                    speedCurve.animationCurveValue = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 1));
+                }
             }
         }
 
@@ -123,17 +128,17 @@ namespace AnimatorExpansion.Editor
                 SerializedProperty nextControlRange = nextProperty.FindPropertyRelative("controlRange");
                 SerializedProperty nextMinProp = nextControlRange.FindPropertyRelative("min");
                 SerializedProperty nextMaxProp = nextControlRange.FindPropertyRelative("max");
-                
+
                 if (currMaxProp.floatValue < currMinProp.floatValue)
                 {
                     currMaxProp.floatValue = currMinProp.floatValue;
                 }
-                
+
                 if (nextMinProp.floatValue < currMaxProp.floatValue)
                 {
                     nextMinProp.floatValue = currMaxProp.floatValue;
                 }
-                
+
                 if (nextMaxProp.floatValue < nextMinProp.floatValue)
                 {
                     nextMaxProp.floatValue = nextMinProp.floatValue;
