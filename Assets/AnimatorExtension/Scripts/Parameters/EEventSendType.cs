@@ -1,6 +1,6 @@
 using System;
 
-namespace AnimatorExpansion.Parameters
+namespace AnimatorExtension.Parameters
 {
     public enum EEventSendType
     {

@@ -1,37 +1,44 @@
-using AnimatorExpansion;
-using AnimatorExpansion.Parameters;
+using System;
+using AnimatorExtension;
+using AnimatorExtension.Parameters;
 using UnityEngine;
 
-public class EventLogger : MonoBehaviour
+namespace AnimatorExtension.Sample
 {
-    public string log0Message;
-    public string log1Message;
-    public string log2Message;
-    
-    
-    [AnimationEvent("Log", EParameterType.Void)]
-    public void Print()
+    public class EventLogger : MonoBehaviour
     {
-        Debug.Log(log0Message);
-    }
+        private Animator animator;
 
-    [AnimationEvent("LogMessage", EParameterType.Int)]
-    public void LogIntMessage(int a)
-    {
-        Debug.Log(a);
-    }
-
-    
-    [AnimationEvent("GetQuaternion", EParameterType.Quaternion)]
-    public void GetQuaternion(Quaternion a)
-    {
-        Debug.Log(a);
-    }
+        public string log0Message;
+        public string log1Message;
+        public string log2Message;
 
 
-    [AnimationEvent("get position", EParameterType.Vector3)]
-    public void GetPosition(Vector3 a)
-    {
-        Debug.Log(a);
+        [AnimationEvent("Log", EParameterType.Void)]
+        public void Print()
+        {
+            Debug.Log(log0Message);
+        }
+
+
+        [AnimationEvent("LogMessage", EParameterType.Int)]
+        public void LogIntMessage(int a)
+        {
+            Debug.Log(a);
+        }
+
+
+        [AnimationEvent("GetQuaternion", EParameterType.Quaternion)]
+        public void GetQuaternion(Quaternion a)
+        {
+            Debug.Log(a);
+        }
+
+
+        [AnimationEvent("get position", EParameterType.Vector3)]
+        public void GetPosition(Vector3 a)
+        {
+            Debug.Log(a);
+        }
     }
 }

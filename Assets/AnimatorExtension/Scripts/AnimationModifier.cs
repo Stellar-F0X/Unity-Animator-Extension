@@ -1,8 +1,6 @@
-using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace AnimatorExpansion
+namespace AnimatorExtension
 {
     public class AnimationModifier : StateMachineBehaviour
     {

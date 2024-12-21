@@ -1,6 +1,6 @@
 {
-    "name": "AnimatorExpansion",
-    "rootNamespace": "AnimatorExpansion",
+    "name": "AnimatorExtension",
+    "rootNamespace": "AnimatorExtension",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

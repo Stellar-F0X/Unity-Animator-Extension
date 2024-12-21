@@ -1,8 +1,7 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace AnimatorExpansion
+namespace AnimatorExtension
 {
     [Serializable]
     public class AnimationSpeedInfo

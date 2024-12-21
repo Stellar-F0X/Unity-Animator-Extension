@@ -1,13 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using AnimatorExpansion.Parameters;
+using AnimatorExtension.Parameters;
 using UnityEditor;
 using UnityEngine;
 using UnityEditorInternal;
 using AnimatorController = UnityEditor.Animations.AnimatorController;
 
-namespace AnimatorExpansion.Editor
+namespace AnimatorExtension.Editor
 {
     using Editor = UnityEditor.Editor;
 

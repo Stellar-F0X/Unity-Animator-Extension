@@ -1,13 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using AnimatorExpansion.Parameters;
+using AnimatorExtension.Parameters;
 using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.Events;
 
-namespace AnimatorExpansion
+namespace AnimatorExtension
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Animator))]
     public sealed class AnimationEventReceiver : MonoBehaviour
     {

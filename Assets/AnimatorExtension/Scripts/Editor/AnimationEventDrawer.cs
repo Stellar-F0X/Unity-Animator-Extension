@@ -1,9 +1,9 @@
 using System;
-using AnimatorExpansion.Parameters;
+using AnimatorExtension.Parameters;
 using UnityEditor;
 using UnityEngine;
 
-namespace AnimatorExpansion.Editor
+namespace AnimatorExtension.Editor
 {
     internal class AnimationEventDrawer
     {

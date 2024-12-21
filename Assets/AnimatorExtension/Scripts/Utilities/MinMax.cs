@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AnimatorExpansion
+namespace AnimatorExtension
 {
     [Serializable]
     public struct MinMax : IEquatable<MinMax>

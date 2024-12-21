@@ -1,8 +1,8 @@
 using System;
-using AnimatorExpansion.Parameters;
+using AnimatorExtension.Parameters;
 using UnityEngine;
 
-namespace AnimatorExpansion
+namespace AnimatorExtension
 {
     [AttributeUsage(AttributeTargets.Method)]
     public class AnimationEventAttribute : PropertyAttribute
