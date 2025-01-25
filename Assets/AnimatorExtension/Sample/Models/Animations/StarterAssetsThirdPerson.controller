@@ -17,8 +17,7 @@ MonoBehaviour:
     eventHash: -246315601
     triggerTime: 0.728
     parameter:
-      parameterType: 1
-      hasParameter: 0
+      parameterType: 0
       intValue: 456789
       charValue: 0
       boolValue: 0
@@ -36,6 +35,8 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      customValue:
+        rid: -2
       sobjValue: {fileID: 0}
     sendType: 5
     rangeTriggerTime:
@@ -46,8 +47,7 @@ MonoBehaviour:
     eventHash: -594658637
     triggerTime: 0.528
     parameter:
-      parameterType: 6
-      hasParameter: 0
+      parameterType: 0
       intValue: 0
       charValue: 0
       boolValue: 0
@@ -65,6 +65,8 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      customValue:
+        rid: -2
       sobjValue: {fileID: 0}
     sendType: 4
     rangeTriggerTime:
@@ -75,8 +77,7 @@ MonoBehaviour:
     eventHash: -1918676790
     triggerTime: 0
     parameter:
-      parameterType: 13
-      hasParameter: 0
+      parameterType: 0
       intValue: 32
       charValue: 0
       boolValue: 0
@@ -112,12 +113,19 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      customValue:
+        rid: -2
       sobjValue: {fileID: 0}
     sendType: 5
     rangeTriggerTime:
       min: 0.23
       max: 0.668
     hasTriggered: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!114 &-8404588960376802524
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -131,6 +139,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationEventList: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!1102 &-7469282255733588732
 AnimatorState:
   serializedVersion: 6

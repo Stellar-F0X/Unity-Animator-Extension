@@ -22,11 +22,12 @@ namespace AnimatorExtension.Editor
         
         private Animator _animator;
         private AnimatorController _controller;
-        private EventInfoContainer _eventContainer;
         private ReorderableList _animationEventList;
         private StateEventBehaviour _behaviour;
-        private AnimationEventDrawer _animationEventDrawer;
         private AnimationSamplePlayer _animationSamplePlayer;
+        
+        private EventInfoContainer _eventContainer = new EventInfoContainer();
+        private AnimationEventDrawer _animationEventDrawer = new AnimationEventDrawer();
 
 
 
@@ -77,8 +78,6 @@ namespace AnimatorExtension.Editor
             _animationEventList.drawElementCallback = this.DrawAnimationEventGUI;
 
             _animationSamplePlayer = new AnimationSamplePlayer(_animator, _controller);
-            _animationEventDrawer = new AnimationEventDrawer();
-
             _behaviour = target as StateEventBehaviour;
 
             _animationEventDrawer.onFocusedPointSlider = i => _previewNormalizedTime = _behaviour.animationEventList[i].triggerTime;
@@ -90,12 +89,6 @@ namespace AnimatorExtension.Editor
         {
             using (new EditorGUI.DisabledScope(Application.isPlaying))
             {
-                if (_controller is null || _animator is null)
-                {
-                    EditorGUILayout.HelpBox("Please click the Animator GameObject.", MessageType.Error, true);
-                    return;
-                }
-
                 if (this.Validate(_behaviour))
                 {
                     _animationSamplePlayer.TryDestroyPlayableGraph();
