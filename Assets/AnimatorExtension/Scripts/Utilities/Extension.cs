@@ -15,10 +15,10 @@ namespace AnimatorExtension
             return sentence.GetHashCode(StringComparison.Ordinal);
         }
 
-        
-        public static Animator BindAction(this Animator animator)
+
+        public static bool Compare(this string a, string b)
         {
-            return animator;
+            return string.Compare(a, b, StringComparison.Ordinal) == 0;
         }
     }
 }

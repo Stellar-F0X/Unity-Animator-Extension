@@ -71,8 +71,8 @@ namespace AnimatorExtension.Sample
             
         }
         
-        [AnimationEvent("get Custom", EParameterType.Customization, typeof(EventAction))]
-        public void GetCustom(ScriptableObject a)
+        [AnimationEvent("get Custom", EParameterType.Customization, typeof(ExampleCustomParameter))]
+        public void GetCustom(ExampleCustomParameter a)
         {
             
         }

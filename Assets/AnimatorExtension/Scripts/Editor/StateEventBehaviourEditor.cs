@@ -19,13 +19,12 @@ namespace AnimatorExtension.Editor
         private bool _isPreviewing;
         private int _currentFocusIndexInList;
 
-        
         private Animator _animator;
         private AnimatorController _controller;
         private ReorderableList _animationEventList;
         private StateEventBehaviour _behaviour;
         private AnimationSamplePlayer _animationSamplePlayer;
-        
+
         private EventInfoContainer _eventContainer = new EventInfoContainer();
         private AnimationEventDrawer _animationEventDrawer = new AnimationEventDrawer();
 
@@ -165,12 +164,25 @@ namespace AnimatorExtension.Editor
 
                 if (GUILayout.Button("Add Event"))
                 {
-                    this.AddNewAnimationEvent(behaviour.animationEventList);
+                    AnimationEvent animationEvent = new AnimationEvent()
+                    {
+                        eventName = _newEventName,
+                        eventHash = Extension.StringToHash(_newEventName),
+                        triggerTime = _previewNormalizedTime,
+                        rangeTriggerTime = new MinMax(_previewNormalizedTime, _previewNormalizedTime)
+                    };
+
+                    behaviour.animationEventList.Add(animationEvent);
                 }
 
                 if (GUILayout.Button("Remove Event"))
                 {
-                    this.RemoveAnimationEvent(behaviour.animationEventList, _currentFocusIndexInList);
+                    if (_currentFocusIndexInList < 0 || behaviour.animationEventList.Count <= _currentFocusIndexInList)
+                    {
+                        return;
+                    }
+
+                    behaviour.animationEventList.RemoveAt(_currentFocusIndexInList);
                 }
 
                 if (_isPreviewing)
@@ -211,47 +223,26 @@ namespace AnimatorExtension.Editor
             if (selectedIndex >= 0 && selectedIndex < _eventContainer.count)
             {
                 EParameterType paramType = _eventContainer.paramTypes[selectedIndex];
-                
+
                 if (paramType == EParameterType.Customization)
                 {
-                    Type customType = _eventContainer.customParams[selectedIndex];
+                    string targetName = _eventContainer.eventNames[selectedIndex];
                     
-                    _animationEventDrawer.DrawParameterField(position, property, _eventContainer.paramTypes[selectedIndex], customType);
+                    AnimationEvent eventInfo = _behaviour.animationEventList.FirstOrDefault(e => e.eventName.Compare(targetName));
+
+                    if (eventInfo is not null && eventInfo.parameter.customValue is null)
+                    {
+                        eventInfo.parameter.customValue = Activator.CreateInstance(_eventContainer.customParams[selectedIndex]) as CustomParameter;
+                    }
                 }
-                else
-                {
-                    _animationEventDrawer.DrawParameterField(position, property, _eventContainer.paramTypes[selectedIndex]);
-                }
+
+                int additiveHeight = _animationEventDrawer.DrawParameterField(position, property, paramType);
             }
             else
+
             {
                 GUILayout.Label($"Previewing at {_previewNormalizedTime:F2}s", EditorStyles.helpBox);
             }
-        }
-
-
-        private void AddNewAnimationEvent(List<AnimationEvent> eventList)
-        {
-            AnimationEvent animationEvent = new AnimationEvent()
-            {
-                eventName = _newEventName,
-                eventHash = Extension.StringToHash(_newEventName),
-                triggerTime = _previewNormalizedTime,
-                rangeTriggerTime = new MinMax(_previewNormalizedTime, _previewNormalizedTime)
-            };
-
-            eventList.Add(animationEvent);
-        }
-
-
-        private void RemoveAnimationEvent(List<AnimationEvent> eventList, int removeIndex)
-        {
-            if (removeIndex < 0 || eventList.Count <= removeIndex)
-            {
-                return;
-            }
-
-            eventList.RemoveAt(removeIndex);
         }
     }
 }

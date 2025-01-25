@@ -13,49 +13,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationEventList:
-  - eventName: LogMessage
-    eventHash: -246315601
-    triggerTime: 0.728
+  - eventName: get Custom
+    eventHash: 1376515589
+    triggerTime: 0
     parameter:
-      parameterType: 0
-      intValue: 456789
-      charValue: 0
-      boolValue: 0
-      stringValue: 
-      floatValue: 0
-      colorValue: {r: 0, g: 0, b: 0, a: 0}
-      vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 0, z: 0}
-      quaternionValue: {x: 1, y: 2, z: 3, w: 4}
-      gobjValue: {fileID: 0}
-      transformValue: {fileID: 0}
-      curveValue:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      customValue:
-        rid: -2
-      sobjValue: {fileID: 0}
-    sendType: 5
-    rangeTriggerTime:
-      min: 0.185
-      max: 0.877
-    hasTriggered: 0
-  - eventName: get position
-    eventHash: -594658637
-    triggerTime: 0.528
-    parameter:
-      parameterType: 0
+      parameterType: 14
       intValue: 0
       charValue: 0
       boolValue: 0
-      stringValue: 
+      stringValue: Untagged
       floatValue: 0
       colorValue: {r: 0, g: 0, b: 0, a: 0}
       vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 3.84, z: 0}
+      vector3Value: {x: 0, y: 0, z: 0}
       quaternionValue: {x: 0, y: 0, z: 0, w: 0}
       gobjValue: {fileID: 0}
       transformValue: {fileID: 0}
@@ -66,66 +36,22 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       customValue:
-        rid: -2
+        rid: 4580380208430580252
       sobjValue: {fileID: 0}
-    sendType: 4
+    sendType: 0
     rangeTriggerTime:
-      min: 0.86181366
-      max: 0.86181366
-    hasTriggered: 0
-  - eventName: get tag
-    eventHash: -1918676790
-    triggerTime: 0
-    parameter:
-      parameterType: 0
-      intValue: 32
-      charValue: 0
-      boolValue: 0
-      stringValue: GameController
-      floatValue: 0
-      colorValue: {r: 0, g: 0, b: 0, a: 0}
-      vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 0, z: 0}
-      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
-      gobjValue: {fileID: 0}
-      transformValue: {fileID: 0}
-      curveValue:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      customValue:
-        rid: -2
-      sobjValue: {fileID: 0}
-    sendType: 5
-    rangeTriggerTime:
-      min: 0.23
-      max: 0.668
+      min: 0
+      max: 0
     hasTriggered: 0
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+    - rid: 4580380208430580252
+      type: {class: ExampleCustomParameter, ns: AnimatorExtension.Parameters, asm: AnimatorExtension}
+      data:
+        parameterName: sd
+        parameterType: 
+        parameterValue: 0.603
 --- !u!114 &-8404588960376802524
 MonoBehaviour:
   m_ObjectHideFlags: 1

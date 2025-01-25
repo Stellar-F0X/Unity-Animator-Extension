@@ -208,6 +208,7 @@ namespace AnimatorExtension.Editor
                 case EParameterType.AnimationCurve:
                     SerializedProperty animationCurveProp = parameter.FindPropertyRelative("curveValue");
                     AnimationCurve animationCurve = animationCurveProp.animationCurveValue;
+                    
                     animationCurve.keys = animationCurve.keys.Length > 0 ? animationCurve.keys : new Keyframe[2] 
                     {
                         new Keyframe(0, 1),
@@ -218,37 +219,11 @@ namespace AnimatorExtension.Editor
                     break;
                 
                 case EParameterType.Customization:
-                    
-                    break;
+                    SerializedProperty customProp = parameter.FindPropertyRelative("customValue");
+                    EditorGUI.PropertyField(parameterRect, customProp, GUIContent.none, true);
+                    return (int)EditorGUI.GetPropertyHeight(customProp);
             }
 
-            //TODO: 여기서 새로 크기 반환
-            return 0;
-        }
-        
-        public int DrawParameterField(Rect position, SerializedProperty property, EParameterType parameterTypes, Type customParameterType)
-        {
-            SerializedProperty parameter = property.FindPropertyRelative("parameter");
-            SerializedProperty parameterType = parameter.FindPropertyRelative("parameterType");
-
-            Rect paramTypeRect = CustomEditorUtility.CalculateVariableRect(position, 0.15f, beforeEmpty: 5);
-            Rect parameterRect = CustomEditorUtility.CalculateVariableRect(position, 0.85f, position.width * 0.15f, 10);
-
-            parameterType.enumValueIndex = (int)parameterTypes;
-
-            using (new EditorGUI.DisabledScope(true))
-            {
-                EditorGUI.PropertyField(paramTypeRect, parameterType, GUIContent.none);
-            }
-            
-            SerializedProperty customProp = parameter.FindPropertyRelative("customValue");
-
-            if (customProp.objectReferenceValue is null)
-            {
-                customProp.objectReferenceValue = Activator.CreateInstance(customParameterType) as Object;
-            }
-            
-            EditorGUI.PropertyField(parameterRect, customProp, GUIContent.none);
             return 0;
         }
     }
