@@ -1,7 +1,9 @@
 using System;
 using AnimatorExtension.Parameters;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace AnimatorExtension.Editor
 {
@@ -114,7 +116,7 @@ namespace AnimatorExtension.Editor
 
 
 
-        public void DrawParameterField(Rect position, SerializedProperty property, EParameterType parameterTypes)
+        public int DrawParameterField(Rect position, SerializedProperty property, EParameterType parameterTypes)
         {
             SerializedProperty parameter = property.FindPropertyRelative("parameter");
             SerializedProperty parameterType = parameter.FindPropertyRelative("parameterType");
@@ -150,6 +152,11 @@ namespace AnimatorExtension.Editor
                     SerializedProperty stringProp = parameter.FindPropertyRelative("stringValue");
                     stringProp.stringValue = EditorGUI.TextField(parameterRect, stringProp.stringValue);
                     break;
+                
+                case EParameterType.Vector2:
+                    SerializedProperty vector2Prop = parameter.FindPropertyRelative("vector2Value");
+                    vector2Prop.vector2Value = EditorGUI.Vector2Field(parameterRect, GUIContent.none, vector2Prop.vector2Value);
+                    break;
 
                 case EParameterType.Vector3:
                     SerializedProperty vector3Prop = parameter.FindPropertyRelative("vector3Value");
@@ -163,19 +170,86 @@ namespace AnimatorExtension.Editor
                     vector4 = EditorGUI.Vector4Field(parameterRect, GUIContent.none, vector4);
                     quaternionProp.quaternionValue = new Quaternion(vector4.x, vector4.y, vector4.z, vector4.w);
                     break;
-
-                case EParameterType.GameObject:
-                    SerializedProperty gameObjectProp = parameter.FindPropertyRelative("gameObjectValue");
-                    gameObjectProp.objectReferenceValue =
-                        EditorGUI.ObjectField(parameterRect, GUIContent.none, gameObjectProp.objectReferenceValue, typeof(GameObject), true);
-
-                    break;
-
+                
                 case EParameterType.Color:
                     SerializedProperty colorProp = parameter.FindPropertyRelative("colorValue");
                     colorProp.colorValue = EditorGUI.ColorField(parameterRect, GUIContent.none, colorProp.colorValue);
                     break;
+                
+                case EParameterType.GameObject:
+                    SerializedProperty gameObjectProp = parameter.FindPropertyRelative("gobjValue");
+                    Object gobj = gameObjectProp.objectReferenceValue;
+                    gobj = EditorGUI.ObjectField(parameterRect, gobj, typeof(GameObject), true);
+                    gameObjectProp.objectReferenceValue = gobj;
+                    break;
+                
+                case EParameterType.ScriptableObject:
+                    SerializedProperty sObjectProp = parameter.FindPropertyRelative("sobjValue");
+                    Object sobj = sObjectProp.objectReferenceValue;
+                    sobj = EditorGUI.ObjectField(parameterRect, sobj, typeof(ScriptableObject), false);
+                    sObjectProp.objectReferenceValue = sobj;
+                    break;
+                
+                case EParameterType.Tag:
+                    SerializedProperty tagProp = parameter.FindPropertyRelative("stringValue");
+                    string[] tagList = InternalEditorUtility.tags;
+                    int selectedIndex = Array.IndexOf(tagList, tagProp.stringValue);
+                    selectedIndex = Mathf.Clamp(selectedIndex, 0, tagList.Length - 1);
+                    tagProp.stringValue = tagList[EditorGUI.Popup(parameterRect, selectedIndex, tagList)];
+                    break;
+                
+                case EParameterType.LayerMask:
+                    SerializedProperty layerMaskProp = parameter.FindPropertyRelative("intValue");
+                    int layerIndex = (int)Mathf.Log(layerMaskProp.intValue, 2);
+                    string[] layerList = InternalEditorUtility.layers;
+                    layerMaskProp.intValue = 1 << EditorGUI.Popup(parameterRect, layerIndex, layerList);
+                    break;
+                
+                case EParameterType.AnimationCurve:
+                    SerializedProperty animationCurveProp = parameter.FindPropertyRelative("curveValue");
+                    AnimationCurve animationCurve = animationCurveProp.animationCurveValue;
+                    animationCurve.keys = animationCurve.keys.Length > 0 ? animationCurve.keys : new Keyframe[2] 
+                    {
+                        new Keyframe(0, 1),
+                        new Keyframe(1, 1),
+                    };
+                    
+                    animationCurveProp.animationCurveValue = EditorGUI.CurveField(parameterRect, animationCurve);
+                    break;
+                
+                case EParameterType.Customization:
+                    
+                    break;
             }
+
+            //TODO: 여기서 새로 크기 반환
+            return 0;
+        }
+        
+        public int DrawParameterField(Rect position, SerializedProperty property, EParameterType parameterTypes, Type customParameterType)
+        {
+            SerializedProperty parameter = property.FindPropertyRelative("parameter");
+            SerializedProperty parameterType = parameter.FindPropertyRelative("parameterType");
+
+            Rect paramTypeRect = CustomEditorUtility.CalculateVariableRect(position, 0.15f, beforeEmpty: 5);
+            Rect parameterRect = CustomEditorUtility.CalculateVariableRect(position, 0.85f, position.width * 0.15f, 10);
+
+            parameterType.enumValueIndex = (int)parameterTypes;
+
+            using (new EditorGUI.DisabledScope(true))
+            {
+                EditorGUI.PropertyField(paramTypeRect, parameterType, GUIContent.none);
+            }
+            
+            SerializedProperty customProp = parameter.FindPropertyRelative("customValue");
+
+            if (customProp.objectReferenceValue is null)
+            {
+                customProp.objectReferenceValue = Activator.CreateInstance(customParameterType) as Object;
+            }
+            
+            EditorGUI.PropertyField(parameterRect, customProp, GUIContent.none);
+            return 0;
         }
     }
 }

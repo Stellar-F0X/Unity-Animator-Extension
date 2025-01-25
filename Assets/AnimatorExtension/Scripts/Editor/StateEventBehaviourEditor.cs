@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AnimatorExtension.Parameters;
@@ -18,11 +19,10 @@ namespace AnimatorExtension.Editor
         private bool _isPreviewing;
         private int _currentFocusIndexInList;
 
-        private string[] _eventNameList;
-        private EParameterType[] _parameterTypeList;
-
+        
         private Animator _animator;
         private AnimatorController _controller;
+        private EventInfoContainer _eventContainer;
         private ReorderableList _animationEventList;
         private StateEventBehaviour _behaviour;
         private AnimationEventDrawer _animationEventDrawer;
@@ -67,8 +67,7 @@ namespace AnimatorExtension.Editor
             if (_animator is null)
             {
                 this.GetAnimatorAndControllerOfReceiver(out AnimationEventReceiver receiver);
-
-                AnimationUtility.GetAnimationEventNames(receiver, out _eventNameList, out _parameterTypeList);
+                ReflectionUtility.SetEventsForContainer(receiver, _eventContainer);
             }
 
             _animationEventList = new ReorderableList(serializedObject, property, true, true, false, false);
@@ -116,7 +115,7 @@ namespace AnimatorExtension.Editor
             _isPreviewing = false;
             _previewNormalizedTime = 0;
 
-            if (_animator != null)
+            if (_animator is null)
             {
                 _animationSamplePlayer?.TryDestroyPlayableGraph();
 
@@ -211,14 +210,25 @@ namespace AnimatorExtension.Editor
             SerializedProperty property = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
 
             position.y += 5;
-            int selectedIndex = _animationEventDrawer.DrawStringHashField(position, property, _eventNameList);
+            int selectedIndex = _animationEventDrawer.DrawStringHashField(position, property, _eventContainer.eventNames);
             position.y += EditorGUIUtility.singleLineHeight + 5;
             _animationEventDrawer.DrawDropdownSliderField(position, property, index);
             position.y += EditorGUIUtility.singleLineHeight + 5;
 
-            if (selectedIndex >= 0 && selectedIndex < _eventNameList.Length)
+            if (selectedIndex >= 0 && selectedIndex < _eventContainer.count)
             {
-                _animationEventDrawer.DrawParameterField(position, property, _parameterTypeList[selectedIndex]);
+                EParameterType paramType = _eventContainer.paramTypes[selectedIndex];
+                
+                if (paramType == EParameterType.Customization)
+                {
+                    Type customType = _eventContainer.customParams[selectedIndex];
+                    
+                    _animationEventDrawer.DrawParameterField(position, property, _eventContainer.paramTypes[selectedIndex], customType);
+                }
+                else
+                {
+                    _animationEventDrawer.DrawParameterField(position, property, _eventContainer.paramTypes[selectedIndex]);
+                }
             }
             else
             {

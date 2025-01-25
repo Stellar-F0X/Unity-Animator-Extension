@@ -28,8 +28,15 @@ MonoBehaviour:
       vector2Value: {x: 0, y: 0}
       vector3Value: {x: 0, y: 0, z: 0}
       quaternionValue: {x: 1, y: 2, z: 3, w: 4}
-      gameObjectValue: {fileID: 0}
+      gobjValue: {fileID: 0}
       transformValue: {fileID: 0}
+      curveValue:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      sobjValue: {fileID: 0}
     sendType: 5
     rangeTriggerTime:
       min: 0.185
@@ -39,7 +46,7 @@ MonoBehaviour:
     eventHash: -594658637
     triggerTime: 0.528
     parameter:
-      parameterType: 5
+      parameterType: 6
       hasParameter: 0
       intValue: 0
       charValue: 0
@@ -50,34 +57,66 @@ MonoBehaviour:
       vector2Value: {x: 0, y: 0}
       vector3Value: {x: 0, y: 3.84, z: 0}
       quaternionValue: {x: 0, y: 0, z: 0, w: 0}
-      gameObjectValue: {fileID: 0}
+      gobjValue: {fileID: 0}
       transformValue: {fileID: 0}
+      curveValue:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      sobjValue: {fileID: 0}
     sendType: 4
     rangeTriggerTime:
       min: 0.86181366
       max: 0.86181366
     hasTriggered: 0
-  - eventName: get position
-    eventHash: -594658637
-    triggerTime: 0.16
+  - eventName: get tag
+    eventHash: -1918676790
+    triggerTime: 0
     parameter:
-      parameterType: 5
+      parameterType: 13
       hasParameter: 0
-      intValue: 0
+      intValue: 32
       charValue: 0
       boolValue: 0
-      stringValue: 
+      stringValue: GameController
       floatValue: 0
       colorValue: {r: 0, g: 0, b: 0, a: 0}
       vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 5, y: 3, z: 2}
+      vector3Value: {x: 0, y: 0, z: 0}
       quaternionValue: {x: 0, y: 0, z: 0, w: 0}
-      gameObjectValue: {fileID: 0}
+      gobjValue: {fileID: 0}
       transformValue: {fileID: 0}
-    sendType: 4
+      curveValue:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      sobjValue: {fileID: 0}
+    sendType: 5
     rangeTriggerTime:
-      min: 0.078
-      max: 0.862
+      min: 0.23
+      max: 0.668
     hasTriggered: 0
 --- !u!114 &-8404588960376802524
 MonoBehaviour:

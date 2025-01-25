@@ -42,5 +42,39 @@ namespace AnimatorExtension.Sample
         {
             Debug.Log(a);
         }
+
+        
+        [AnimationEvent("get layerMask", EParameterType.LayerMask)]
+        public void GetLayerMask(int a)
+        {
+            Debug.Log(a);
+        }
+        
+        
+        [AnimationEvent("get tag", EParameterType.Tag)]
+        public void GetTag(int a)
+        {
+            Debug.Log(a);
+        }
+
+        
+        [AnimationEvent("get Animation Curve", EParameterType.AnimationCurve)]
+        public void GetAnimationCurve(AnimationCurve a)
+        {
+            
+        }
+        
+        
+        [AnimationEvent("get SO", EParameterType.ScriptableObject)]
+        public void GetAnimationCurve(ScriptableObject a)
+        {
+            
+        }
+        
+        [AnimationEvent("get Custom", EParameterType.Customization, typeof(EventAction))]
+        public void GetCustom(ScriptableObject a)
+        {
+            
+        }
     }
 }

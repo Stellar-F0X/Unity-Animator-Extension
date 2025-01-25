@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace AnimatorExtension.Parameters
 {
@@ -7,7 +8,6 @@ namespace AnimatorExtension.Parameters
     public struct SEventParameter
     {
         public EParameterType parameterType;
-        public bool hasParameter;
         
         public int intValue;
         public char charValue;
@@ -18,7 +18,12 @@ namespace AnimatorExtension.Parameters
         public Vector2 vector2Value;
         public Vector3 vector3Value;
         public Quaternion quaternionValue;
-        public GameObject gameObjectValue;
+        public GameObject gobjValue;
         public Transform transformValue;
+        public AnimationCurve curveValue;
+        
+        [SerializeReference]
+        public CustomParameter customValue;
+        public ScriptableObject sobjValue;
     }
 }

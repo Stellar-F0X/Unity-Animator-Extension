@@ -12,94 +12,9 @@ namespace AnimatorExtension.Editor
 {
     public static class AnimationUtility
     {
-        private struct SEventInfo
-        {
-            public SEventInfo(string eventName, EParameterType paramType)
-            {
-                this.eventName = eventName;
-                this.paramType = paramType;
-            }
-
-            public string eventName;
-            public EParameterType paramType;
-        }
-
         public const BindingFlags ANIMATOR_BINDING_FLAGS = BindingFlags.NonPublic | BindingFlags.Instance;
 
-        private const BindingFlags _EVENT_BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-
         private readonly static Type _animatorWindowType = Type.GetType("UnityEditor.Graphs.AnimatorControllerTool, UnityEditor.Graphs");
-        
-        private readonly static Type _SearchAttributeType = typeof(AnimationEventAttribute);
-
-        private readonly static Dictionary<Type, Func<MonoBehaviour, IEnumerable<SEventInfo>>> _MethodCache = new ();
-
-        private readonly static Lazy<List<SEventInfo>> _CachedEventName = new Lazy<List<SEventInfo>>(() => new List<SEventInfo>());
-
-        private readonly static Lazy<List<SEventInfo>> _TempCachedEventNames = new Lazy<List<SEventInfo>>(() => new List<SEventInfo>());
-
-
-        [DidReloadScripts]
-        private static void OnReloadScripts()
-        {
-            _MethodCache.Clear();
-            _CachedEventName.Value.Clear();
-            _TempCachedEventNames.Value.Clear();
-        }
-
-
-        public static void GetAnimationEventNames(AnimationEventReceiver receiver, out string[] nameList, out EParameterType[] paramTypeList)
-        {
-            if (receiver == null)
-            {
-                nameList = null;
-                paramTypeList = null;
-                return;
-            }
-            
-            var components = receiver.GetComponentsInChildren<MonoBehaviour>(true);
-
-            OnReloadScripts();
-
-            if (components == null || components.Length == 0)
-            {
-                nameList = null;
-                paramTypeList = null;
-                return;
-            }
-
-            _CachedEventName.Value.Add(new SEventInfo("None", EParameterType.Void));
-
-            foreach (var component in components)
-            {
-                Type type = component.GetType();
-
-                if (_MethodCache.TryGetValue(type, out var getMethodNames) == false)
-                {
-                    getMethodNames = CreateMethodDelegate(type);
-                    _MethodCache[type] = getMethodNames;
-                }
-
-                _CachedEventName.Value.AddRange(getMethodNames(component));
-            }
-
-            nameList = _CachedEventName.Value.Select(info => info.eventName).ToArray();
-            paramTypeList = _CachedEventName.Value.Select(info => info.paramType).ToArray();
-        }
-
-
-        private static Func<MonoBehaviour, IEnumerable<SEventInfo>> CreateMethodDelegate(Type type)
-        {
-            foreach (var method in type.GetMethods(_EVENT_BINDING_FLAGS))
-            {
-                if (method.GetCustomAttribute(_SearchAttributeType) is AnimationEventAttribute attribute)
-                {
-                    _TempCachedEventNames.Value.Add(new SEventInfo(attribute.eventName, attribute.parameterType));
-                }
-            }
-
-            return _ => _TempCachedEventNames.Value;
-        }
 
 
         private static ChildAnimatorState FindMatchingStateRecursion(AnimatorStateMachine stateMachine, StateMachineBehaviour behaviour)
