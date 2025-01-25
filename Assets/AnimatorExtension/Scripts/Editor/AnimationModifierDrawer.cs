@@ -25,11 +25,9 @@ namespace AnimatorExtension.Editor
 
         private void OnEnable()
         {
-            AnimationUtility.GetAnimatorAndController(out _, out _controller);
-
             SerializedProperty speedProp = serializedObject.FindProperty("speedInfos");
 
-            if (_controller && _controller.parameters.Length > 0)
+            if (AnimationUtility.GetAnimationController(out _controller) && _controller.parameters.Length > 0)
             {
                 List<string> newParamNameList = new List<string>();
 
@@ -44,8 +42,11 @@ namespace AnimatorExtension.Editor
             }
 
             _speedModifierList = new ReorderableList(serializedObject, speedProp, true, true, true, true);
+            
             _speedModifierList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Speed Modifier List");
+            
             _speedModifierList.elementHeightCallback = index => EditorGUIUtility.singleLineHeight + 5;
+            
             _speedModifierList.drawElementCallback = this.DrawSpeedModifierList;
         }
 

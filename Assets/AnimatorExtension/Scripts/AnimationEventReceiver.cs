@@ -1,7 +1,6 @@
 using System;
 using System.Reflection;
 using AnimatorExtension.Parameters;
-using UnityEditor.Animations;
 using UnityEngine;
 
 namespace AnimatorExtension
@@ -16,19 +15,14 @@ namespace AnimatorExtension
 
         private readonly EventContainer _eventContainer = new EventContainer();
 
-        private Animator _cachedAnimator;
+        private Animator _animator;
 
         private const BindingFlags _EVENT_BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
 
         public Animator animator
         {
-            get { return _cachedAnimator ??= GetComponent<Animator>(); }
-        }
-
-        public AnimatorController controller
-        {
-            get { return animator.runtimeAnimatorController as AnimatorController; }
+            get { return _animator ?? TryGetComponent(out _animator) ? _animator : null; }
         }
 
 

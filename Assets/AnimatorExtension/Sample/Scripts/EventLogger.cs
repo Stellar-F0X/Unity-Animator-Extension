@@ -2,6 +2,7 @@ using System;
 using AnimatorExtension;
 using AnimatorExtension.Parameters;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace AnimatorExtension.Sample
 {
@@ -13,6 +14,7 @@ namespace AnimatorExtension.Sample
         public string log1Message;
         public string log2Message;
 
+        
 
         [AnimationEvent("Log", EParameterType.Void)]
         public void Print()

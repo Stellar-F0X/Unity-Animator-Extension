@@ -19,7 +19,7 @@ MonoBehaviour:
     parameter:
       parameterType: 1
       hasParameter: 0
-      intValue: 0
+      intValue: 456789
       charValue: 0
       boolValue: 0
       stringValue: 
@@ -32,8 +32,52 @@ MonoBehaviour:
       transformValue: {fileID: 0}
     sendType: 5
     rangeTriggerTime:
-      min: 0.295
-      max: 0.795
+      min: 0.185
+      max: 0.877
+    hasTriggered: 0
+  - eventName: get position
+    eventHash: -594658637
+    triggerTime: 0.528
+    parameter:
+      parameterType: 5
+      hasParameter: 0
+      intValue: 0
+      charValue: 0
+      boolValue: 0
+      stringValue: 
+      floatValue: 0
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      vector2Value: {x: 0, y: 0}
+      vector3Value: {x: 0, y: 3.84, z: 0}
+      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
+      gameObjectValue: {fileID: 0}
+      transformValue: {fileID: 0}
+    sendType: 4
+    rangeTriggerTime:
+      min: 0.86181366
+      max: 0.86181366
+    hasTriggered: 0
+  - eventName: get position
+    eventHash: -594658637
+    triggerTime: 0.16
+    parameter:
+      parameterType: 5
+      hasParameter: 0
+      intValue: 0
+      charValue: 0
+      boolValue: 0
+      stringValue: 
+      floatValue: 0
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      vector2Value: {x: 0, y: 0}
+      vector3Value: {x: 5, y: 3, z: 2}
+      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
+      gameObjectValue: {fileID: 0}
+      transformValue: {fileID: 0}
+    sendType: 4
+    rangeTriggerTime:
+      min: 0.078
+      max: 0.862
     hasTriggered: 0
 --- !u!114 &-8404588960376802524
 MonoBehaviour:
@@ -60,6 +104,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -1241942381204629156}
+  - {fileID: 5621369284603443325}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 1
@@ -159,7 +204,7 @@ AnimatorStateMachine:
   m_EntryPosition: {x: 220, y: 330, z: 0}
   m_ExitPosition: {x: 410, y: 330, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: 6904719651407550685}
+  m_DefaultState: {fileID: 2316907928501487792}
 --- !u!1101 &-5554260563948360725
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -631,6 +676,28 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 0
+--- !u!1101 &5621369284603443325
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions: []
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 2316907928501487792}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.25
+  m_TransitionOffset: 0
+  m_ExitTime: 0.90625
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!114 &6542766217863170750
 MonoBehaviour:
   m_ObjectHideFlags: 1

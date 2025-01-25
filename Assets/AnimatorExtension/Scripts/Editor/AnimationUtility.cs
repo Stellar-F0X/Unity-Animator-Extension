@@ -270,15 +270,22 @@ namespace AnimatorExtension.Editor
         }
         
         
-        public static void GetAnimatorAndController(out Animator animator, out AnimatorController controller)
+        public static bool GetAnimationController(out AnimatorController controller)
         {
             EditorWindow window = EditorWindow.GetWindow(_animatorWindowType);
+            
+            FieldInfo controllerField = _animatorWindowType?.GetField("m_AnimatorController", ANIMATOR_BINDING_FLAGS);
+            
+            controller = controllerField?.GetValue(window) as AnimatorController;
 
-            FieldInfo animatorField = _animatorWindowType.GetField("m_PreviewAnimator", ANIMATOR_BINDING_FLAGS);
-            FieldInfo controllerField = _animatorWindowType.GetField("m_AnimatorController", ANIMATOR_BINDING_FLAGS);
-
-            animator = animatorField.GetValue(window) as Animator;
-            controller = controllerField.GetValue(window) as AnimatorController;
-        } 
+            if (controller is null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }
