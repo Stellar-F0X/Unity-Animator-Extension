@@ -1,6 +1,6 @@
 namespace AnimatorExtension.Parameters
 {
-    public enum EParameterType
+    public enum EAnimationEventParameter
     {
         Void,
         Int,

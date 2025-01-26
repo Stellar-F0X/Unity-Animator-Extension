@@ -16,6 +16,7 @@ MonoBehaviour:
   - eventName: get Custom
     eventHash: 1376515589
     triggerTime: 0
+    hasTriggered: 0
     parameter:
       parameterType: 14
       intValue: 0
@@ -35,23 +36,24 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      customValue:
-        rid: 4580380208430580252
       sobjValue: {fileID: 0}
-    sendType: 0
+      customValue:
+        rid: 4580380217559220288
+    dispatchType: 0
     rangeTriggerTime:
       min: 0
       max: 0
-    hasTriggered: 0
   references:
     version: 2
     RefIds:
-    - rid: 4580380208430580252
-      type: {class: ExampleCustomParameter, ns: AnimatorExtension.Parameters, asm: AnimatorExtension}
+    - rid: 4580380217559220288
+      type: {class: ExampleCustomAnimationEventParameter, ns: AnimatorExtension.Sample,
+        asm: AnimatorExtension}
       data:
-        parameterName: sd
-        parameterType: 
-        parameterValue: 0.603
+        a: '  13'
+        b: 5341
+        c: 0.552
+        d: 0
 --- !u!114 &-8404588960376802524
 MonoBehaviour:
   m_ObjectHideFlags: 1

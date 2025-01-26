@@ -7,7 +7,7 @@ namespace AnimatorExtension.Parameters
     {
         private List<Type> _customParams = new List<Type>();
         private List<string> _eventNames = new List<string>();
-        private List<EParameterType> _paramTypes = new List<EParameterType>();
+        private List<EAnimationEventParameter> _paramTypes = new List<EAnimationEventParameter>();
 
         
         public int count
@@ -22,7 +22,7 @@ namespace AnimatorExtension.Parameters
             private set;
         }
 
-        public EParameterType[] paramTypes
+        public EAnimationEventParameter[] paramTypes
         {
             get;
             private set;
@@ -33,19 +33,27 @@ namespace AnimatorExtension.Parameters
             get;
             private set;
         }
-        
-        
-        public void AddInfo(string eventName, EParameterType paramType, Type customParam)
+
+        public int[] eventNameHashes
         {
-            count++;
+            get;
+            private set;
+        }
+        
+        
+        public void AddInfo(string eventName, EAnimationEventParameter param, Type customParam)
+        {
+            this.count++;
             
             this._eventNames.Add(eventName);
-            this._paramTypes.Add(paramType);
+            this._paramTypes.Add(param);
             this._customParams.Add(customParam);
         }
 
         public void Clear()
         {
+            this.count = 0;
+            
             this._eventNames.Clear();
             this._paramTypes.Clear();
             this._customParams.Clear();
@@ -54,8 +62,16 @@ namespace AnimatorExtension.Parameters
         public void Build()
         {
             customParams = _customParams.ToArray();
-            eventNames = _eventNames.ToArray();
             paramTypes = _paramTypes.ToArray();
+            
+            eventNames = new string[_eventNames.Count];
+            eventNameHashes = new int[_eventNames.Count];
+
+            for (int i = 0; i < count; i++)
+            {
+                this.eventNames[i] = this._eventNames[i];
+                this.eventNameHashes[i] = Extension.StringToHash(this._eventNames[i]);
+            }
         }
     }
 }

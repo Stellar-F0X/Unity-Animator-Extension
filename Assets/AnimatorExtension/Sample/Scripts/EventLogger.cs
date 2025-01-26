@@ -16,63 +16,63 @@ namespace AnimatorExtension.Sample
 
         
 
-        [AnimationEvent("Log", EParameterType.Void)]
+        [AnimationEvent("Log", EAnimationEventParameter.Void)]
         public void Print()
         {
             Debug.Log(log0Message);
         }
 
 
-        [AnimationEvent("LogMessage", EParameterType.Int)]
+        [AnimationEvent("LogMessage", EAnimationEventParameter.Int)]
         public void LogIntMessage(int a)
         {
             Debug.Log(a);
         }
 
 
-        [AnimationEvent("GetQuaternion", EParameterType.Quaternion)]
+        [AnimationEvent("GetQuaternion", EAnimationEventParameter.Quaternion)]
         public void GetQuaternion(Quaternion a)
         {
             Debug.Log(a);
         }
 
 
-        [AnimationEvent("get position", EParameterType.Vector3)]
+        [AnimationEvent("get position", EAnimationEventParameter.Vector3)]
         public void GetPosition(Vector3 a)
         {
             Debug.Log(a);
         }
 
         
-        [AnimationEvent("get layerMask", EParameterType.LayerMask)]
+        [AnimationEvent("get layerMask", EAnimationEventParameter.LayerMask)]
         public void GetLayerMask(int a)
         {
             Debug.Log(a);
         }
         
         
-        [AnimationEvent("get tag", EParameterType.Tag)]
+        [AnimationEvent("get tag", EAnimationEventParameter.Tag)]
         public void GetTag(int a)
         {
             Debug.Log(a);
         }
 
         
-        [AnimationEvent("get Animation Curve", EParameterType.AnimationCurve)]
+        [AnimationEvent("get Animation Curve", EAnimationEventParameter.AnimationCurve)]
         public void GetAnimationCurve(AnimationCurve a)
         {
             
         }
         
         
-        [AnimationEvent("get SO", EParameterType.ScriptableObject)]
+        [AnimationEvent("get SO", EAnimationEventParameter.ScriptableObject)]
         public void GetAnimationCurve(ScriptableObject a)
         {
             
         }
         
-        [AnimationEvent("get Custom", EParameterType.Customization, typeof(ExampleCustomParameter))]
-        public void GetCustom(ExampleCustomParameter a)
+        [AnimationEvent("get Custom", EAnimationEventParameter.Customization, typeof(ExampleCustomAnimationEventParameter2))]
+        public void GetCustom(ExampleCustomAnimationEventParameter2 a)
         {
             
         }

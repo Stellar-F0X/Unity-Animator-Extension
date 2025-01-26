@@ -1,14 +1,26 @@
 using AnimatorExtension.Parameters;
+using UnityEngine;
 
 namespace AnimatorExtension
 {
-    public abstract class EventCallback
+    public abstract class EventCallback : ISerializationCallbackReceiver
     {
-        public EventCallback(EParameterType parameterType)
+        public EventCallback(EAnimationEventParameter animationEventParameter)
         {
-            this.parameterType = parameterType;
+            this.animationEventParameter = animationEventParameter;
         }
         
-        public EParameterType parameterType;
+        public readonly EAnimationEventParameter animationEventParameter;
+        
+        
+        public void OnBeforeSerialize()
+        {
+            
+        }
+
+        public void OnAfterDeserialize()
+        {
+            
+        }
     }
 }

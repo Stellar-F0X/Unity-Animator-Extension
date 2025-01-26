@@ -32,7 +32,7 @@ namespace AnimatorExtension
             {
                 var animationEvent = animationEventList[i];
                 
-                if (animationEvent.sendType != EEventSendType.Enter)
+                if (animationEvent.dispatchType != EventDispatchType.Enter)
                 {
                     continue;
                 }
@@ -59,7 +59,7 @@ namespace AnimatorExtension
             {
                 var animationEvent = animationEventList[i];
                 
-                if (animationEvent.sendType == EEventSendType.None)
+                if (animationEvent.dispatchType == EventDispatchType.None)
                 {
                     continue;
                 }
@@ -76,7 +76,7 @@ namespace AnimatorExtension
             {
                 var animationEvent = animationEventList[i];
                 
-                if (animationEvent.sendType == EEventSendType.Exit)
+                if (animationEvent.dispatchType == EventDispatchType.Exit)
                 {
                     _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
                     animationEvent.hasTriggered = true;
@@ -104,13 +104,13 @@ namespace AnimatorExtension
         
         private void NotifyEvents(AnimationEvent animationEvent, float currentTime)
         {
-            if (animationEvent.sendType == EEventSendType.Update)
+            if (animationEvent.dispatchType == EventDispatchType.Update)
             {
                 _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
                 
                 animationEvent.hasTriggered = true;
             }
-            else if (animationEvent.sendType == EEventSendType.Range)
+            else if (animationEvent.dispatchType == EventDispatchType.Range)
             {
                 MinMax rangeTriggerTime = animationEvent.rangeTriggerTime;
 
@@ -126,7 +126,7 @@ namespace AnimatorExtension
                     }
                 }
             }
-            else if (animationEvent.sendType == EEventSendType.Point)
+            else if (animationEvent.dispatchType == EventDispatchType.Point)
             {
                 if (animationEvent.hasTriggered)
                 {

@@ -10,12 +10,13 @@ namespace AnimatorExtension
     public class AnimationEvent
     {
         public string eventName;
-        public int eventHash; 
-        public float triggerTime;
-        public SEventParameter parameter;
-        public EEventSendType sendType;
-        public MinMax rangeTriggerTime;
+        public int eventHash;
         
+        public float triggerTime;
         public bool hasTriggered;
+        
+        public AnimationEventParameter parameter;
+        public EventDispatchType dispatchType;
+        public MinMax rangeTriggerTime;
     }
 }

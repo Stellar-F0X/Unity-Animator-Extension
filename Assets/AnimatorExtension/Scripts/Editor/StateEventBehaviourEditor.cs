@@ -222,21 +222,23 @@ namespace AnimatorExtension.Editor
 
             if (selectedIndex >= 0 && selectedIndex < _eventContainer.count)
             {
-                EParameterType paramType = _eventContainer.paramTypes[selectedIndex];
+                EAnimationEventParameter param = _eventContainer.paramTypes[selectedIndex];
 
-                if (paramType == EParameterType.Customization)
+                if (param == EAnimationEventParameter.Customization)
                 {
-                    string targetName = _eventContainer.eventNames[selectedIndex];
+                    AnimationEvent eventInfo = _behaviour.animationEventList.FirstOrDefault(e => e.eventHash == _eventContainer.eventNameHashes[selectedIndex]);
                     
-                    AnimationEvent eventInfo = _behaviour.animationEventList.FirstOrDefault(e => e.eventName.Compare(targetName));
+                    Type type = _eventContainer.customParams[selectedIndex];
 
-                    if (eventInfo is not null && eventInfo.parameter.customValue is null)
+                    if (eventInfo is not null && (eventInfo.parameter.customValue is null || eventInfo.parameter.customValue.GetType() != type))
                     {
-                        eventInfo.parameter.customValue = Activator.CreateInstance(_eventContainer.customParams[selectedIndex]) as CustomParameter;
+                        eventInfo.parameter.customValue = null;
+                        
+                        eventInfo.parameter.customValue = Activator.CreateInstance(type) as CustomAnimationEventParameter;
                     }
                 }
 
-                int additiveHeight = _animationEventDrawer.DrawParameterField(position, property, paramType);
+                int additiveHeight = _animationEventDrawer.DrawParameterField(position, property, param);
             }
             else
 

@@ -11,11 +11,11 @@ namespace AnimatorExtension
         /// 
         /// </summary>
         /// <param name="eventName"></param>
-        /// <param name="parameterType"></param>
-        public AnimationEventAttribute(string eventName, EParameterType parameterType = EParameterType.Void)
+        /// <param name="animationEventParameter"></param>
+        public AnimationEventAttribute(string eventName, EAnimationEventParameter animationEventParameter = EAnimationEventParameter.Void)
         {
             this.eventName = eventName;
-            this.parameterType = parameterType;
+            this.animationEventParameter = animationEventParameter;
         }
 
         
@@ -23,17 +23,17 @@ namespace AnimatorExtension
         /// 
         /// </summary>
         /// <param name="eventName"></param>
-        /// <param name="parameterType"></param>
+        /// <param name="animationEventParameter"></param>
         /// <param name="customParam"></param>
-        public AnimationEventAttribute(string eventName, EParameterType parameterType, Type customParam)
+        public AnimationEventAttribute(string eventName, EAnimationEventParameter animationEventParameter, Type customParam)
         {
             this.eventName = eventName;
-            this.parameterType = parameterType;
+            this.animationEventParameter = animationEventParameter;
             this.customParameterType = customParam;
         }
 
         public string eventName;
         public Type customParameterType;
-        public EParameterType parameterType;
+        public EAnimationEventParameter animationEventParameter;
     }
 }

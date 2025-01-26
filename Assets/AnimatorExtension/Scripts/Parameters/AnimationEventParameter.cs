@@ -5,9 +5,9 @@ using UnityEngine.Serialization;
 namespace AnimatorExtension.Parameters
 {
     [Serializable]
-    public struct SEventParameter
+    public struct AnimationEventParameter
     {
-        public EParameterType parameterType;
+        public EAnimationEventParameter parameterType;
         
         public int intValue;
         public char charValue;
@@ -21,9 +21,9 @@ namespace AnimatorExtension.Parameters
         public GameObject gobjValue;
         public Transform transformValue;
         public AnimationCurve curveValue;
+        public ScriptableObject sobjValue;
         
         [SerializeReference]
-        public CustomParameter customValue;
-        public ScriptableObject sobjValue;
+        public CustomAnimationEventParameter customValue;
     }
 }

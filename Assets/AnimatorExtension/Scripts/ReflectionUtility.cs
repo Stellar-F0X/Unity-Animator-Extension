@@ -27,7 +27,7 @@ namespace AnimatorExtension
             
             container.Clear();
             
-            container.AddInfo("None", EParameterType.Void, null);
+            container.AddInfo("None", EAnimationEventParameter.Void, null);
             
             if (components is null)
             {
@@ -42,7 +42,7 @@ namespace AnimatorExtension
                 {
                     if (method.GetCustomAttribute(_SearchAttributeType) is AnimationEventAttribute attribute)
                     {
-                        container.AddInfo(attribute.eventName, attribute.parameterType, attribute.customParameterType);
+                        container.AddInfo(attribute.eventName, attribute.animationEventParameter, attribute.customParameterType);
                     }
                 }
             }

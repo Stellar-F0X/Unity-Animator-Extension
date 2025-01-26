@@ -17,11 +17,11 @@ namespace AnimatorExtension.Editor
 
         public void DrawDropdownSliderField(Rect position, SerializedProperty property, int index)
         {
-            SerializedProperty sendType = property.FindPropertyRelative("sendType");
+            SerializedProperty dispatchType = property.FindPropertyRelative("dispatchType");
             Rect stateSendTypeRect = CustomEditorUtility.CalculateVariableRect(position, 0.15f, beforeEmpty: 5);
-            EditorGUI.PropertyField(stateSendTypeRect, sendType, GUIContent.none);
+            EditorGUI.PropertyField(stateSendTypeRect, dispatchType, GUIContent.none);
 
-            if ((EEventSendType)sendType.enumValueIndex == EEventSendType.Range)
+            if ((EventDispatchType)dispatchType.enumValueIndex == EventDispatchType.Range)
             {
                 SerializedProperty triggerTime = property.FindPropertyRelative("rangeTriggerTime");
                 SerializedProperty min = triggerTime.FindPropertyRelative("min");
@@ -71,7 +71,7 @@ namespace AnimatorExtension.Editor
                     }
                 }
             }
-            else if ((EEventSendType)sendType.enumValueIndex == EEventSendType.Point)
+            else if ((EventDispatchType)dispatchType.enumValueIndex == EventDispatchType.Point)
             {
                 SerializedProperty triggerTime = property.FindPropertyRelative("triggerTime");
                 Rect pointSliderFieldRect = CustomEditorUtility.CalculateVariableRect(position, 0.85f, position.width * 0.15f, 10);
@@ -116,7 +116,7 @@ namespace AnimatorExtension.Editor
 
 
 
-        public int DrawParameterField(Rect position, SerializedProperty property, EParameterType parameterTypes)
+        public int DrawParameterField(Rect position, SerializedProperty property, EAnimationEventParameter animationEventParameter)
         {
             SerializedProperty parameter = property.FindPropertyRelative("parameter");
             SerializedProperty parameterType = parameter.FindPropertyRelative("parameterType");
@@ -124,46 +124,46 @@ namespace AnimatorExtension.Editor
             Rect paramTypeRect = CustomEditorUtility.CalculateVariableRect(position, 0.15f, beforeEmpty: 5);
             Rect parameterRect = CustomEditorUtility.CalculateVariableRect(position, 0.85f, position.width * 0.15f, 10);
 
-            parameterType.enumValueIndex = (int)parameterTypes;
+            parameterType.enumValueIndex = (int)animationEventParameter;
 
             using (new EditorGUI.DisabledScope(true))
             {
                 EditorGUI.PropertyField(paramTypeRect, parameterType, GUIContent.none);
             }
 
-            switch (parameterTypes)
+            switch (animationEventParameter)
             {
-                case EParameterType.Int:
+                case EAnimationEventParameter.Int:
                     SerializedProperty intProp = parameter.FindPropertyRelative("intValue");
                     intProp.intValue = EditorGUI.IntField(parameterRect, intProp.intValue);
                     break;
 
-                case EParameterType.Float:
+                case EAnimationEventParameter.Float:
                     SerializedProperty floatProp = parameter.FindPropertyRelative("floatValue");
                     floatProp.floatValue = EditorGUI.FloatField(parameterRect, floatProp.floatValue);
                     break;
 
-                case EParameterType.Bool:
+                case EAnimationEventParameter.Bool:
                     SerializedProperty boolProp = parameter.FindPropertyRelative("boolValue");
                     boolProp.boolValue = EditorGUI.Toggle(parameterRect, boolProp.boolValue);
                     break;
 
-                case EParameterType.String:
+                case EAnimationEventParameter.String:
                     SerializedProperty stringProp = parameter.FindPropertyRelative("stringValue");
                     stringProp.stringValue = EditorGUI.TextField(parameterRect, stringProp.stringValue);
                     break;
                 
-                case EParameterType.Vector2:
+                case EAnimationEventParameter.Vector2:
                     SerializedProperty vector2Prop = parameter.FindPropertyRelative("vector2Value");
                     vector2Prop.vector2Value = EditorGUI.Vector2Field(parameterRect, GUIContent.none, vector2Prop.vector2Value);
                     break;
 
-                case EParameterType.Vector3:
+                case EAnimationEventParameter.Vector3:
                     SerializedProperty vector3Prop = parameter.FindPropertyRelative("vector3Value");
                     vector3Prop.vector3Value = EditorGUI.Vector3Field(parameterRect, GUIContent.none, vector3Prop.vector3Value);
                     break;
 
-                case EParameterType.Quaternion:
+                case EAnimationEventParameter.Quaternion:
                     SerializedProperty quaternionProp = parameter.FindPropertyRelative("quaternionValue");
                     Quaternion quaternion = quaternionProp.quaternionValue;
                     Vector4 vector4 = new Vector4(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
@@ -171,26 +171,26 @@ namespace AnimatorExtension.Editor
                     quaternionProp.quaternionValue = new Quaternion(vector4.x, vector4.y, vector4.z, vector4.w);
                     break;
                 
-                case EParameterType.Color:
+                case EAnimationEventParameter.Color:
                     SerializedProperty colorProp = parameter.FindPropertyRelative("colorValue");
                     colorProp.colorValue = EditorGUI.ColorField(parameterRect, GUIContent.none, colorProp.colorValue);
                     break;
                 
-                case EParameterType.GameObject:
+                case EAnimationEventParameter.GameObject:
                     SerializedProperty gameObjectProp = parameter.FindPropertyRelative("gobjValue");
                     Object gobj = gameObjectProp.objectReferenceValue;
                     gobj = EditorGUI.ObjectField(parameterRect, gobj, typeof(GameObject), true);
                     gameObjectProp.objectReferenceValue = gobj;
                     break;
                 
-                case EParameterType.ScriptableObject:
+                case EAnimationEventParameter.ScriptableObject:
                     SerializedProperty sObjectProp = parameter.FindPropertyRelative("sobjValue");
                     Object sobj = sObjectProp.objectReferenceValue;
                     sobj = EditorGUI.ObjectField(parameterRect, sobj, typeof(ScriptableObject), false);
                     sObjectProp.objectReferenceValue = sobj;
                     break;
                 
-                case EParameterType.Tag:
+                case EAnimationEventParameter.Tag:
                     SerializedProperty tagProp = parameter.FindPropertyRelative("stringValue");
                     string[] tagList = InternalEditorUtility.tags;
                     int selectedIndex = Array.IndexOf(tagList, tagProp.stringValue);
@@ -198,14 +198,14 @@ namespace AnimatorExtension.Editor
                     tagProp.stringValue = tagList[EditorGUI.Popup(parameterRect, selectedIndex, tagList)];
                     break;
                 
-                case EParameterType.LayerMask:
+                case EAnimationEventParameter.LayerMask:
                     SerializedProperty layerMaskProp = parameter.FindPropertyRelative("intValue");
                     int layerIndex = (int)Mathf.Log(layerMaskProp.intValue, 2);
                     string[] layerList = InternalEditorUtility.layers;
                     layerMaskProp.intValue = 1 << EditorGUI.Popup(parameterRect, layerIndex, layerList);
                     break;
                 
-                case EParameterType.AnimationCurve:
+                case EAnimationEventParameter.AnimationCurve:
                     SerializedProperty animationCurveProp = parameter.FindPropertyRelative("curveValue");
                     AnimationCurve animationCurve = animationCurveProp.animationCurveValue;
                     
@@ -218,7 +218,7 @@ namespace AnimatorExtension.Editor
                     animationCurveProp.animationCurveValue = EditorGUI.CurveField(parameterRect, animationCurve);
                     break;
                 
-                case EParameterType.Customization:
+                case EAnimationEventParameter.Customization:
                     SerializedProperty customProp = parameter.FindPropertyRelative("customValue");
                     EditorGUI.PropertyField(parameterRect, customProp, GUIContent.none, true);
                     return (int)EditorGUI.GetPropertyHeight(customProp);

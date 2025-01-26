@@ -7,7 +7,7 @@ namespace AnimatorExtension
 {
     public class EventAction<T> : EventCallback
     {
-        public EventAction(Action<T> action, EParameterType parameterType) : base(parameterType)
+        public EventAction(Action<T> action, EAnimationEventParameter animationEventParameter) : base(animationEventParameter)
         {
             this.action = action;
         }
@@ -23,7 +23,7 @@ namespace AnimatorExtension
     
     public class EventAction : EventCallback
     {
-        public EventAction(Action action, EParameterType parameterType) : base(parameterType)
+        public EventAction(Action action, EAnimationEventParameter animationEventParameter) : base(animationEventParameter)
         {
             this.action = action;
         }
