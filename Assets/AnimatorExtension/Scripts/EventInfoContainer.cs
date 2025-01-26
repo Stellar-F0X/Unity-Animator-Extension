@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AnimatorExtension.Parameters
 {
@@ -28,7 +29,7 @@ namespace AnimatorExtension.Parameters
             private set;
         }
         
-        public Type[] customParams
+        public Type[] customParamTypes
         {
             get;
             private set;
@@ -50,6 +51,19 @@ namespace AnimatorExtension.Parameters
             this._customParams.Add(customParam);
         }
 
+        public Type FindTypeByHash(int hashCode)
+        {
+            for (int i = 0; i < this._paramTypes.Count; i++)
+            {
+                if (eventNameHashes[i] == hashCode)
+                {
+                    return customParamTypes[i];
+                }
+            }
+
+            return null;
+        }
+
         public void Clear()
         {
             this.count = 0;
@@ -61,7 +75,7 @@ namespace AnimatorExtension.Parameters
 
         public void Build()
         {
-            customParams = _customParams.ToArray();
+            customParamTypes = _customParams.ToArray();
             paramTypes = _paramTypes.ToArray();
             
             eventNames = new string[count];

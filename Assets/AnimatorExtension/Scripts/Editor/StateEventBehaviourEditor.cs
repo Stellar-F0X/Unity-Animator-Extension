@@ -28,6 +28,8 @@ namespace AnimatorExtension.Editor
         private EventInfoContainer _eventContainer = new EventInfoContainer();
         private AnimationEventDrawer _animationEventDrawer = new AnimationEventDrawer();
 
+        private readonly Type _customEventParameterType = typeof(CustomAnimationEventParameter);
+
 
 
         private void GetAnimatorAndControllerOfReceiver(out AnimationEventReceiver receiver)
@@ -199,36 +201,47 @@ namespace AnimatorExtension.Editor
 
         private void DrawAnimationEventGUI(Rect position, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty property = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
-
-            position.y += 5;
-            int selectedIndex = _animationEventDrawer.DrawStringHashField(position, property, _eventContainer.eventNames);
-            position.y += EditorGUIUtility.singleLineHeight + 5;
-            _animationEventDrawer.DrawDropdownSliderField(position, property, index);
-            position.y += EditorGUIUtility.singleLineHeight + 5;
+            if (index >= _behaviour.animationEventList.Count)
+            {
+                return;
+            }
 
             if (isFocused)
             {
                 _currentFocusIndex = index;
             }
+            
+            SerializedProperty property = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
 
-            if (selectedIndex >= 0 && selectedIndex < _eventContainer.count)
+            position.y += 5;
+            int pickedEvent = _animationEventDrawer.DrawStringHashField(position, property, _eventContainer.eventNames);
+            position.y += EditorGUIUtility.singleLineHeight + 5;
+            _animationEventDrawer.DrawDropdownSliderField(position, property, index);
+            position.y += EditorGUIUtility.singleLineHeight + 5;
+
+
+            if (pickedEvent >= 0 && pickedEvent < _eventContainer.count)
             {
-                if (_eventContainer.paramTypes[selectedIndex] == EAnimationEventParameter.Customization)
+                if (_eventContainer.paramTypes[pickedEvent] == EAnimationEventParameter.Customization)
                 {
-                    Type type = _eventContainer.customParams[selectedIndex];
+                    Type castingTargetType = _eventContainer.customParamTypes[pickedEvent];
 
-                    int targetEventHash = _eventContainer.eventNameHashes[selectedIndex];
-
-                    AnimationEvent eventInfo = _behaviour.animationEventList.FirstOrDefault(e => e.eventHash == targetEventHash);
-
-                    if (eventInfo is not null && (eventInfo.parameter.customValue is null || eventInfo.parameter.customValue.GetType() != type))
+                    if (_customEventParameterType.IsAssignableFrom(castingTargetType) == false)
                     {
-                        eventInfo.parameter.customValue = Activator.CreateInstance(type) as CustomAnimationEventParameter;
+                        EditorGUILayout.HelpBox($"{castingTargetType.Name} cannot be cast to CustomParameter.", MessageType.Error, true);
+                        return;
+                    }
+
+                    AnimationEventParameter customParam = _behaviour.animationEventList[index].parameter;
+
+                    if (customParam.customValue is null || customParam.customValue.GetType() != castingTargetType)
+                    {
+                        customParam.customValue = (CustomAnimationEventParameter)Activator.CreateInstance(castingTargetType);
+                        _behaviour.animationEventList[index].parameter = customParam;
                     }
                 }
 
-                _animationEventDrawer.DrawParameterField(position, property, _eventContainer.paramTypes[selectedIndex]);
+                _animationEventDrawer.DrawParameterField(position, property, _eventContainer.paramTypes[pickedEvent]);
             }
         }
 
@@ -236,25 +249,28 @@ namespace AnimatorExtension.Editor
         private float DrawAnimationEventHeight(int index)
         {
             SerializedProperty property = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
-
+            SerializedProperty eventHashProp = property.FindPropertyRelative("eventHash");
             SerializedProperty parameter = property.FindPropertyRelative("parameter");
-            
+
+            Type castingTargetType = _eventContainer.FindTypeByHash(eventHashProp.intValue);
+
+            if (castingTargetType is not null && _customEventParameterType.IsAssignableFrom(castingTargetType) == false)
+            {
+                return EditorGUIUtility.singleLineHeight * 3f;
+            }
+
             if (parameter is not null)
             {
                 SerializedProperty paramType = parameter.FindPropertyRelative("parameterType");
 
-                if ((EAnimationEventParameter)paramType.enumValueIndex != EAnimationEventParameter.Customization)
+                if ((EAnimationEventParameter)paramType.enumValueIndex == EAnimationEventParameter.Customization)
                 {
-                    return EditorGUIUtility.singleLineHeight * 4f;
-                }
+                    SerializedProperty customValueProp = parameter.FindPropertyRelative("customValue");
 
-                SerializedProperty customValueProp = parameter.FindPropertyRelative("customValue");
-
-                if (customValueProp.isExpanded)
-                {
-                    float propertyHeight = EditorGUI.GetPropertyHeight(customValueProp);
-
-                    return EditorGUIUtility.singleLineHeight * 3f + propertyHeight;
+                    if (customValueProp.isExpanded)
+                    {
+                        return EditorGUIUtility.singleLineHeight * 3f + EditorGUI.GetPropertyHeight(customValueProp);
+                    }
                 }
             }
 

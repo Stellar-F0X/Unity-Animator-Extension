@@ -12,10 +12,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18af2ec660677944c852056699f54797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationEventList: []
+  animationEventList:
+  - eventName: None
+    eventHash: 1414246128
+    triggerTime: 0
+    hasTriggered: 0
+    parameter:
+      parameterType: 0
+      intValue: 0
+      charValue: 0
+      boolValue: 0
+      stringValue: 
+      floatValue: 0
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      vector2Value: {x: 0, y: 0}
+      vector3Value: {x: 0, y: 0, z: 0}
+      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
+      gobjValue: {fileID: 0}
+      transformValue: {fileID: 0}
+      curveValue:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      sobjValue: {fileID: 0}
+      customValue:
+        rid: 4580380224907116690
+    dispatchType: 0
+    rangeTriggerTime:
+      min: 0
+      max: 0
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 4580380224907116690
+      type: {class: CustomAnimEventParamExample2, ns: AnimatorExtension.Sample, asm: AnimatorExtension}
+      data:
+        eventName: 
+        eventParameter: 0
+        minmax:
+          min: 0
+          max: 0
 --- !u!114 &-8404588960376802524
 MonoBehaviour:
   m_ObjectHideFlags: 1
