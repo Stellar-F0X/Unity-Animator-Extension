@@ -5,7 +5,7 @@ using UnityEngine;
 namespace AnimatorExtension.Sample
 {
     [Serializable]
-    public class ExampleCustomAnimationEventParameter : CustomAnimationEventParameter
+    public class CustomAnimEventParamExample1 : CustomAnimationEventParameter
     {
         public string a;
         public int b;
@@ -19,19 +19,6 @@ namespace AnimatorExtension.Sample
         public override void Execute()
         {
             Debug.Log($"{a} {b} {c} {d}");
-        }
-    }
-    
-    [Serializable]
-    public class ExampleCustomAnimationEventParameter2 : CustomAnimationEventParameter
-    {
-        public string a;
-        public int b;
-
-
-        public override void Execute()
-        {
-            Debug.Log($"{a} {b}");
         }
     }
 }

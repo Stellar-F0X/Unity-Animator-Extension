@@ -17,7 +17,7 @@ namespace AnimatorExtension.Editor
         private string _newEventName;
         private float _previewNormalizedTime;
         private bool _isPreviewing;
-        private int _currentFocusIndexInList;
+        private int _currentFocusIndex;
 
         private Animator _animator;
         private AnimatorController _controller;
@@ -73,7 +73,7 @@ namespace AnimatorExtension.Editor
             _animationEventList = new ReorderableList(serializedObject, property, true, true, false, false);
 
             _animationEventList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Animation Event List");
-            _animationEventList.elementHeightCallback = _ => EditorGUIUtility.singleLineHeight * 4f;
+            _animationEventList.elementHeightCallback = this.DrawAnimationEventHeight;
             _animationEventList.drawElementCallback = this.DrawAnimationEventGUI;
 
             _animationSamplePlayer = new AnimationSamplePlayer(_animator, _controller);
@@ -96,7 +96,7 @@ namespace AnimatorExtension.Editor
                 }
                 else
                 {
-                    EditorGUILayout.HelpBox("No valid AnimationClip found for the current state.", MessageType.Error, true);
+                    EditorGUILayout.HelpBox("Invalid AnimationClip found for the current state.", MessageType.Error, true);
                 }
             }
         }
@@ -143,75 +143,62 @@ namespace AnimatorExtension.Editor
             GUILayout.Space(10);
             serializedObject.Update();
 
-            using (new EditorGUILayout.VerticalScope(GUI.skin.window))
+            if (_isPreviewing)
             {
-                if (_isPreviewing)
+                if (GUILayout.Button("Stop Preview"))
                 {
-                    if (GUILayout.Button("Stop Preview"))
-                    {
-                        this.OnDisable();
-                    }
-                    else
-                    {
-                        _animationSamplePlayer.PreviewAnimationClip(behaviour, _previewNormalizedTime);
-                    }
+                    this.OnDisable();
                 }
-                else if (GUILayout.Button("Preview"))
+                else
                 {
-                    _isPreviewing = true;
-                    AnimationMode.StartAnimationMode();
+                    _animationSamplePlayer.PreviewAnimationClip(behaviour, _previewNormalizedTime);
                 }
-
-                if (GUILayout.Button("Add Event"))
-                {
-                    AnimationEvent animationEvent = new AnimationEvent()
-                    {
-                        eventName = _newEventName,
-                        eventHash = Extension.StringToHash(_newEventName),
-                        triggerTime = _previewNormalizedTime,
-                        rangeTriggerTime = new MinMax(_previewNormalizedTime, _previewNormalizedTime)
-                    };
-
-                    behaviour.animationEventList.Add(animationEvent);
-                }
-
-                if (GUILayout.Button("Remove Event"))
-                {
-                    if (_currentFocusIndexInList < 0 || behaviour.animationEventList.Count <= _currentFocusIndexInList)
-                    {
-                        return;
-                    }
-
-                    behaviour.animationEventList.RemoveAt(_currentFocusIndexInList);
-                }
-
-                if (_isPreviewing)
-                {
-                    Rect lastRect = GUILayoutUtility.GetLastRect();
-                    lastRect.y += EditorGUIUtility.singleLineHeight + 5;
-
-                    string previewMsg = $"{_previewNormalizedTime * 100f:F2}%";
-                    EditorGUI.ProgressBar(lastRect, _previewNormalizedTime, previewMsg);
-                }
-
-                GUILayout.Space(_isPreviewing ? 30 : 10);
-                _animationEventList.DoLayoutList();
             }
+            else if (GUILayout.Button("Preview"))
+            {
+                _isPreviewing = true;
+                AnimationMode.StartAnimationMode();
+            }
+
+            if (GUILayout.Button("Add Event"))
+            {
+                AnimationEvent animationEvent = new AnimationEvent
+                {
+                    eventName = _newEventName,
+                    triggerTime = _previewNormalizedTime,
+                    eventHash = Extension.StringToHash(_newEventName),
+                    rangeTriggerTime = new MinMax(_previewNormalizedTime, _previewNormalizedTime)
+                };
+
+                behaviour.animationEventList.Add(animationEvent);
+            }
+
+            if (GUILayout.Button("Remove Event"))
+            {
+                int count = behaviour.animationEventList.Count;
+
+                if (_currentFocusIndex >= 0 && _currentFocusIndex < count)
+                {
+                    behaviour.animationEventList.RemoveAt(_currentFocusIndex);
+                }
+            }
+
+            if (_isPreviewing)
+            {
+                Rect lastRect = GUILayoutUtility.GetLastRect();
+                lastRect.y += EditorGUIUtility.singleLineHeight + 5;
+
+                string previewMsg = $"{_previewNormalizedTime * 100f:F2}%";
+                EditorGUI.ProgressBar(lastRect, _previewNormalizedTime, previewMsg);
+            }
+
+            GUILayout.Space(_isPreviewing ? 30 : 10);
+            _animationEventList.DoLayoutList();
         }
 
 
         private void DrawAnimationEventGUI(Rect position, int index, bool isActive, bool isFocused)
         {
-            if (_behaviour.animationEventList.Count <= index)
-            {
-                return;
-            }
-
-            if (isFocused)
-            {
-                _currentFocusIndexInList = index;
-            }
-
             SerializedProperty property = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
 
             position.y += 5;
@@ -220,31 +207,58 @@ namespace AnimatorExtension.Editor
             _animationEventDrawer.DrawDropdownSliderField(position, property, index);
             position.y += EditorGUIUtility.singleLineHeight + 5;
 
+            if (isFocused)
+            {
+                _currentFocusIndex = index;
+            }
+
             if (selectedIndex >= 0 && selectedIndex < _eventContainer.count)
             {
-                EAnimationEventParameter param = _eventContainer.paramTypes[selectedIndex];
-
-                if (param == EAnimationEventParameter.Customization)
+                if (_eventContainer.paramTypes[selectedIndex] == EAnimationEventParameter.Customization)
                 {
-                    AnimationEvent eventInfo = _behaviour.animationEventList.FirstOrDefault(e => e.eventHash == _eventContainer.eventNameHashes[selectedIndex]);
-                    
                     Type type = _eventContainer.customParams[selectedIndex];
+
+                    int targetEventHash = _eventContainer.eventNameHashes[selectedIndex];
+
+                    AnimationEvent eventInfo = _behaviour.animationEventList.FirstOrDefault(e => e.eventHash == targetEventHash);
 
                     if (eventInfo is not null && (eventInfo.parameter.customValue is null || eventInfo.parameter.customValue.GetType() != type))
                     {
-                        eventInfo.parameter.customValue = null;
-                        
                         eventInfo.parameter.customValue = Activator.CreateInstance(type) as CustomAnimationEventParameter;
                     }
                 }
 
-                int additiveHeight = _animationEventDrawer.DrawParameterField(position, property, param);
+                _animationEventDrawer.DrawParameterField(position, property, _eventContainer.paramTypes[selectedIndex]);
             }
-            else
+        }
 
+
+        private float DrawAnimationEventHeight(int index)
+        {
+            SerializedProperty property = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
+
+            SerializedProperty parameter = property.FindPropertyRelative("parameter");
+            
+            if (parameter is not null)
             {
-                GUILayout.Label($"Previewing at {_previewNormalizedTime:F2}s", EditorStyles.helpBox);
+                SerializedProperty paramType = parameter.FindPropertyRelative("parameterType");
+
+                if ((EAnimationEventParameter)paramType.enumValueIndex != EAnimationEventParameter.Customization)
+                {
+                    return EditorGUIUtility.singleLineHeight * 4f;
+                }
+
+                SerializedProperty customValueProp = parameter.FindPropertyRelative("customValue");
+
+                if (customValueProp.isExpanded)
+                {
+                    float propertyHeight = EditorGUI.GetPropertyHeight(customValueProp);
+
+                    return EditorGUIUtility.singleLineHeight * 3f + propertyHeight;
+                }
             }
+
+            return EditorGUIUtility.singleLineHeight * 4f;
         }
     }
 }

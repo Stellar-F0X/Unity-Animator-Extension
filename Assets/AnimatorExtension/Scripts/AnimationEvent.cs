@@ -16,7 +16,7 @@ namespace AnimatorExtension
         public bool hasTriggered;
         
         public AnimationEventParameter parameter;
-        public EventDispatchType dispatchType;
+        public EEventDispatchType dispatchType;
         public MinMax rangeTriggerTime;
     }
 }

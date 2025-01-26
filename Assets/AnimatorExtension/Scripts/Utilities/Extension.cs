@@ -11,7 +11,7 @@ namespace AnimatorExtension
             {
                 return 0;
             }
-            
+
             return sentence.GetHashCode(StringComparison.Ordinal);
         }
 

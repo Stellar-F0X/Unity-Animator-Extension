@@ -2,7 +2,7 @@ using System;
 
 namespace AnimatorExtension.Parameters
 {
-    public enum EventDispatchType
+    public enum EEventDispatchType
     {
         None,
         Enter,

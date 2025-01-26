@@ -64,8 +64,8 @@ namespace AnimatorExtension.Parameters
             customParams = _customParams.ToArray();
             paramTypes = _paramTypes.ToArray();
             
-            eventNames = new string[_eventNames.Count];
-            eventNameHashes = new int[_eventNames.Count];
+            eventNames = new string[count];
+            eventNameHashes = new int[count];
 
             for (int i = 0; i < count; i++)
             {
