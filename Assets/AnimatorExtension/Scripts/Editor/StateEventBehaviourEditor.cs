@@ -210,7 +210,7 @@ namespace AnimatorExtension.Editor
             {
                 _currentFocusIndex = index;
             }
-            
+
             SerializedProperty property = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
 
             position.y += 5;
