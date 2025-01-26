@@ -71,8 +71,8 @@ namespace AnimatorExtension.Sample
             
         }
         
-        [AnimationEvent("get Custom1", EAnimationEventParameter.Customization, typeof(CustomAnimEventParamExample1))]
-        public void GetCustom(CustomAnimEventParamExample1 a)
+        [AnimationEvent("get Custom1", EAnimationEventParameter.Customization, typeof(MonoBehaviour))]
+        public void GetCustom(MonoBehaviour a)
         {
             
         }
