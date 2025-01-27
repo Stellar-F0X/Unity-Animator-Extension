@@ -6,10 +6,25 @@ namespace AnimatorExtension.Parameters
     [Serializable]
     public abstract class CustomAnimationEventParameter
     {
-        protected int _layerIndex;
-        protected Animator _animator;
-        protected AnimatorStateInfo _stateInfo;
+        public int layerIndex
+        {
+            get;
+            set;
+        }
+
+        public AnimatorClipInfo[] clipInfo
+        {
+            get;
+            set;
+        }
+
+        public AnimatorStateInfo stateInfo
+        {
+            get;
+            set;
+        }
         
-        public abstract void OnBeforeEventTrigger();
+        public virtual void OnBeforeEventTrigger() { }
+        public virtual void OnAfterEventTrigger() { }
     }
 }

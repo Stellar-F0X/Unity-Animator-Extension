@@ -20,8 +20,8 @@ namespace AnimatorExtension.Sample
         }
 
 
-        [AnimationEvent("LogMessage", EAnimationEventParameter.Int)]
-        public void LogIntMessage(int a)
+        [AnimationEvent("LogMessage", EAnimationEventParameter.String)]
+        public void LogIntMessage(string a)
         {
             Debug.Log(a);
         }

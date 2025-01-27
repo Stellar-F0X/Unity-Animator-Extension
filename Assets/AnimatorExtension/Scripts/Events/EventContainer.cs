@@ -10,7 +10,7 @@ namespace AnimatorExtension
     {
         public readonly Dictionary<int, EventCallback> eventList = new Dictionary<int, EventCallback>();
 
-        
+
         public void RegisterEventAction(int eventHash, EventCallback callback)
         {
             if (eventList.ContainsKey(eventHash))
@@ -18,11 +18,11 @@ namespace AnimatorExtension
                 Debug.LogError("Event already exists");
                 return;
             }
-            
+
             eventList.Add(eventHash, callback);
         }
-        
-        
+
+
         public bool Invoke(int eventHash, AnimationEventParameter parameter, out string errorMessage)
         {
             if (eventList.TryGetValue(eventHash, out var callback) == false)
@@ -51,22 +51,28 @@ namespace AnimatorExtension
 
                 case EAnimationEventParameter.Tag:
                 case EAnimationEventParameter.String: GetEventAction<string>(callback).Invoke(parameter.stringValue); break;
-                
-                case EAnimationEventParameter.LayerMask: GetEventAction<LayerMask>(callback).Invoke(parameter.intValue); break; 
+
+                case EAnimationEventParameter.LayerMask: GetEventAction<LayerMask>(callback).Invoke(parameter.intValue); break;
 
                 case EAnimationEventParameter.Vector2: GetEventAction<Vector2>(callback).Invoke(parameter.vector2Value); break;
-                
+
                 case EAnimationEventParameter.Vector3: GetEventAction<Vector3>(callback).Invoke(parameter.vector3Value); break;
 
                 case EAnimationEventParameter.Quaternion: GetEventAction<Quaternion>(callback).Invoke(parameter.quaternionValue); break;
-                
+
                 case EAnimationEventParameter.AnimationCurve: GetEventAction<AnimationCurve>(callback).Invoke(parameter.curveValue); break;
-                
+
                 case EAnimationEventParameter.GameObject: GetEventAction<GameObject>(callback).Invoke(parameter.gobjValue); break;
-                
+
                 case EAnimationEventParameter.ScriptableObject: GetEventAction<ScriptableObject>(callback).Invoke(parameter.sobjValue); break;
-                
-                case EAnimationEventParameter.Customization: GetEventAction<CustomAnimationEventParameter>(callback).Invoke(parameter.customValue); break;
+
+                case EAnimationEventParameter.Customization:
+                {
+                    parameter.customValue.OnBeforeEventTrigger();
+                    GetEventAction<CustomAnimationEventParameter>(callback).Invoke(parameter.customValue);
+                    parameter.customValue.OnAfterEventTrigger();
+                    break;
+                }
             }
 
             errorMessage = "";
@@ -76,34 +82,24 @@ namespace AnimatorExtension
 
         private Action<T> GetEventAction<T>(EventCallback callback)
         {
-            Action<T> eventAction = (callback as EventAction<T>).action;
-
-            if (eventAction == null)
+            if (callback is EventAction<T> eventAction)
             {
-                Debug.LogError("EventAction<T> action is null");
-            }
-            else
-            {
-                return eventAction;
+                return eventAction.action;
             }
 
+            Debug.LogError($"EventAction<{typeof(T).Name}> cannot be converted.");
             return null;
         }
 
-        
+
         private Action GetEventAction(EventCallback callback)
         {
-            Action eventAction = (callback as EventAction).action;
-
-            if (eventAction == null)
+            if (callback is EventAction eventAction)
             {
-                Debug.LogError("EventAction<T> action is null");
-            }
-            else
-            {
-                return eventAction;
+                return eventAction.action;
             }
 
+            Debug.LogError($"EventAction cannot be converted.");
             return null;
         }
     }
