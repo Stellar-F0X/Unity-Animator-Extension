@@ -42,7 +42,7 @@ namespace AnimatorExtension
                 {
                     if (method.GetCustomAttribute(_SearchAttributeType) is AnimationEventAttribute attribute)
                     {
-                        container.AddInfo(attribute.eventName, attribute.animationEventParameter, attribute.customParameterType);
+                        container.AddInfo(attribute.eventName, attribute.eventParameter, attribute.customParameterType);
                     }
                 }
             }

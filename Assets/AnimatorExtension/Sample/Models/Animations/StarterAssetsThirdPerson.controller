@@ -13,12 +13,60 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationEventList:
-  - eventName: None
-    eventHash: 1414246128
-    triggerTime: 0
+  - eventName: get Animation Curve
+    eventHash: 1033834291
+    triggerTime: 0.5
     hasTriggered: 0
     parameter:
-      parameterType: 0
+      parameterType: 10
+      intValue: 1
+      charValue: 0
+      boolValue: 0
+      stringValue: 
+      floatValue: 0
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      vector2Value: {x: 0, y: 0}
+      vector3Value: {x: 0, y: 0, z: 0}
+      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
+      gobjValue: {fileID: 0}
+      transformValue: {fileID: 0}
+      curveValue:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 1
+          outSlope: 1
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 1
+          outSlope: 1
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      sobjValue: {fileID: 0}
+      customValue:
+        rid: -2
+    dispatchType: 4
+    rangeTriggerTime:
+      min: 0
+      max: 0
+  - eventName: get Custom1
+    eventHash: -1684332780
+    triggerTime: 0.2
+    hasTriggered: 0
+    parameter:
+      parameterType: 14
       intValue: 0
       charValue: 0
       boolValue: 0
@@ -38,22 +86,59 @@ MonoBehaviour:
         m_RotationOrder: 4
       sobjValue: {fileID: 0}
       customValue:
-        rid: 4580380224907116690
-    dispatchType: 0
+        rid: 4580380248201494595
+    dispatchType: 4
+    rangeTriggerTime:
+      min: 0
+      max: 0
+  - eventName: get Custom2
+    eventHash: -1684332777
+    triggerTime: 0.67
+    hasTriggered: 0
+    parameter:
+      parameterType: 14
+      intValue: 0
+      charValue: 0
+      boolValue: 0
+      stringValue: 
+      floatValue: 0
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      vector2Value: {x: 0, y: 0}
+      vector3Value: {x: 0, y: 0, z: 0}
+      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
+      gobjValue: {fileID: 0}
+      transformValue: {fileID: 0}
+      curveValue:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      sobjValue: {fileID: 0}
+      customValue:
+        rid: 4580380248201494599
+    dispatchType: 1
     rangeTriggerTime:
       min: 0
       max: 0
   references:
     version: 2
     RefIds:
-    - rid: 4580380224907116690
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 4580380248201494595
+      type: {class: CustomAnimEventParamExample1, ns: AnimatorExtension.Sample, asm: AnimatorExtension}
+      data:
+        a: "\uB098\uB294 A\uC694!"
+        b: 10
+        c: 0.75
+        d: 1
+    - rid: 4580380248201494599
       type: {class: CustomAnimEventParamExample2, ns: AnimatorExtension.Sample, asm: AnimatorExtension}
       data:
-        eventName: 
-        eventParameter: 0
-        minmax:
-          min: 0
-          max: 0
+        eventName: "\uB098\uB294 \uC774\uBCA4\uD2B8\uC694!"
+        eventParameter: 50
+        nameList: []
 --- !u!114 &-8404588960376802524
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -66,42 +151,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18af2ec660677944c852056699f54797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationEventList:
-  - eventName: None
-    eventHash: 1414246128
-    triggerTime: 0
-    hasTriggered: 0
-    parameter:
-      parameterType: 0
-      intValue: 0
-      charValue: 0
-      boolValue: 0
-      stringValue: 
-      floatValue: 0
-      colorValue: {r: 0, g: 0, b: 0, a: 0}
-      vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 0, z: 0}
-      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
-      gobjValue: {fileID: 0}
-      transformValue: {fileID: 0}
-      curveValue:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      sobjValue: {fileID: 0}
-      customValue:
-        rid: -2
-    dispatchType: 0
-    rangeTriggerTime:
-      min: 0
-      max: 0
+  animationEventList: []
   references:
     version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+    RefIds: []
 --- !u!1102 &-7469282255733588732
 AnimatorState:
   serializedVersion: 6
@@ -114,7 +167,6 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -1241942381204629156}
-  - {fileID: 5621369284603443325}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 1
@@ -508,7 +560,7 @@ AnimatorStateTransition:
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7469282255733588732}
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
   m_IsExit: 0
   serializedVersion: 3
   m_TransitionDuration: 0.47048202
@@ -577,7 +629,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: JumpStart
-  m_Speed: 1
+  m_Speed: 0.3
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1705606405774109490}
@@ -645,28 +697,6 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 0
---- !u!1101 &5621369284603443325
-AnimatorStateTransition:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_Conditions: []
-  m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: 2316907928501487792}
-  m_Solo: 0
-  m_Mute: 0
-  m_IsExit: 0
-  serializedVersion: 3
-  m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
-  m_ExitTime: 0.90625
-  m_HasExitTime: 1
-  m_HasFixedDuration: 1
-  m_InterruptionSource: 0
-  m_OrderedInterruption: 1
-  m_CanTransitionToSelf: 1
 --- !u!114 &6542766217863170750
 MonoBehaviour:
   m_ObjectHideFlags: 1

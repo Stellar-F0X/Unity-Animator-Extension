@@ -4,18 +4,18 @@ using UnityEngine;
 
 namespace AnimatorExtension
 {
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public class AnimationEventAttribute : PropertyAttribute
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="eventName"></param>
-        /// <param name="animationEventParameter"></param>
-        public AnimationEventAttribute(string eventName, EAnimationEventParameter animationEventParameter = EAnimationEventParameter.Void)
+        /// <param name="eventParameter"></param>
+        public AnimationEventAttribute(string eventName, EAnimationEventParameter eventParameter = EAnimationEventParameter.Void)
         {
             this.eventName = eventName;
-            this.animationEventParameter = animationEventParameter;
+            this.eventParameter = eventParameter;
         }
 
         
@@ -23,17 +23,17 @@ namespace AnimatorExtension
         /// 
         /// </summary>
         /// <param name="eventName"></param>
-        /// <param name="animationEventParameter"></param>
+        /// <param name="eventParameter"></param>
         /// <param name="customParam"></param>
-        public AnimationEventAttribute(string eventName, EAnimationEventParameter animationEventParameter, Type customParam)
+        public AnimationEventAttribute(string eventName, EAnimationEventParameter eventParameter, Type customParam)
         {
             this.eventName = eventName;
-            this.animationEventParameter = animationEventParameter;
+            this.eventParameter = eventParameter;
             this.customParameterType = customParam;
         }
 
         public string eventName;
         public Type customParameterType;
-        public EAnimationEventParameter animationEventParameter;
+        public EAnimationEventParameter eventParameter;
     }
 }

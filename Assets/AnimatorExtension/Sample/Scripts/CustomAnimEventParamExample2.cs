@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AnimatorExtension.Parameters;
 using UnityEngine;
 
@@ -7,10 +8,10 @@ namespace AnimatorExtension.Sample
     {
         public string eventName;
         public int eventParameter;
-        
-        public MinMax minmax;
 
-        public override void Execute()
+        public List<string> nameList;
+
+        public override void OnBeforeEventTrigger()
         {
             
         }

@@ -16,7 +16,7 @@ namespace AnimatorExtension.Sample
         public bool d;
 
 
-        public override void Execute()
+        public override void OnBeforeEventTrigger()
         {
             Debug.Log($"{a} {b} {c} {d}");
         }

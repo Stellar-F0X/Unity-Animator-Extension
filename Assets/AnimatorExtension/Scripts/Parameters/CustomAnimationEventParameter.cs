@@ -10,6 +10,6 @@ namespace AnimatorExtension.Parameters
         protected Animator _animator;
         protected AnimatorStateInfo _stateInfo;
         
-        public abstract void Execute();
+        public abstract void OnBeforeEventTrigger();
     }
 }

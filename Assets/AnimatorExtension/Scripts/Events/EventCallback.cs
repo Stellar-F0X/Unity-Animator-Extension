@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AnimatorExtension
 {
-    public abstract class EventCallback : ISerializationCallbackReceiver
+    public abstract class EventCallback
     {
         public EventCallback(EAnimationEventParameter animationEventParameter)
         {
@@ -11,16 +11,5 @@ namespace AnimatorExtension
         }
         
         public readonly EAnimationEventParameter animationEventParameter;
-        
-        
-        public void OnBeforeSerialize()
-        {
-            
-        }
-
-        public void OnAfterDeserialize()
-        {
-            
-        }
     }
 }

@@ -49,11 +49,24 @@ namespace AnimatorExtension
 
                 case EAnimationEventParameter.Color: GetEventAction<Color>(callback).Invoke(parameter.colorValue); break;
 
+                case EAnimationEventParameter.Tag:
                 case EAnimationEventParameter.String: GetEventAction<string>(callback).Invoke(parameter.stringValue); break;
+                
+                case EAnimationEventParameter.LayerMask: GetEventAction<LayerMask>(callback).Invoke(parameter.intValue); break; 
 
+                case EAnimationEventParameter.Vector2: GetEventAction<Vector2>(callback).Invoke(parameter.vector2Value); break;
+                
                 case EAnimationEventParameter.Vector3: GetEventAction<Vector3>(callback).Invoke(parameter.vector3Value); break;
 
                 case EAnimationEventParameter.Quaternion: GetEventAction<Quaternion>(callback).Invoke(parameter.quaternionValue); break;
+                
+                case EAnimationEventParameter.AnimationCurve: GetEventAction<AnimationCurve>(callback).Invoke(parameter.curveValue); break;
+                
+                case EAnimationEventParameter.GameObject: GetEventAction<GameObject>(callback).Invoke(parameter.gobjValue); break;
+                
+                case EAnimationEventParameter.ScriptableObject: GetEventAction<ScriptableObject>(callback).Invoke(parameter.sobjValue); break;
+                
+                case EAnimationEventParameter.Customization: GetEventAction<CustomAnimationEventParameter>(callback).Invoke(parameter.customValue); break;
             }
 
             errorMessage = "";

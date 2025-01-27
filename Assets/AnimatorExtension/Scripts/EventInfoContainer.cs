@@ -9,6 +9,7 @@ namespace AnimatorExtension.Parameters
         private List<Type> _customParams = new List<Type>();
         private List<string> _eventNames = new List<string>();
         private List<EAnimationEventParameter> _paramTypes = new List<EAnimationEventParameter>();
+        private Dictionary<int, Type> _customParamTypes = new Dictionary<int, Type>();
 
         
         public int count
@@ -51,18 +52,17 @@ namespace AnimatorExtension.Parameters
             this._customParams.Add(customParam);
         }
 
+        
         public Type FindTypeByHash(int hashCode)
         {
-            for (int i = 0; i < this._paramTypes.Count; i++)
+            if (_customParamTypes.TryGetValue(hashCode, out Type type))
             {
-                if (eventNameHashes[i] == hashCode)
-                {
-                    return customParamTypes[i];
-                }
+                return type;
             }
 
             return null;
         }
+        
 
         public void Clear()
         {
@@ -71,20 +71,25 @@ namespace AnimatorExtension.Parameters
             this._eventNames.Clear();
             this._paramTypes.Clear();
             this._customParams.Clear();
+            this._customParamTypes.Clear();
         }
+        
 
         public void Build()
         {
-            customParamTypes = _customParams.ToArray();
             paramTypes = _paramTypes.ToArray();
             
             eventNames = new string[count];
             eventNameHashes = new int[count];
+            customParamTypes = new Type[count];
 
             for (int i = 0; i < count; i++)
             {
                 this.eventNames[i] = this._eventNames[i];
+                this.customParamTypes[i] = this._customParams[i];
                 this.eventNameHashes[i] = Extension.StringToHash(this._eventNames[i]);
+                
+                this._customParamTypes.Add(this.eventNameHashes[i], this.customParamTypes[i]);
             }
         }
     }

@@ -109,7 +109,7 @@ namespace AnimatorExtension.Editor
             _isPreviewing = false;
             _previewNormalizedTime = 0;
 
-            if (_animator is null)
+            if (_animator is not null)
             {
                 _animationSamplePlayer?.TryDestroyPlayableGraph();
 
@@ -228,7 +228,7 @@ namespace AnimatorExtension.Editor
 
                     if (_customEventParameterType.IsAssignableFrom(castingTargetType) == false)
                     {
-                        EditorGUILayout.HelpBox($"[{index + 1}] {castingTargetType.Name} cannot be cast to CustomParameter.", MessageType.Error, true);
+                        EditorGUILayout.HelpBox($"[{index + 1}] \"{castingTargetType.Name}\" cannot be cast to CustomParameter.", MessageType.Error, true);
                         return;
                     }
 
