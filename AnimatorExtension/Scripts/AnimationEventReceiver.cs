@@ -11,14 +11,10 @@ namespace AnimatorExtension
     public sealed class AnimationEventReceiver : MonoBehaviour
     {
         public bool debug = false;
-
-        private readonly static Type _SearchAttributeType = typeof(AnimationEventAttribute);
-
+        
         private readonly EventContainer _eventContainer = new EventContainer();
 
         private Animator _animator;
-
-        private const BindingFlags _EVENT_BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
 
         public Animator animator
@@ -29,128 +25,114 @@ namespace AnimatorExtension
 
         private void Awake()
         {
-            MonoBehaviour[] components = GetComponentsInChildren<MonoBehaviour>(true);
-
-            foreach (MonoBehaviour component in components)
+            ReflectionUtility.FindAttributeAction<AnimationEventAttribute>(this, (attribute, method, mono) =>
             {
-                Type type = component.GetType();
+                int eventHash = Extension.StringToHash(attribute.eventName);
 
-                foreach (MethodInfo method in type.GetMethods(_EVENT_BINDING_FLAGS))
+                EAnimationEventParameter paramType = attribute.eventParameter;
+
+                switch (paramType)
                 {
-                    if (method.GetCustomAttribute(_SearchAttributeType) is AnimationEventAttribute attribute)
+                    case EAnimationEventParameter.Void:
                     {
-                        int eventHash = Extension.StringToHash(attribute.eventName);
+                        Action action = (Action)method.CreateDelegate(typeof(Action), mono);
+                        _eventContainer.RegisterEventAction(eventHash, new EventAction(action, paramType));
+                        break;
+                    }
 
-                        this.RegisterEvent(eventHash, attribute.eventParameter, method, component);
+                    case EAnimationEventParameter.Int:
+                    {
+                        Action<int> action = (Action<int>)method.CreateDelegate(typeof(Action<int>), mono);
+                        _eventContainer.RegisterEventAction(eventHash, new EventAction<int>(action, paramType));
+                        break;
+                    }
+
+                    case EAnimationEventParameter.Float:
+                    {
+                        Action<float> action = (Action<float>)method.CreateDelegate(typeof(Action<float>), mono);
+                        _eventContainer.RegisterEventAction(eventHash, new EventAction<float>(action, paramType));
+                        break;
+                    }
+
+                    case EAnimationEventParameter.Bool:
+                    {
+                        Action<bool> action = (Action<bool>)method.CreateDelegate(typeof(Action<bool>), mono);
+                        _eventContainer.RegisterEventAction(eventHash, new EventAction<bool>(action, paramType));
+                        break;
+                    }
+
+                    case EAnimationEventParameter.Tag:
+                    case EAnimationEventParameter.String:
+                    {
+                        Action<string> action = (Action<string>)method.CreateDelegate(typeof(Action<string>), mono);
+                        _eventContainer.RegisterEventAction(eventHash, new EventAction<string>(action, paramType));
+                        break;
+                    }
+
+                    case EAnimationEventParameter.Color:
+                    {
+                        Action<Color> action = (Action<Color>)method.CreateDelegate(typeof(Action<Color>), mono);
+                        _eventContainer.RegisterEventAction(eventHash, new EventAction<Color>(action, paramType));
+                        break;
+                    }
+
+                    case EAnimationEventParameter.LayerMask:
+                    {
+                        Action<LayerMask> action = (Action<LayerMask>)method.CreateDelegate(typeof(Action<LayerMask>), mono);
+                        _eventContainer.RegisterEventAction(eventHash, new EventAction<LayerMask>(action, paramType));
+                        break;
+                    }
+
+                    case EAnimationEventParameter.Vector2:
+                    {
+                        Action<Vector2> action = (Action<Vector2>)method.CreateDelegate(typeof(Action<Vector2>), mono);
+                        _eventContainer.RegisterEventAction(eventHash, new EventAction<Vector2>(action, paramType));
+                        break;
+                    }
+
+                    case EAnimationEventParameter.Vector3:
+                    {
+                        Action<Vector3> action = (Action<Vector3>)method.CreateDelegate(typeof(Action<Vector3>), mono);
+                        _eventContainer.RegisterEventAction(eventHash, new EventAction<Vector3>(action, paramType));
+                        break;
+                    }
+
+                    case EAnimationEventParameter.Quaternion:
+                    {
+                        Action<Quaternion> action = (Action<Quaternion>)method.CreateDelegate(typeof(Action<Quaternion>), mono);
+                        _eventContainer.RegisterEventAction(eventHash, new EventAction<Quaternion>(action, paramType));
+                        break;
+                    }
+
+                    case EAnimationEventParameter.GameObject:
+                    {
+                        Action<GameObject> action = (Action<GameObject>)method.CreateDelegate(typeof(Action<GameObject>), mono);
+                        _eventContainer.RegisterEventAction(eventHash, new EventAction<GameObject>(action, paramType));
+                        break;
+                    }
+
+                    case EAnimationEventParameter.ScriptableObject:
+                    {
+                        Action<ScriptableObject> action = (Action<ScriptableObject>)method.CreateDelegate(typeof(Action<ScriptableObject>), mono);
+                        _eventContainer.RegisterEventAction(eventHash, new EventAction<ScriptableObject>(action, paramType));
+                        break;
+                    }
+
+                    case EAnimationEventParameter.AnimationCurve:
+                    {
+                        Action<AnimationCurve> action = (Action<AnimationCurve>)method.CreateDelegate(typeof(Action<AnimationCurve>), mono);
+                        _eventContainer.RegisterEventAction(eventHash, new EventAction<AnimationCurve>(action, paramType));
+                        break;
+                    }
+
+                    case EAnimationEventParameter.Customization:
+                    {
+                        var action = (Action<CustomAnimationEventParameter>)method.CreateDelegate(typeof(Action<CustomAnimationEventParameter>), mono);
+                        _eventContainer.RegisterEventAction(eventHash, new EventAction<CustomAnimationEventParameter>(action, paramType));
+                        break;
                     }
                 }
-            }
-        }
-
-
-        private void RegisterEvent(int eventHash, EAnimationEventParameter eventParameter, MethodInfo method, Component component)
-        {
-            switch (eventParameter)
-            {
-                case EAnimationEventParameter.Void:
-                {
-                    Action action = (Action)method.CreateDelegate(typeof(Action), component);
-                    _eventContainer.RegisterEventAction(eventHash, new EventAction(action, eventParameter));
-                    break;
-                }
-
-                case EAnimationEventParameter.Int:
-                {
-                    Action<int> action = (Action<int>)method.CreateDelegate(typeof(Action<int>), component);
-                    _eventContainer.RegisterEventAction(eventHash, new EventAction<int>(action, eventParameter));
-                    break;
-                }
-
-                case EAnimationEventParameter.Float:
-                {
-                    Action<float> action = (Action<float>)method.CreateDelegate(typeof(Action<float>), component);
-                    _eventContainer.RegisterEventAction(eventHash, new EventAction<float>(action, eventParameter));
-                    break;
-                }
-
-                case EAnimationEventParameter.Bool:
-                {
-                    Action<bool> action = (Action<bool>)method.CreateDelegate(typeof(Action<bool>), component);
-                    _eventContainer.RegisterEventAction(eventHash, new EventAction<bool>(action, eventParameter));
-                    break;
-                }
-
-                case EAnimationEventParameter.Tag:
-                case EAnimationEventParameter.String:
-                {
-                    Action<string> action = (Action<string>)method.CreateDelegate(typeof(Action<string>), component);
-                    _eventContainer.RegisterEventAction(eventHash, new EventAction<string>(action, eventParameter));
-                    break;
-                }
-
-                case EAnimationEventParameter.Color:
-                {
-                    Action<Color> action = (Action<Color>)method.CreateDelegate(typeof(Action<Color>), component);
-                    _eventContainer.RegisterEventAction(eventHash, new EventAction<Color>(action, eventParameter));
-                    break;
-                }
-
-                case EAnimationEventParameter.LayerMask:
-                {
-                    Action<LayerMask> action = (Action<LayerMask>)method.CreateDelegate(typeof(Action<LayerMask>), component);
-                    _eventContainer.RegisterEventAction(eventHash, new EventAction<LayerMask>(action, eventParameter));
-                    break;
-                }
-
-                case EAnimationEventParameter.Vector2:
-                {
-                    Action<Vector2> action = (Action<Vector2>)method.CreateDelegate(typeof(Action<Vector2>), component);
-                    _eventContainer.RegisterEventAction(eventHash, new EventAction<Vector2>(action, eventParameter));
-                    break;
-                }
-
-                case EAnimationEventParameter.Vector3:
-                {
-                    Action<Vector3> action = (Action<Vector3>)method.CreateDelegate(typeof(Action<Vector3>), component);
-                    _eventContainer.RegisterEventAction(eventHash, new EventAction<Vector3>(action, eventParameter));
-                    break;
-                }
-
-                case EAnimationEventParameter.Quaternion:
-                {
-                    Action<Quaternion> action = (Action<Quaternion>)method.CreateDelegate(typeof(Action<Quaternion>), component);
-                    _eventContainer.RegisterEventAction(eventHash, new EventAction<Quaternion>(action, eventParameter));
-                    break;
-                }
-
-                case EAnimationEventParameter.GameObject:
-                {
-                    Action<GameObject> action = (Action<GameObject>)method.CreateDelegate(typeof(Action<GameObject>), component);
-                    _eventContainer.RegisterEventAction(eventHash, new EventAction<GameObject>(action, eventParameter));
-                    break;
-                }
-
-                case EAnimationEventParameter.ScriptableObject:
-                {
-                    Action<ScriptableObject> action = (Action<ScriptableObject>)method.CreateDelegate(typeof(Action<ScriptableObject>), component);
-                    _eventContainer.RegisterEventAction(eventHash, new EventAction<ScriptableObject>(action, eventParameter));
-                    break;
-                }
-
-                case EAnimationEventParameter.AnimationCurve:
-                {
-                    Action<AnimationCurve> action = (Action<AnimationCurve>)method.CreateDelegate(typeof(Action<AnimationCurve>), component);
-                    _eventContainer.RegisterEventAction(eventHash, new EventAction<AnimationCurve>(action, eventParameter));
-                    break;
-                }
-
-                case EAnimationEventParameter.Customization:
-                {
-                    var action = (Action<CustomAnimationEventParameter>)method.CreateDelegate(typeof(Action<CustomAnimationEventParameter>), component);
-                    _eventContainer.RegisterEventAction(eventHash, new EventAction<CustomAnimationEventParameter>(action, eventParameter));
-                    break;
-                }
-            }
+            });
         }
 
 
@@ -162,6 +144,24 @@ namespace AnimatorExtension
             {
                 Debug.Log($"<color=magenta>[Animation Event Receiver]</color> {errorMessage}");
             }
+        }
+
+
+        public void AddEvent<T>(string eventName, int targetLayer, AnimatorStateInfo stateInfo, AnimationEventParameter param, Action<T> action)
+        {
+            
+        }
+        
+        
+        public void AddEvent(string eventName, int targetLayer, AnimatorStateInfo stateInfo, Action action)
+        {
+            
+        }
+
+
+        public void RemoveEvent(string eventName, int targetLayer)
+        {
+            
         }
     }
 }

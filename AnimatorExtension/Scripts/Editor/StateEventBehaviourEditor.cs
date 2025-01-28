@@ -14,7 +14,6 @@ namespace AnimatorExtension.Editor
     [CustomEditor(typeof(StateEventBehaviour))]
     internal class StateEventBehaviourEditor : Editor
     {
-        private string _newEventName;
         private float _previewNormalizedTime;
         private bool _isPreviewing;
         private int _currentFocusIndex;
@@ -71,7 +70,7 @@ namespace AnimatorExtension.Editor
                 this.GetAnimatorAndControllerOfReceiver(out AnimationEventReceiver receiver);
                 ReflectionUtility.SetEventsForContainer(receiver, _eventContainer);
             }
-
+            
             _animationEventList = new ReorderableList(serializedObject, property, true, true, false, false);
 
             _animationEventList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Animation Event List");
@@ -166,9 +165,9 @@ namespace AnimatorExtension.Editor
             {
                 AnimationEvent animationEvent = new AnimationEvent
                 {
-                    eventName = _newEventName,
+                    eventName = _eventContainer.eventNames[0],
                     triggerTime = _previewNormalizedTime,
-                    eventHash = Extension.StringToHash(_newEventName),
+                    eventHash = _eventContainer.eventNameHashes[0],
                     rangeTriggerTime = new MinMax(_previewNormalizedTime, _previewNormalizedTime)
                 };
 
@@ -214,7 +213,7 @@ namespace AnimatorExtension.Editor
             SerializedProperty property = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
 
             position.y += 5;
-            int pickedEvent = _animationEventDrawer.DrawStringHashField(position, property, _eventContainer.eventNames);
+            int pickedEvent = _animationEventDrawer.DrawStringHashField(position, property, _eventContainer.eventNames, _eventContainer.eventNameHashes);
             position.y += EditorGUIUtility.singleLineHeight + 5;
             _animationEventDrawer.DrawDropdownSliderField(position, property, index);
             position.y += EditorGUIUtility.singleLineHeight + 5;

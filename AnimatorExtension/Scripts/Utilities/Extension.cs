@@ -11,7 +11,8 @@ namespace AnimatorExtension
         {
             if (string.IsNullOrEmpty(sentence) || string.IsNullOrWhiteSpace(sentence))
             {
-                return 0;
+                Debug.LogError("[StringToHash] Sentence is empty");
+                return -1;
             }
 
             return sentence.GetHashCode(StringComparison.Ordinal);
@@ -29,6 +30,15 @@ namespace AnimatorExtension
             foreach (var item in lookup[key])
             {
                 action.Invoke(item);
+            }
+        }
+        
+        
+        public static void ForEach<T>(this T[] array, Action<T> action)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                action.Invoke(array[i]);
             }
         }
     }

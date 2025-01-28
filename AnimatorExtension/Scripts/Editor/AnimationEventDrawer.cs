@@ -93,7 +93,7 @@ namespace AnimatorExtension.Editor
         }
 
 
-        public int DrawStringHashField(Rect position, SerializedProperty property, string[] eventNames)
+        public int DrawStringHashField(Rect position, SerializedProperty property, string[] eventNames, int[] hashes)
         {
             SerializedProperty eventName = property.FindPropertyRelative("eventName");
             SerializedProperty eventHash = property.FindPropertyRelative("eventHash");
@@ -104,13 +104,16 @@ namespace AnimatorExtension.Editor
             selectedIndex = EditorGUI.Popup(stateNameRect, selectedIndex, eventNames);
             eventName.stringValue = selectedIndex < 0 || selectedIndex >= eventNames.Length ? eventNames[0] : eventNames[selectedIndex];
 
-            using (new EditorGUI.DisabledScope(true))
+            if (selectedIndex != 0)
             {
-                eventHash.intValue = Extension.StringToHash(eventName.stringValue);
-                Rect stateHashRect = CustomEditorUtility.CalculateVariableRect(position, 0.3f, position.width * 0.7f, 5);
-                EditorGUI.PropertyField(stateHashRect, eventHash, GUIContent.none);
+                using (new EditorGUI.DisabledScope(true))
+                {
+                    eventHash.intValue = hashes[selectedIndex];
+                    Rect stateHashRect = CustomEditorUtility.CalculateVariableRect(position, 0.3f, position.width * 0.7f, 5);
+                    EditorGUI.PropertyField(stateHashRect, eventHash, GUIContent.none);
+                }
             }
-
+            
             return selectedIndex;
         }
 
