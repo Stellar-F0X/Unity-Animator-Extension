@@ -31,31 +31,31 @@ namespace AnimatorExtension.Editor
 
 
 
-        private void GetAnimatorAndControllerOfReceiver(out AnimationEventReceiver receiver)
+        private void GetAnimatorAndControllerOfReceiver(out AnimationEventController controller)
         {
             if (_animator is null)
             {
                 if (AnimationUtility.GetAnimationController(out _controller) == false)
                 {
-                    receiver = null;
+                    controller = null;
                     Debug.LogError("Unable to find the animation controller. Please check if the animation is set up correctly.");
                     return;
                 }
 
-                receiver = FindObjectsByType<AnimationEventReceiver>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)
+                controller = FindObjectsByType<AnimationEventController>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)
                     .FirstOrDefault(eventReceiver => eventReceiver.animator.runtimeAnimatorController == _controller);
 
-                if (receiver is null)
+                if (controller is null)
                 {
                     Debug.LogError("Unable to find AnimationEventReceiver. Please check if there are receivers linked to the controller.");
                     return;
                 }
 
-                _animator = receiver.animator;
+                _animator = controller.animator;
             }
             else
             {
-                receiver = _animator.GetComponent<AnimationEventReceiver>();
+                controller = _animator.GetComponent<AnimationEventController>();
             }
         }
 
@@ -67,7 +67,7 @@ namespace AnimatorExtension.Editor
 
             if (_animator is null)
             {
-                this.GetAnimatorAndControllerOfReceiver(out AnimationEventReceiver receiver);
+                this.GetAnimatorAndControllerOfReceiver(out AnimationEventController receiver);
                 ReflectionUtility.SetEventsForContainer(receiver, _eventContainer);
             }
             

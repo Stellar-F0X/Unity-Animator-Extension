@@ -14,7 +14,7 @@ namespace AnimatorExtension
 
         private int _loopCount;
 
-        private AnimationEventReceiver _receiver;
+        private AnimationEventController _controller;
 
         private ILookup<EEventDispatchType, AnimationEvent> _onRepeatingEvent;
 
@@ -22,7 +22,7 @@ namespace AnimatorExtension
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             _loopCount = 1;
-            
+
             if (animationEventList.Count == 0)
             {
                 return;
@@ -32,7 +32,7 @@ namespace AnimatorExtension
             {
                 _initialized = true;
 
-                bool foundReceiver = animator.TryGetComponent(out _receiver);
+                bool foundReceiver = animator.TryGetComponent(out _controller);
 
                 Debug.Assert(foundReceiver, "There are no Receivers on this object or its hierarchy.");
 
@@ -45,9 +45,11 @@ namespace AnimatorExtension
             {
                 if (animationEventList[i].dispatchType is EEventDispatchType.Enter or EEventDispatchType.Start)
                 {
+                    AnimationEvent animEvent = animationEventList[i];
+
                     this.InitializeCustomizationParameter(animationEventList[i].parameter, animator, layerIndex);
-                    _receiver.ReceiveEvent(animationEventList[i].eventHash, animationEventList[i].parameter);
-                    animationEventList[i].hasTriggered = true;
+                    this._controller.ReceiveEvent(animEvent.eventName, animEvent.eventHash, animEvent.parameter);
+                    this.animationEventList[i].hasTriggered = true;
                 }
             }
         }
@@ -66,13 +68,13 @@ namespace AnimatorExtension
                 _onRepeatingEvent.ForEach(EEventDispatchType.End, animEvent =>
                 {
                     this.InitializeCustomizationParameter(animEvent.parameter, animator, layerIndex);
-                    _receiver.ReceiveEvent(animEvent.eventHash, animEvent.parameter);
+                    _controller.ReceiveEvent(animEvent.eventName, animEvent.eventHash, animEvent.parameter);
                 });
 
                 _onRepeatingEvent.ForEach(EEventDispatchType.Start, animEvent =>
                 {
                     this.InitializeCustomizationParameter(animEvent.parameter, animator, layerIndex);
-                    _receiver.ReceiveEvent(animEvent.eventHash, animEvent.parameter);
+                    _controller.ReceiveEvent(animEvent.eventName, animEvent.eventHash, animEvent.parameter);
                 });
 
                 animationEventList.ForEach(e => e.hasTriggered = false);
@@ -98,15 +100,16 @@ namespace AnimatorExtension
             {
                 return;
             }
-            
+
             for (int i = 0; i < animationEventList.Count; i++)
             {
                 if (animationEventList[i].dispatchType is EEventDispatchType.Exit or EEventDispatchType.End)
                 {
-                    this.InitializeCustomizationParameter(animationEventList[i].parameter, animator, layerIndex);
+                    AnimationEvent animEvent = animationEventList[i];
 
-                    _receiver.ReceiveEvent(animationEventList[i].eventHash, animationEventList[i].parameter);
-                    animationEventList[i].hasTriggered = true;
+                    this.InitializeCustomizationParameter(animationEventList[i].parameter, animator, layerIndex);
+                    this._controller.ReceiveEvent(animEvent.eventName, animEvent.eventHash, animEvent.parameter);
+                    this.animationEventList[i].hasTriggered = true;
                 }
             }
         }
@@ -143,30 +146,30 @@ namespace AnimatorExtension
 
 
 
-        private void NotifyEvents(AnimationEvent animationEvent, float currentTime, Animator animator, int layerIndex)
+        private void NotifyEvents(AnimationEvent animEvent, float currentTime, Animator animator, int layerIndex)
         {
-            switch (animationEvent.dispatchType)
+            switch (animEvent.dispatchType)
             {
                 case EEventDispatchType.Update:
                 {
-                    this.InitializeCustomizationParameter(animationEvent.parameter, animator, layerIndex);
-                    _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
-                    animationEvent.hasTriggered = true;
+                    this.InitializeCustomizationParameter(animEvent.parameter, animator, layerIndex);
+                    _controller.ReceiveEvent(animEvent.eventName, animEvent.eventHash, animEvent.parameter);
+                    animEvent.hasTriggered = true;
                     break;
                 }
 
                 case EEventDispatchType.Range:
                 {
-                    if (currentTime >= animationEvent.rangeTriggerTime.min)
+                    if (currentTime >= animEvent.rangeTriggerTime.min)
                     {
-                        if (currentTime <= animationEvent.rangeTriggerTime.max)
+                        if (currentTime <= animEvent.rangeTriggerTime.max)
                         {
-                            this.InitializeCustomizationParameter(animationEvent.parameter, animator, layerIndex);
-                            _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
+                            this.InitializeCustomizationParameter(animEvent.parameter, animator, layerIndex);
+                            _controller.ReceiveEvent(animEvent.eventName, animEvent.eventHash, animEvent.parameter);
                             break;
                         }
 
-                        animationEvent.hasTriggered = true;
+                        animEvent.hasTriggered = true;
                     }
 
                     break;
@@ -174,11 +177,11 @@ namespace AnimatorExtension
 
                 case EEventDispatchType.Point:
                 {
-                    if (animationEvent.hasTriggered == false && currentTime > animationEvent.triggerTime)
+                    if (animEvent.hasTriggered == false && currentTime > animEvent.triggerTime)
                     {
-                        this.InitializeCustomizationParameter(animationEvent.parameter, animator, layerIndex);
-                        _receiver.ReceiveEvent(animationEvent.eventHash, animationEvent.parameter);
-                        animationEvent.hasTriggered = true;
+                        this.InitializeCustomizationParameter(animEvent.parameter, animator, layerIndex);
+                        _controller.ReceiveEvent(animEvent.eventName, animEvent.eventHash, animEvent.parameter);
+                        animEvent.hasTriggered = true;
                     }
 
                     break;

@@ -11,6 +11,36 @@ namespace AnimatorExtension
 {
     internal class ReflectionUtility
     {
+        public static readonly Type VoidType = typeof(Action);
+        
+        public static readonly Type IntType = typeof(Action<int>);
+        
+        public static readonly Type FloatType = typeof(Action<float>);
+        
+        public static readonly Type BoolType = typeof(Action<bool>);
+        
+        public static readonly Type StringType = typeof(Action<string>);
+        
+        public static readonly Type ColorType = typeof(Action<Color>);
+        
+        public static readonly Type LayerMaskType = typeof(Action<LayerMask>);
+        
+        public static readonly Type Vector2Type = typeof(Action<Vector2>);
+        
+        public static readonly Type Vector3Type = typeof(Action<Vector3>);
+        
+        public static readonly Type QuaternionType = typeof(Action<Quaternion>);
+        
+        public static readonly Type GameObjectType = typeof(Action<GameObject>);
+        
+        public static readonly Type ScriptableObjectType = typeof(Action<ScriptableObject>);
+        
+        public static readonly Type AnimationCurveType = typeof(Action<AnimationCurve>);
+        
+        public static readonly Type CustomizationType = typeof(Action<CustomAnimationEventParameter>);
+        
+        
+        
         private const BindingFlags _EVENT_BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
         private readonly static Type _SEARCH_ATTRIBUTE_TYPE = typeof(AnimationEventAttribute);
@@ -24,11 +54,11 @@ namespace AnimatorExtension
         }
 
 
-        public static void SetEventsForContainer(AnimationEventReceiver receiver, EventInfoContainer container)
+        public static void SetEventsForContainer(AnimationEventController controller, EventInfoContainer container)
         {
             container.Clear();
 
-            if (receiver.GetComponentsInChildren<MonoBehaviour>(true) is MonoBehaviour[] components)
+            if (controller.GetComponentsInChildren<MonoBehaviour>(true) is MonoBehaviour[] components)
             {
                 foreach (var mono in components)
                 {
@@ -48,9 +78,9 @@ namespace AnimatorExtension
         }
 
 
-        public static void FindAttributeAction<T>(AnimationEventReceiver receiver, Action<T, MethodInfo, MonoBehaviour> action) where T : Attribute
+        public static void FindAttributeAction<T>(AnimationEventController controller, Action<T, MethodInfo, MonoBehaviour> action) where T : Attribute
         {
-            MonoBehaviour[] components = receiver.GetComponentsInChildren<MonoBehaviour>(true);
+            MonoBehaviour[] components = controller.GetComponentsInChildren<MonoBehaviour>(true);
             
             foreach (var mono in components)
             {
