@@ -94,7 +94,7 @@ namespace AnimatorExtension
 
         public void RemoveRuntimeEvent(string eventName, int targetLayer)
         {
-
+            
         }
 
 
@@ -155,11 +155,13 @@ namespace AnimatorExtension
 
                 EAnimationEventParameter.GameObject => method.CreateDelegate(ReflectionUtility.GameObjectType, mono),
 
-                EAnimationEventParameter.ScriptableObject => method.CreateDelegate(ReflectionUtility.ScriptableObjectType, mono),
+                EAnimationEventParameter.Object => method.CreateDelegate(ReflectionUtility.ObjectType, mono),
 
                 EAnimationEventParameter.AnimationCurve => method.CreateDelegate(ReflectionUtility.AnimationCurveType, mono),
 
                 EAnimationEventParameter.Customization => method.CreateDelegate(ReflectionUtility.CustomizationType, mono),
+                
+                EAnimationEventParameter.AnimatorInfo => method.CreateDelegate(ReflectionUtility.AnimationInfoType, mono),
             };
         }
     }

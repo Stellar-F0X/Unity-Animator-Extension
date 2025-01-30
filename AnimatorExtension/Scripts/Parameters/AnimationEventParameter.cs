@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
 namespace AnimatorExtension.Parameters
 {
@@ -10,7 +11,6 @@ namespace AnimatorExtension.Parameters
         public EAnimationEventParameter parameterType;
         
         public int intValue;
-        public char charValue;
         public bool boolValue;
         public string stringValue;
         public float floatValue;
@@ -18,10 +18,10 @@ namespace AnimatorExtension.Parameters
         public Vector2 vector2Value;
         public Vector3 vector3Value;
         public Quaternion quaternionValue;
-        public GameObject gobjValue;
-        public Transform transformValue;
+        public GameObject gameobjectValue;
         public AnimationCurve curveValue;
-        public ScriptableObject sobjValue;
+        public Object objectValue;
+        public AnimatorInfo animatorInfoValue;
         
         [SerializeReference]
         public CustomAnimationEventParameter customValue;

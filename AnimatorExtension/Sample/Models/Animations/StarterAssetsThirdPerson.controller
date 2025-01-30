@@ -13,14 +13,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationEventList:
-  - eventName: Log
-    eventHash: 1502599712
+  - eventName: get Animator Info
+    eventHash: -877164093
     triggerTime: 0
     hasTriggered: 0
     parameter:
-      parameterType: 0
+      parameterType: 15
       intValue: 0
-      charValue: 0
       boolValue: 0
       stringValue: 
       floatValue: 0
@@ -28,78 +27,21 @@ MonoBehaviour:
       vector2Value: {x: 0, y: 0}
       vector3Value: {x: 0, y: 0, z: 0}
       quaternionValue: {x: 0, y: 0, z: 0, w: 0}
-      gobjValue: {fileID: 0}
-      transformValue: {fileID: 0}
+      gameobjectValue: {fileID: 0}
       curveValue:
         serializedVersion: 2
         m_Curve: []
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      sobjValue: {fileID: 0}
-      customValue:
-        rid: -2
-    dispatchType: 1
-    rangeTriggerTime:
-      min: 0
-      max: 0
-  - eventName: LogMessage
-    eventHash: -246315601
-    triggerTime: 0
-    hasTriggered: 0
-    parameter:
-      parameterType: 4
-      intValue: 0
-      charValue: 0
-      boolValue: 0
-      stringValue: "\uC548\uB155\uD558\uC138\uC694~"
-      floatValue: 0
-      colorValue: {r: 0, g: 0, b: 0, a: 0}
-      vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 0, z: 0}
-      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
-      gobjValue: {fileID: 0}
-      transformValue: {fileID: 0}
-      curveValue:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      sobjValue: {fileID: 0}
+      objectValue: {fileID: 0}
+      animatorInfoValue:
+        layerIndex: 0
+        nodeName: 
+        nodeTag: 
       customValue:
         rid: -2
     dispatchType: 2
-    rangeTriggerTime:
-      min: 0
-      max: 0
-  - eventName: get Custom2
-    eventHash: -1684332777
-    triggerTime: 0
-    hasTriggered: 0
-    parameter:
-      parameterType: 14
-      intValue: 0
-      charValue: 0
-      boolValue: 0
-      stringValue: 
-      floatValue: 0
-      colorValue: {r: 0, g: 0, b: 0, a: 0}
-      vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 0, z: 0}
-      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
-      gobjValue: {fileID: 0}
-      transformValue: {fileID: 0}
-      curveValue:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      sobjValue: {fileID: 0}
-      customValue:
-        rid: 4580380275772489731
-    dispatchType: 3
     rangeTriggerTime:
       min: 0
       max: 0
@@ -108,13 +50,6 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 4580380275772489731
-      type: {class: CustomAnimEventParamExample2, ns: AnimatorExtension.Sample, asm: AnimatorExtension}
-      data:
-        eventName: 2
-        eventParameter: 3
-        nameList:
-        - 2323
 --- !u!1102 &-7469282255733588732
 AnimatorState:
   serializedVersion: 6
@@ -154,6 +89,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 398ac83512c69bb4ba6122f7792aa538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-6868126379504657884
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18af2ec660677944c852056699f54797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationEventList: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!1107 &-5602963042399094863
 AnimatorStateMachine:
   serializedVersion: 6
@@ -602,7 +553,7 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7478122292733868173, guid: 98f277b0c8055e143b2fcf058d3c27dc, type: 3}
-  m_Tag: 
+  m_Tag: My Tag
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
@@ -679,7 +630,8 @@ AnimatorState:
   m_Transitions:
   - {fileID: -4639224020698590961}
   - {fileID: 8635457214972911529}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -6868126379504657884}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 1
   m_WriteDefaultValues: 1

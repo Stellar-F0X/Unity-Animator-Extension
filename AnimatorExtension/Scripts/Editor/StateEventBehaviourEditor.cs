@@ -204,21 +204,20 @@ namespace AnimatorExtension.Editor
             {
                 return;
             }
-
+            
+            SerializedProperty property = _animationEventList.serializedProperty.GetArrayElementAtIndex(index); 
+            
             if (isFocused)
             {
                 _currentFocusIndex = index;
             }
-
-            SerializedProperty property = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
 
             position.y += 5;
             int pickedEvent = _animationEventDrawer.DrawStringHashField(position, property, _eventContainer.eventNames, _eventContainer.eventNameHashes);
             position.y += EditorGUIUtility.singleLineHeight + 5;
             _animationEventDrawer.DrawDropdownSliderField(position, property, index);
             position.y += EditorGUIUtility.singleLineHeight + 5;
-
-
+            
             if (pickedEvent >= 0 && pickedEvent < _eventContainer.count)
             {
                 if (_eventContainer.paramTypes[pickedEvent] == EAnimationEventParameter.Customization)

@@ -6,6 +6,7 @@ using System.Reflection;
 using AnimatorExtension.Parameters;
 using UnityEditor.Callbacks;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace AnimatorExtension
 {
@@ -33,9 +34,11 @@ namespace AnimatorExtension
         
         public static readonly Type GameObjectType = typeof(Action<GameObject>);
         
-        public static readonly Type ScriptableObjectType = typeof(Action<ScriptableObject>);
+        public static readonly Type ObjectType = typeof(Action<Object>);
         
         public static readonly Type AnimationCurveType = typeof(Action<AnimationCurve>);
+        
+        public static readonly Type AnimationInfoType = typeof(Action<AnimatorInfo>);
         
         public static readonly Type CustomizationType = typeof(Action<CustomAnimationEventParameter>);
         
@@ -50,7 +53,7 @@ namespace AnimatorExtension
         [DidReloadScripts]
         private static void OnReloadScripts()
         {
-
+            
         }
 
 

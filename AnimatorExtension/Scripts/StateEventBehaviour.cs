@@ -19,27 +19,33 @@ namespace AnimatorExtension
         private ILookup<EEventDispatchType, AnimationEvent> _onRepeatingEvent;
 
 
+
+
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            _loopCount = 1;
-
             if (animationEventList.Count == 0)
             {
                 return;
             }
 
+            _loopCount = 1;
+
             if (_initialized == false)
             {
-                _initialized = true;
-
-                bool foundReceiver = animator.TryGetComponent(out _controller);
-
-                Debug.Assert(foundReceiver, "There are no Receivers on this object or its hierarchy.");
+                _initialized = animator.TryGetComponent(out _controller);
+                
+                Debug.Assert(_initialized, "There are no Receivers on this object or its hierarchy.");
+                
+                if (_initialized == false)
+                {
+                    return;
+                }
 
                 _onRepeatingEvent = animationEventList
                     .Where(e => e.dispatchType is EEventDispatchType.Start or EEventDispatchType.End)
                     .ToLookup(key => key.dispatchType, result => result);
             }
+
 
             for (int i = 0; i < animationEventList.Count; i++)
             {
@@ -47,7 +53,8 @@ namespace AnimatorExtension
                 {
                     AnimationEvent animEvent = animationEventList[i];
 
-                    this.InitializeCustomizationParameter(animationEventList[i].parameter, animator, layerIndex);
+                    this.InitializeParameter(ref animEvent.parameter, animator, layerIndex);
+                    
                     this._controller.ReceiveEvent(animEvent.eventName, animEvent.eventHash, animEvent.parameter);
                     this.animationEventList[i].hasTriggered = true;
                 }
@@ -58,7 +65,7 @@ namespace AnimatorExtension
 
         public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (animationEventList.Count == 0)
+            if (_initialized == false || animationEventList.Count == 0)
             {
                 return;
             }
@@ -67,13 +74,13 @@ namespace AnimatorExtension
             {
                 _onRepeatingEvent.ForEach(EEventDispatchType.End, animEvent =>
                 {
-                    this.InitializeCustomizationParameter(animEvent.parameter, animator, layerIndex);
+                    this.InitializeParameter(ref animEvent.parameter, animator, layerIndex);
                     _controller.ReceiveEvent(animEvent.eventName, animEvent.eventHash, animEvent.parameter);
                 });
 
                 _onRepeatingEvent.ForEach(EEventDispatchType.Start, animEvent =>
                 {
-                    this.InitializeCustomizationParameter(animEvent.parameter, animator, layerIndex);
+                    this.InitializeParameter(ref animEvent.parameter, animator, layerIndex);
                     _controller.ReceiveEvent(animEvent.eventName, animEvent.eventHash, animEvent.parameter);
                 });
 
@@ -96,7 +103,7 @@ namespace AnimatorExtension
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (animationEventList.Count == 0)
+            if (_initialized == false || animationEventList.Count == 0)
             {
                 return;
             }
@@ -107,7 +114,7 @@ namespace AnimatorExtension
                 {
                     AnimationEvent animEvent = animationEventList[i];
 
-                    this.InitializeCustomizationParameter(animationEventList[i].parameter, animator, layerIndex);
+                    this.InitializeParameter(ref animEvent.parameter, animator, layerIndex);
                     this._controller.ReceiveEvent(animEvent.eventName, animEvent.eventHash, animEvent.parameter);
                     this.animationEventList[i].hasTriggered = true;
                 }
@@ -130,18 +137,30 @@ namespace AnimatorExtension
 
 
 
-        private void InitializeCustomizationParameter(AnimationEventParameter param, Animator animator, int layerIndex)
+        private void InitializeParameter(ref AnimationEventParameter param, Animator animator, int layerIndex)
         {
-            if (param.parameterType != EAnimationEventParameter.Customization)
+            switch (param.parameterType)
             {
-                return;
+                case EAnimationEventParameter.Customization:
+                {
+                    param.customValue.stateInfo = animator.GetCurrentAnimatorStateInfo(layerIndex);
+                    param.customValue.clipInfo = animator.GetCurrentAnimatorClipInfo(layerIndex);
+                    param.customValue.layerIndex = layerIndex;
+                    break;
+                }
+
+                case EAnimationEventParameter.AnimatorInfo:
+                {
+                    AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(layerIndex);
+                    param.animatorInfoValue.clipInfos = animator.GetCurrentAnimatorClipInfo(layerIndex);
+                    param.animatorInfoValue.transitionInfo = animator.GetAnimatorTransitionInfo(layerIndex);
+                    param.animatorInfoValue.nodeName = animator.GetCurrentStateName(layerIndex);
+                    param.animatorInfoValue.nodeTag = animator.ResolveHash(stateInfo.tagHash);
+                    param.animatorInfoValue.layerIndex = layerIndex;
+                    param.animatorInfoValue.stateInfo = stateInfo;
+                    break;
+                }
             }
-
-            param.customValue.layerIndex = layerIndex;
-
-            param.customValue.stateInfo = animator.GetCurrentAnimatorStateInfo(layerIndex);
-
-            param.customValue.clipInfo = animator.GetCurrentAnimatorClipInfo(layerIndex);
         }
 
 
@@ -152,7 +171,7 @@ namespace AnimatorExtension
             {
                 case EEventDispatchType.Update:
                 {
-                    this.InitializeCustomizationParameter(animEvent.parameter, animator, layerIndex);
+                    this.InitializeParameter(ref animEvent.parameter, animator, layerIndex);
                     _controller.ReceiveEvent(animEvent.eventName, animEvent.eventHash, animEvent.parameter);
                     animEvent.hasTriggered = true;
                     break;
@@ -164,7 +183,7 @@ namespace AnimatorExtension
                     {
                         if (currentTime <= animEvent.rangeTriggerTime.max)
                         {
-                            this.InitializeCustomizationParameter(animEvent.parameter, animator, layerIndex);
+                            this.InitializeParameter(ref animEvent.parameter, animator, layerIndex);
                             _controller.ReceiveEvent(animEvent.eventName, animEvent.eventHash, animEvent.parameter);
                             break;
                         }
@@ -179,7 +198,7 @@ namespace AnimatorExtension
                 {
                     if (animEvent.hasTriggered == false && currentTime > animEvent.triggerTime)
                     {
-                        this.InitializeCustomizationParameter(animEvent.parameter, animator, layerIndex);
+                        this.InitializeParameter(ref animEvent.parameter, animator, layerIndex);
                         _controller.ReceiveEvent(animEvent.eventName, animEvent.eventHash, animEvent.parameter);
                         animEvent.hasTriggered = true;
                     }

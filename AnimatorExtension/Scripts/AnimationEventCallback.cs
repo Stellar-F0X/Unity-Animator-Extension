@@ -2,6 +2,7 @@ using System;
 using AnimatorExtension.Parameters;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace AnimatorExtension
 {
@@ -46,9 +47,11 @@ namespace AnimatorExtension
 
                 case EAnimationEventParameter.AnimationCurve: (_callbackAction as Action<AnimationCurve>).Invoke(parameter.curveValue); break;
 
-                case EAnimationEventParameter.GameObject: (_callbackAction as Action<GameObject>).Invoke(parameter.gobjValue); break;
+                case EAnimationEventParameter.GameObject: (_callbackAction as Action<GameObject>).Invoke(parameter.gameobjectValue); break;
 
-                case EAnimationEventParameter.ScriptableObject: (_callbackAction as Action<ScriptableObject>).Invoke(parameter.sobjValue); break;
+                case EAnimationEventParameter.Object: (_callbackAction as Action<Object>).Invoke(parameter.objectValue); break;
+                
+                case EAnimationEventParameter.AnimatorInfo: (_callbackAction as Action<AnimatorInfo>).Invoke(parameter.animatorInfoValue); break;
 
                 case EAnimationEventParameter.Customization:
                     parameter.customValue.OnBeforeEventTrigger();

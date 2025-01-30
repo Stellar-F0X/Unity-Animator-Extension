@@ -3,6 +3,7 @@ using AnimatorExtension;
 using AnimatorExtension.Parameters;
 using UnityEngine;
 using UnityEngine.Events;
+using Object = UnityEngine.Object;
 
 namespace AnimatorExtension.Sample
 {
@@ -62,8 +63,15 @@ namespace AnimatorExtension.Sample
         }
         
         
-        [AnimationEvent("get SO", EAnimationEventParameter.ScriptableObject)]
-        public void GetScriptableObject(ScriptableObject a)
+        [AnimationEvent("get Animator Info", EAnimationEventParameter.AnimatorInfo)]
+        public void GetAnimatorInformation(AnimatorInfo a)
+        {
+            Debug.Log($"{a.nodeName} {a.nodeTag} {a.layerIndex}");
+        }
+        
+        
+        [AnimationEvent("get Object", EAnimationEventParameter.Object)]
+        public void GetObject(Object a)
         {
             Debug.Log(a.name);
         }

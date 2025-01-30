@@ -104,7 +104,7 @@ namespace AnimatorExtension.Editor
             selectedIndex = EditorGUI.Popup(stateNameRect, selectedIndex, eventNames);
             eventName.stringValue = selectedIndex < 0 || selectedIndex >= eventNames.Length ? eventNames[0] : eventNames[selectedIndex];
 
-            if (selectedIndex != 0)
+            if (selectedIndex > 0)
             {
                 using (new EditorGUI.DisabledScope(true))
                 {
@@ -113,7 +113,7 @@ namespace AnimatorExtension.Editor
                     EditorGUI.PropertyField(stateHashRect, eventHash, GUIContent.none);
                 }
             }
-            
+
             return selectedIndex;
         }
 
@@ -142,36 +142,42 @@ namespace AnimatorExtension.Editor
                     prop.intValue = EditorGUI.IntField(parameterRect, prop.intValue);
                     return;
                 }
+
                 case EAnimationEventParameter.Float:
                 {
                     SerializedProperty prop = parameter.FindPropertyRelative("floatValue");
                     prop.floatValue = EditorGUI.FloatField(parameterRect, prop.floatValue);
                     return;
                 }
+
                 case EAnimationEventParameter.Bool:
                 {
                     SerializedProperty prop = parameter.FindPropertyRelative("boolValue");
                     prop.boolValue = EditorGUI.Toggle(parameterRect, prop.boolValue);
                     return;
                 }
+
                 case EAnimationEventParameter.String:
                 {
                     SerializedProperty prop = parameter.FindPropertyRelative("stringValue");
                     prop.stringValue = EditorGUI.TextField(parameterRect, prop.stringValue);
                     return;
                 }
+
                 case EAnimationEventParameter.Vector2:
                 {
                     SerializedProperty prop = parameter.FindPropertyRelative("vector2Value");
                     prop.vector2Value = EditorGUI.Vector2Field(parameterRect, GUIContent.none, prop.vector2Value);
                     return;
                 }
+
                 case EAnimationEventParameter.Vector3:
                 {
                     SerializedProperty prop = parameter.FindPropertyRelative("vector3Value");
                     prop.vector3Value = EditorGUI.Vector3Field(parameterRect, GUIContent.none, prop.vector3Value);
                     return;
                 }
+
                 case EAnimationEventParameter.Quaternion:
                 {
                     SerializedProperty prop = parameter.FindPropertyRelative("quaternionValue");
@@ -181,28 +187,32 @@ namespace AnimatorExtension.Editor
                     prop.quaternionValue = new Quaternion(vector4.x, vector4.y, vector4.z, vector4.w);
                     return;
                 }
+
                 case EAnimationEventParameter.Color:
                 {
                     SerializedProperty prop = parameter.FindPropertyRelative("colorValue");
                     prop.colorValue = EditorGUI.ColorField(parameterRect, GUIContent.none, prop.colorValue);
                     return;
                 }
+
                 case EAnimationEventParameter.GameObject:
                 {
-                    SerializedProperty prop = parameter.FindPropertyRelative("gobjValue");
+                    SerializedProperty prop = parameter.FindPropertyRelative("gameobjectValue");
                     Object obj = prop.objectReferenceValue;
                     obj = EditorGUI.ObjectField(parameterRect, obj, typeof(GameObject), true);
                     prop.objectReferenceValue = obj;
                     return;
                 }
-                case EAnimationEventParameter.ScriptableObject:
+
+                case EAnimationEventParameter.Object:
                 {
-                    SerializedProperty prop = parameter.FindPropertyRelative("sobjValue");
+                    SerializedProperty prop = parameter.FindPropertyRelative("objectValue");
                     Object obj = prop.objectReferenceValue;
-                    obj = EditorGUI.ObjectField(parameterRect, obj, typeof(ScriptableObject), false);
+                    obj = EditorGUI.ObjectField(parameterRect, obj, typeof(Object), false);
                     prop.objectReferenceValue = obj;
                     return;
                 }
+
                 case EAnimationEventParameter.Tag:
                 {
                     SerializedProperty prop = parameter.FindPropertyRelative("stringValue");
@@ -212,6 +222,7 @@ namespace AnimatorExtension.Editor
                     prop.stringValue = tagList[EditorGUI.Popup(parameterRect, selectedIndex, tagList)];
                     return;
                 }
+
                 case EAnimationEventParameter.LayerMask:
                 {
                     SerializedProperty prop = parameter.FindPropertyRelative("intValue");
@@ -220,6 +231,7 @@ namespace AnimatorExtension.Editor
                     prop.intValue = 1 << EditorGUI.Popup(parameterRect, layerIndex, layerList);
                     return;
                 }
+
                 case EAnimationEventParameter.AnimationCurve:
                 {
                     SerializedProperty prop = parameter.FindPropertyRelative("curveValue");
@@ -227,12 +239,22 @@ namespace AnimatorExtension.Editor
                     prop.animationCurveValue = EditorGUI.CurveField(parameterRect, animationCurve);
                     return;
                 }
+
                 case EAnimationEventParameter.Customization:
                 {
                     SerializedProperty prop = parameter.FindPropertyRelative("customValue");
                     parameterRect.x += 10;
                     parameterRect.width -= 10;
                     EditorGUI.PropertyField(parameterRect, prop, new GUIContent(prop.displayName), true);
+                    return;
+                }
+
+                case EAnimationEventParameter.AnimatorInfo:
+                {
+                    GUIContent icon = EditorGUIUtility.IconContent("d_AnimatorStateMachine Icon");
+                    string tooltip = "This event outputs various data from the animator at runtime.";
+                    string message = " Provide current state information in runtime";
+                    EditorGUI.LabelField(parameterRect, new GUIContent(message, icon.image, tooltip));
                     return;
                 }
             }
