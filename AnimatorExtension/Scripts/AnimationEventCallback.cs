@@ -14,6 +14,8 @@ namespace AnimatorExtension
             this._callbackAction = callback;
         }
 
+        public bool enable;
+
         public readonly bool isRuntime;
         
         private readonly Delegate _callbackAction;
@@ -21,6 +23,11 @@ namespace AnimatorExtension
 
         public void Invoke(AnimationEventParameter parameter)
         {
+            if (enable == false)
+            {
+                return;
+            }
+            
             switch (parameter.parameterType)
             {
                 case EAnimationEventParameter.Void: (_callbackAction as Action).Invoke(); break;

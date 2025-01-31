@@ -48,13 +48,7 @@ namespace AnimatorExtension
 
         private readonly static Type _SEARCH_ATTRIBUTE_TYPE = typeof(AnimationEventAttribute);
 
-
-
-        [DidReloadScripts]
-        private static void OnReloadScripts()
-        {
-            
-        }
+        
 
 
         public static void SetEventsForContainer(AnimationEventController controller, EventInfoContainer container)

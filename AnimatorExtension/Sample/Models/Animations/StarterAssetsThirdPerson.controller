@@ -41,10 +41,10 @@ MonoBehaviour:
         nodeTag: 
       customValue:
         rid: -2
-    dispatchType: 2
+    dispatchType: 7
     rangeTriggerTime:
-      min: 0
-      max: 0
+      min: 0.438
+      max: 0.662
   references:
     version: 2
     RefIds:

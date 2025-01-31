@@ -10,6 +10,7 @@ namespace AnimatorExtension.Parameters
         private List<int> _eventNameHashes = new List<int>();
         private List<string> _eventNames = new List<string>();
         private List<EAnimationEventParameter> _paramTypes = new List<EAnimationEventParameter>();
+        
         private Dictionary<int, Type> _customParamTypes = new Dictionary<int, Type>();
 
         
@@ -53,8 +54,7 @@ namespace AnimatorExtension.Parameters
             this._customParams.Add(attribute.customParameterType);
             this._eventNameHashes.Add(attribute.eventName.StringToHash());
         }
-
-
+        
         
         public Type FindTypeByHash(int hashCode)
         {
@@ -94,8 +94,8 @@ namespace AnimatorExtension.Parameters
             for (int i = 0; i < count; i++)
             {
                 this.eventNames[i] = this._eventNames[i];
-                this.customParamTypes[i] = this._customParams[i];
                 this.eventNameHashes[i] = this._eventNameHashes[i];
+                this.customParamTypes[i] = this._customParams[i];
                 
                 this._customParamTypes.Add(this.eventNameHashes[i], this.customParamTypes[i]);
             }

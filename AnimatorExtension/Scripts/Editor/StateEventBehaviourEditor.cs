@@ -84,6 +84,7 @@ namespace AnimatorExtension.Editor
         }
 
 
+        
         public override void OnInspectorGUI()
         {
             using (new EditorGUI.DisabledScope(Application.isPlaying))
@@ -102,6 +103,7 @@ namespace AnimatorExtension.Editor
         }
 
 
+        
         public void OnDisable()
         {
             _isPreviewing = false;
@@ -117,6 +119,7 @@ namespace AnimatorExtension.Editor
         }
 
 
+        
         private bool Validate(StateEventBehaviour behaviour)
         {
             if (_animationEventList == null)
@@ -138,6 +141,7 @@ namespace AnimatorExtension.Editor
         }
 
 
+        
         private void DrawEventStateBehaviourGUI(StateEventBehaviour behaviour)
         {
             GUILayout.Space(10);
@@ -196,6 +200,7 @@ namespace AnimatorExtension.Editor
             _animationEventList.DoLayoutList();
         }
 
+        
 
         private void DrawAnimationEventGUI(Rect position, int index, bool isActive, bool isFocused)
         {
@@ -242,6 +247,7 @@ namespace AnimatorExtension.Editor
             }
         }
 
+        
 
         private float DrawAnimationEventHeight(int index)
         {

@@ -11,11 +11,12 @@ namespace AnimatorExtension
     public sealed class AnimationEventController : MonoBehaviour
     {
         private readonly Dictionary<int, AnimationEventCallback> _eventList = new Dictionary<int, AnimationEventCallback>();
-
-
+        
         public bool debug = false;
 
         private Animator _animator;
+
+        private const string _INTRO = "<color=green>[Animation Event Receiver]</color>";
 
 
         public Animator animator
@@ -38,11 +39,11 @@ namespace AnimatorExtension
                 {
                     if (succeed)
                     {
-                        Debug.Log($"<color=green>[Animation Event Receiver]</color> Register {attribute.eventName} animation event");
+                        Debug.Log($"{_INTRO} Register {attribute.eventName} animation event");
                     }
                     else
                     {
-                        Debug.LogError($"<color=green>[Animation Event Receiver]</color> Failed registry {attribute.eventName} animation event");
+                        Debug.LogError($"{_INTRO} Failed registry {attribute.eventName} animation event");
                     }
                 }
             });
@@ -58,11 +59,11 @@ namespace AnimatorExtension
             {
                 if (succeed)
                 {
-                    Debug.Log($"<color=green>[Animation Event Receiver]</color> Received {eventName} event");
+                    Debug.Log($"{_INTRO} Received {eventName} event");
                 }
                 else
                 {
-                    Debug.LogError($"color=green>[Animation Event Receiver]</color> {eventName} event does not exist.");
+                    Debug.LogError($"{_INTRO} {eventName} event does not exist.");
                 }
             }
 
@@ -74,55 +75,28 @@ namespace AnimatorExtension
 
 
 
-        public void AddRuntimeEvent<T>(string eventName, int targetLayer, AnimatorStateInfo stateInfo, AnimationEventParameter param, Action<T> action)
+        public void SetActiveEvent(string eventName, bool active)
         {
             int eventHash = eventName.StringToHash();
 
-            bool succeed = _eventList.TryAdd(eventHash, new AnimationEventCallback(action, true));
-        }
+            bool hasEvent = _eventList.ContainsKey(eventHash);
 
+            if (hasEvent)
+            {
+                _eventList[eventHash].enable = active;
+            }
 
-
-        public void AddRuntimeEvent(string eventName, int targetLayer, AnimatorStateInfo stateInfo, Action action)
-        {
-            int eventHash = eventName.StringToHash();
-
-            bool succeed = _eventList.TryAdd(eventHash, new AnimationEventCallback(action, true));
-        }
-
-
-
-        public void RemoveRuntimeEvent(string eventName, int targetLayer)
-        {
-            
-        }
-
-
-
-        public void DisableEvent(string eventName, int targetLayer, AnimatorStateInfo stateInfo)
-        {
-
-        }
-
-
-
-        public void EnableEvent(string eventName, int targetLayer, AnimatorStateInfo stateInfo)
-        {
-
-        }
-
-
-
-        public void RegisterSequence()
-        {
-            
-        }
-
-
-
-        public void RemoveSequences()
-        {
-            
+            if (debug)
+            {
+                if (hasEvent)
+                {
+                    Debug.Log($"{_INTRO} {(active ? "Enable" : "Disable")} {eventName} event");
+                }
+                else
+                {
+                    Debug.Log($"{_INTRO} \"{eventName}\" Event does not exist.");
+                }
+            }
         }
 
 
@@ -160,7 +134,7 @@ namespace AnimatorExtension
                 EAnimationEventParameter.AnimationCurve => method.CreateDelegate(ReflectionUtility.AnimationCurveType, mono),
 
                 EAnimationEventParameter.Customization => method.CreateDelegate(ReflectionUtility.CustomizationType, mono),
-                
+
                 EAnimationEventParameter.AnimatorInfo => method.CreateDelegate(ReflectionUtility.AnimationInfoType, mono),
             };
         }
