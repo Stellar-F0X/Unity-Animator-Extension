@@ -28,7 +28,7 @@ namespace AnimatorExtension
         {
             ReflectionUtility.FindAttributeAction<AnimationEventAttribute>(this, (attribute, method, mono) =>
             {
-                int eventHash = Extension.StringToHash(attribute.eventName);
+                int eventHash = attribute.eventName.StringToHash();
 
                 Delegate createdCallback = this.CreateDelegate(attribute, method, mono);
 
@@ -76,7 +76,7 @@ namespace AnimatorExtension
 
         public void AddRuntimeEvent<T>(string eventName, int targetLayer, AnimatorStateInfo stateInfo, AnimationEventParameter param, Action<T> action)
         {
-            int eventHash = Extension.StringToHash(eventName);
+            int eventHash = eventName.StringToHash();
 
             bool succeed = _eventList.TryAdd(eventHash, new AnimationEventCallback(action, true));
         }
@@ -85,7 +85,7 @@ namespace AnimatorExtension
 
         public void AddRuntimeEvent(string eventName, int targetLayer, AnimatorStateInfo stateInfo, Action action)
         {
-            int eventHash = Extension.StringToHash(eventName);
+            int eventHash = eventName.StringToHash();
 
             bool succeed = _eventList.TryAdd(eventHash, new AnimationEventCallback(action, true));
         }

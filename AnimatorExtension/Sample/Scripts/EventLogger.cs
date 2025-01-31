@@ -21,14 +21,14 @@ namespace AnimatorExtension.Sample
         }
 
 
-        [AnimationEvent("LogMessage", EAnimationEventParameter.String)]
+        [AnimationEvent("Print Message", EAnimationEventParameter.String)]
         public void LogIntMessage(string a)
         {
             Debug.Log(a);
         }
 
 
-        [AnimationEvent("GetQuaternion", EAnimationEventParameter.Quaternion)]
+        [AnimationEvent("Get Quaternion", EAnimationEventParameter.Quaternion)]
         public void GetQuaternion(Quaternion a)
         {
             Debug.Log(a);
@@ -66,7 +66,7 @@ namespace AnimatorExtension.Sample
         [AnimationEvent("get Animator Info", EAnimationEventParameter.AnimatorInfo)]
         public void GetAnimatorInformation(AnimatorInfo a)
         {
-            Debug.Log($"{a.nodeName} {a.nodeTag} {a.layerIndex}");
+            Debug.Log($"Name : {a.nodeName}    Tag : {a.nodeTag}    LayerIndex : {a.layerIndex}");
         }
         
         

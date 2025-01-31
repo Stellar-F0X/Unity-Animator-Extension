@@ -15,11 +15,11 @@ MonoBehaviour:
   animationEventList:
   - eventName: get Animator Info
     eventHash: -877164093
-    triggerTime: 0
+    triggerTime: 0.5
     hasTriggered: 0
     parameter:
       parameterType: 15
-      intValue: 0
+      intValue: 1
       boolValue: 0
       stringValue: 
       floatValue: 0
@@ -116,16 +116,16 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 6904719651407550685}
-    m_Position: {x: 200, y: 400, z: 0}
+    m_Position: {x: 200, y: 420, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7469282255733588732}
-    m_Position: {x: 200, y: 590, z: 0}
+    m_Position: {x: 200, y: 490, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1645763842379584696}
-    m_Position: {x: 400, y: 490, z: 0}
+    m_Position: {x: 420, y: 420, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2316907928501487792}
-    m_Position: {x: 10, y: 500, z: 0}
+    m_Position: {x: -20, y: 490, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

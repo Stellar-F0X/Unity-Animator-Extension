@@ -21,7 +21,7 @@ namespace AnimatorExtension.Editor
         private Animator _animator;
         private AnimatorController _controller;
         private ReorderableList _animationEventList;
-        private StateEventBehaviour _behaviour;
+        private StateEventBehaviour _stateEventBehaviour;
         private AnimationSamplePlayer _animationSamplePlayer;
 
         private EventInfoContainer _eventContainer = new EventInfoContainer();
@@ -35,13 +35,6 @@ namespace AnimatorExtension.Editor
         {
             if (_animator is null)
             {
-                if (AnimationUtility.GetAnimationController(out _controller) == false)
-                {
-                    controller = null;
-                    Debug.LogError("Unable to find the animation controller. Please check if the animation is set up correctly.");
-                    return;
-                }
-
                 controller = FindObjectsByType<AnimationEventController>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)
                     .FirstOrDefault(eventReceiver => eventReceiver.animator.runtimeAnimatorController == _controller);
 
@@ -65,23 +58,29 @@ namespace AnimatorExtension.Editor
         {
             SerializedProperty property = serializedObject?.FindProperty("animationEventList");
 
-            if (_animator is null)
+            if (_controller is null)
             {
-                this.GetAnimatorAndControllerOfReceiver(out AnimationEventController receiver);
-                ReflectionUtility.SetEventsForContainer(receiver, _eventContainer);
+                bool foundAnimatorController = AnimationUtility.GetAnimationController(out _controller);
+                Debug.Assert(foundAnimatorController, "Unable to find AnimationEventController");
             }
+
+            if (_animator is null || _animator.runtimeAnimatorController != _controller)
+            {
+                this.GetAnimatorAndControllerOfReceiver(out AnimationEventController controller);
+                ReflectionUtility.SetEventsForContainer(controller, _eventContainer);
+            }
+            
+            _animationSamplePlayer = new AnimationSamplePlayer(_animator, _controller);
+            _stateEventBehaviour = target as StateEventBehaviour;
             
             _animationEventList = new ReorderableList(serializedObject, property, true, true, false, false);
 
+            _animationEventDrawer.onFocusedPointSlider = i => _previewNormalizedTime = _stateEventBehaviour.animationEventList[i].triggerTime;
+            _animationEventDrawer.onFocusedRangeSlider = t => _previewNormalizedTime = t;
+            
             _animationEventList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Animation Event List");
             _animationEventList.elementHeightCallback = this.DrawAnimationEventHeight;
             _animationEventList.drawElementCallback = this.DrawAnimationEventGUI;
-
-            _animationSamplePlayer = new AnimationSamplePlayer(_animator, _controller);
-            _behaviour = target as StateEventBehaviour;
-
-            _animationEventDrawer.onFocusedPointSlider = i => _previewNormalizedTime = _behaviour.animationEventList[i].triggerTime;
-            _animationEventDrawer.onFocusedRangeSlider = t => _previewNormalizedTime = t;
         }
 
 
@@ -89,10 +88,10 @@ namespace AnimatorExtension.Editor
         {
             using (new EditorGUI.DisabledScope(Application.isPlaying))
             {
-                if (this.Validate(_behaviour))
+                if (this.Validate(_stateEventBehaviour))
                 {
                     _animationSamplePlayer.TryDestroyPlayableGraph();
-                    this.DrawEventStateBehaviourGUI(_behaviour);
+                    this.DrawEventStateBehaviourGUI(_stateEventBehaviour);
                     this.serializedObject.ApplyModifiedProperties();
                 }
                 else
@@ -200,7 +199,7 @@ namespace AnimatorExtension.Editor
 
         private void DrawAnimationEventGUI(Rect position, int index, bool isActive, bool isFocused)
         {
-            if (index >= _behaviour.animationEventList.Count)
+            if (index >= _stateEventBehaviour.animationEventList.Count)
             {
                 return;
             }
@@ -230,12 +229,12 @@ namespace AnimatorExtension.Editor
                         return;
                     }
 
-                    AnimationEventParameter customParam = _behaviour.animationEventList[index].parameter;
+                    AnimationEventParameter customParam = _stateEventBehaviour.animationEventList[index].parameter;
 
                     if (customParam.customValue is null || customParam.customValue.GetType() != castingTargetType)
                     {
                         customParam.customValue = (CustomAnimationEventParameter)Activator.CreateInstance(castingTargetType);
-                        _behaviour.animationEventList[index].parameter = customParam;
+                        _stateEventBehaviour.animationEventList[index].parameter = customParam;
                     }
                 }
 

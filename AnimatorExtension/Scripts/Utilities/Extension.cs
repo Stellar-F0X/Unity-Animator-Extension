@@ -8,7 +8,7 @@ namespace AnimatorExtension
 {
     public static class Extension
     {
-        public static int StringToHash(string sentence)
+        public static int StringToHash(this string sentence)
         {
             if (string.IsNullOrEmpty(sentence) || string.IsNullOrWhiteSpace(sentence))
             {
@@ -44,7 +44,7 @@ namespace AnimatorExtension
         }
 
         
-        #region Referenced By https://discussions.unity.com/t/current-animator-state-name/584039/19
+        #region Reference By https://discussions.unity.com/t/current-animator-state-name/584039/19
 
         private const BindingFlags _BINDING_FLAGS = BindingFlags.Instance | BindingFlags.NonPublic;
         
@@ -64,8 +64,6 @@ namespace AnimatorExtension
         /// <param name="methodName">The name of the method the compile.</param>
         /// <returns>The compiled delegate, which should be about as fast as calling the function
         /// directly on the instance.</returns>
-        /// <exception cref="ArgumentException">If the method can't be found, or it has an
-        /// unexpected return type (the return type must match exactly).</exception>
         /// <see href="https://codeblog.jonskeet.uk/2008/08/09/making-reflection-fly-and-exploring-delegates/"/>
         private static Func<TThis, TArg0, TReturn> BuildFastOpenMemberDelegate<TThis, TArg0, TReturn>(string methodName)
         {
@@ -87,7 +85,7 @@ namespace AnimatorExtension
                 _getCurrentStateName = BuildFastOpenMemberDelegate<Animator, int, string>("GetCurrentStateName");
             }
 
-            return _getCurrentStateName(animator, layer);
+            return _getCurrentStateName.Invoke(animator, layer);
         }
 
 
@@ -104,7 +102,7 @@ namespace AnimatorExtension
                 _getNextStateName = BuildFastOpenMemberDelegate<Animator, int, string>("GetNextStateName");
             }
 
-            return _getNextStateName(animator, layer);
+            return _getNextStateName.Invoke(animator, layer);
         }
 
         
@@ -122,7 +120,7 @@ namespace AnimatorExtension
                 _resolveHash = BuildFastOpenMemberDelegate<Animator, int, string>("ResolveHash");
             }
 
-            return _resolveHash(animator, hash);
+            return _resolveHash.Invoke(animator, hash);
         }
 
         #endregion

@@ -51,7 +51,7 @@ namespace AnimatorExtension.Parameters
             this._eventNames.Add(attribute.eventName);
             this._paramTypes.Add(attribute.eventParameter);
             this._customParams.Add(attribute.customParameterType);
-            this._eventNameHashes.Add(Extension.StringToHash(attribute.eventName));
+            this._eventNameHashes.Add(attribute.eventName.StringToHash());
         }
 
 

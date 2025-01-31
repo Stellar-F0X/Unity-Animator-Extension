@@ -83,7 +83,7 @@ namespace AnimatorExtension
                     this.InitializeParameter(ref animEvent.parameter, animator, layerIndex);
                     _controller.ReceiveEvent(animEvent.eventName, animEvent.eventHash, animEvent.parameter);
                 });
-
+                
                 animationEventList.ForEach(e => e.hasTriggered = false);
             }
 

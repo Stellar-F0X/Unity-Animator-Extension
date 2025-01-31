@@ -10,10 +10,5 @@ namespace AnimatorExtension.Sample
         public int eventParameter;
 
         public List<string> nameList;
-
-        public override void OnBeforeEventTrigger()
-        {
-            
-        }
     }
 }
