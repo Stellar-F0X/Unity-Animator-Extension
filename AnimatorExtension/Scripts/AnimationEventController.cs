@@ -67,7 +67,7 @@ namespace AnimatorExtension
             {
                 if (succeed)
                 {
-                    Debug.Log($"{_INTRO} Received {eventName} event");
+                    Debug.Log($"{_INTRO} Received {eventCallback.callbackName} event");
                 }
                 else
                 {
@@ -87,6 +87,13 @@ namespace AnimatorExtension
         {
             int eventHash = eventName.StringToHash();
 
+            this.SetActiveEvent(eventHash, active);
+        }
+        
+        
+        
+        public void SetActiveEvent(int eventHash, bool active)
+        {
             bool hasEvent = _eventList.ContainsKey(eventHash);
 
             if (hasEvent)
@@ -98,11 +105,13 @@ namespace AnimatorExtension
             {
                 if (hasEvent)
                 {
+                    string eventName = _eventList[eventHash].callbackName;
+                    
                     Debug.Log($"{_INTRO} {(active ? "Enable" : "Disable")} {eventName} event");
                 }
                 else
                 {
-                    Debug.Log($"{_INTRO} \"{eventName}\" Event does not exist.");
+                    Debug.Log($"{_INTRO} Event does not exist.");
                 }
             }
         }
