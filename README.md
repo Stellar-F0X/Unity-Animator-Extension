@@ -28,11 +28,12 @@ Unity의 Animator에서 사용되는 `StateBehaviourMachine`를를 통해 이벤
 3. `StateBehaviourMachine`가 `AnimationEventController`컴포넌트가 부착된 계층부터 하위계층으로 <br>
    `MonoBehaviour`를 상속한 컴포넌트를 순회하며 `AnimationEventAttribute`가 수식된 메서드들을 찾습니다.
 
-4. `StateBehaviourMachine`에서 등록하고 싶은 메서드를 선택합니다. 해당 메서드가 받을 매개변수 타입이 자동으로 설정됩니다.
+4. `StateBehaviourMachine`에서 등록하고 싶은 메서드를 선택합니다. <br> 해당 메서드가 받을 매개변수 타입이 자동으로 설정됩니다.
 
 5. `StateBehaviourMachine`에서 이벤트를 송신할 타이밍을 선택합니다.
 
-6. 실행하면 애니메이션이 재생되면 등록된 타이밍에 이벤트가 송신되고 `AnimationEventController`에서 인자 전달과 함께 호출됩니다. 
+6. 실행하면 애니메이션이 재생되면 등록된 타이밍에 이벤트가 송신되고 <br> 
+`AnimationEventController`에서 인자 전달과 함께 호출됩니다. 
 
 
 ```C#
@@ -240,9 +241,9 @@ public class EventExample : MonoBehaviour
 
 ### 에디터
 
-등록된 애니메이션 이벤트 리스트를 인스펙터상에서 제공합니다. (미구현)
+런타임에 등록된 애니메이션 이벤트 리스트를 인스펙터상에서 뷰로 제공합니다.
 
-디버그를 활성화 및 비활성화할 수 있습니다.
+특정 이벤트를 디버그를 활성화 및 비활성화할 수 있습니다.
 
 ---
 
