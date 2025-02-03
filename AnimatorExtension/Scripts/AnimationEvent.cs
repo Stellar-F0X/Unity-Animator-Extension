@@ -1,8 +1,5 @@
 using System;
 using AnimatorExtension.Parameters;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 namespace AnimatorExtension
 {

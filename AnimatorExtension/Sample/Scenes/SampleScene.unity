@@ -1801,7 +1801,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3862277631971027947, guid: 7ae956b4f54394e80818898d8f4d30c6, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1703981316}
+      addedObject: {fileID: 1703981318}
     - targetCorrespondingSourceObject: {fileID: 3862277631971027947, guid: 7ae956b4f54394e80818898d8f4d30c6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1703981317}
@@ -1811,19 +1811,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3862277631971027947, guid: 7ae956b4f54394e80818898d8f4d30c6, type: 3}
   m_PrefabInstance: {fileID: 1703981314}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1703981316
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1703981315}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16c7b9d0d1b6481a94dba9e98fab58b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debug: 0
 --- !u!114 &1703981317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1837,6 +1824,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   log0Message: log 0
+--- !u!114 &1703981318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703981315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c7b9d0d1b6481a94dba9e98fab58b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debug: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

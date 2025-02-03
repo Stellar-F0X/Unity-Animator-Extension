@@ -21,7 +21,7 @@ namespace AnimatorExtension.Parameters
         public GameObject gameobjectValue;
         public AnimationCurve curveValue;
         public Object objectValue;
-        public AnimatorInfo animatorInfoValue;
+        public AnimationInfo animationInfoValue;
         
         [SerializeReference]
         public CustomAnimationEventParameter customValue;

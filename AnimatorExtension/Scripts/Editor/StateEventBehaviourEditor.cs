@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using AnimatorExtension.Parameters;
 using UnityEditor;
@@ -31,24 +30,25 @@ namespace AnimatorExtension.Editor
 
 
 
-        private void GetAnimatorAndControllerOfReceiver(out AnimationEventController controller)
+        private void GetAnimatorAndControllerOfReceiver(out AnimationEventController eventController)
         {
-            if (_animator is null)
+            if (Selection.activeGameObject is not null)
             {
-                controller = FindObjectsByType<AnimationEventController>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)
-                    .FirstOrDefault(eventReceiver => eventReceiver.animator.runtimeAnimatorController == _controller);
-
-                if (controller is null)
-                {
-                    Debug.LogError("Unable to find AnimationEventReceiver. Please check if there are receivers linked to the controller.");
-                    return;
-                }
-
-                _animator = controller.animator;
+                eventController = Selection.activeGameObject.GetComponent<AnimationEventController>();
             }
             else
             {
-                controller = _animator.GetComponent<AnimationEventController>();
+                eventController = FindObjectsByType<AnimationEventController>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)
+                    .FirstOrDefault(animEventController => animEventController.animator.runtimeAnimatorController == _controller);
+            }
+
+            if (eventController is null)
+            {
+                Debug.LogError("Unable to find AnimationEventReceiver. Please check if there are receivers linked to the controller.");
+            }
+            else
+            {
+                _animator = eventController.animator;
             }
         }
 
@@ -56,35 +56,40 @@ namespace AnimatorExtension.Editor
 
         private void OnEnable()
         {
-            SerializedProperty property = serializedObject?.FindProperty("animationEventList");
+            SerializedProperty property = serializedObject.FindProperty("animationEventList");
 
             if (_controller is null)
             {
-                bool foundAnimatorController = AnimationUtility.GetAnimationController(out _controller);
+                bool foundAnimatorController = AnimationUtility.GetAnimatorController(out _controller);
                 Debug.Assert(foundAnimatorController, "Unable to find AnimationEventController");
+            }
+
+            if (_controller is null)
+            {
+                return;
             }
 
             if (_animator is null || _animator.runtimeAnimatorController != _controller)
             {
-                this.GetAnimatorAndControllerOfReceiver(out AnimationEventController controller);
-                ReflectionUtility.SetEventsForContainer(controller, _eventContainer);
+                this.GetAnimatorAndControllerOfReceiver(out AnimationEventController eventController);
+                ReflectionUtility.SetEventsForContainer(eventController, _eventContainer);
             }
-            
+
             _animationSamplePlayer = new AnimationSamplePlayer(_animator, _controller);
             _stateEventBehaviour = target as StateEventBehaviour;
-            
+
             _animationEventList = new ReorderableList(serializedObject, property, true, true, false, false);
 
             _animationEventDrawer.onFocusedPointSlider = i => _previewNormalizedTime = _stateEventBehaviour.animationEventList[i].triggerTime;
             _animationEventDrawer.onFocusedRangeSlider = t => _previewNormalizedTime = t;
-            
+
             _animationEventList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Animation Event List");
             _animationEventList.elementHeightCallback = this.DrawAnimationEventHeight;
             _animationEventList.drawElementCallback = this.DrawAnimationEventGUI;
         }
 
 
-        
+
         public override void OnInspectorGUI()
         {
             using (new EditorGUI.DisabledScope(Application.isPlaying))
@@ -103,7 +108,7 @@ namespace AnimatorExtension.Editor
         }
 
 
-        
+
         public void OnDisable()
         {
             _isPreviewing = false;
@@ -119,7 +124,7 @@ namespace AnimatorExtension.Editor
         }
 
 
-        
+
         private bool Validate(StateEventBehaviour behaviour)
         {
             if (_animationEventList == null)
@@ -141,7 +146,7 @@ namespace AnimatorExtension.Editor
         }
 
 
-        
+
         private void DrawEventStateBehaviourGUI(StateEventBehaviour behaviour)
         {
             GUILayout.Space(10);
@@ -200,7 +205,7 @@ namespace AnimatorExtension.Editor
             _animationEventList.DoLayoutList();
         }
 
-        
+
 
         private void DrawAnimationEventGUI(Rect position, int index, bool isActive, bool isFocused)
         {
@@ -208,9 +213,9 @@ namespace AnimatorExtension.Editor
             {
                 return;
             }
-            
-            SerializedProperty property = _animationEventList.serializedProperty.GetArrayElementAtIndex(index); 
-            
+
+            SerializedProperty property = _animationEventList.serializedProperty.GetArrayElementAtIndex(index);
+
             if (isFocused)
             {
                 _currentFocusIndex = index;
@@ -221,7 +226,7 @@ namespace AnimatorExtension.Editor
             position.y += EditorGUIUtility.singleLineHeight + 5;
             _animationEventDrawer.DrawDropdownSliderField(position, property, index);
             position.y += EditorGUIUtility.singleLineHeight + 5;
-            
+
             if (pickedEvent >= 0 && pickedEvent < _eventContainer.count)
             {
                 if (_eventContainer.paramTypes[pickedEvent] == EAnimationEventParameter.Customization)
@@ -247,7 +252,7 @@ namespace AnimatorExtension.Editor
             }
         }
 
-        
+
 
         private float DrawAnimationEventHeight(int index)
         {

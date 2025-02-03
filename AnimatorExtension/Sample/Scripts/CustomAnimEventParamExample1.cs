@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace AnimatorExtension.Sample
 {
-    [Serializable]
     public class CustomAnimEventParamExample1 : CustomAnimationEventParameter
     {
         public string a;
@@ -12,7 +11,6 @@ namespace AnimatorExtension.Sample
 
         [Range(0f, 1f)]
         public float c;
-
         public bool d;
 
 

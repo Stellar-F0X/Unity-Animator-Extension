@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using AnimatorExtension.Parameters;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace AnimatorExtension
 {
@@ -18,12 +20,18 @@ namespace AnimatorExtension
 
         private const string _INTRO = "<color=green>[Animation Event Receiver]</color>";
 
+        
+        public Dictionary<int, AnimationEventCallback>.ValueCollection eventList
+        {
+            get { return _eventList.Values; }
+        }
 
         public Animator animator
         {
             get { return _animator == null ? _animator = GetComponent<Animator>() : _animator; }
         }
 
+        
 
         private void Awake()
         {
@@ -33,7 +41,7 @@ namespace AnimatorExtension
 
                 Delegate createdCallback = this.CreateDelegate(attribute, method, mono);
 
-                bool succeed = _eventList.TryAdd(eventHash, new AnimationEventCallback(createdCallback));
+                bool succeed = _eventList.TryAdd(eventHash, new AnimationEventCallback(attribute.eventName, createdCallback));
 
                 if (debug)
                 {

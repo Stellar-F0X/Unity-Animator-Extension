@@ -1,22 +1,22 @@
 using System;
 using AnimatorExtension.Parameters;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+using AnimationInfo = AnimatorExtension.Parameters.AnimationInfo;
 using Object = UnityEngine.Object;
 
 namespace AnimatorExtension
 {
     public class AnimationEventCallback
     {
-        public AnimationEventCallback(Delegate callback, bool isRuntime = false)
+        public AnimationEventCallback(string callbackName, Delegate callback)
         {
-            this.isRuntime = isRuntime;
+            this.callbackName = callbackName;
             this._callbackAction = callback;
         }
 
-        public bool enable;
+        public string callbackName;
 
-        public readonly bool isRuntime;
+        public bool enable = true;
         
         private readonly Delegate _callbackAction;
 
@@ -58,7 +58,7 @@ namespace AnimatorExtension
 
                 case EAnimationEventParameter.Object: (_callbackAction as Action<Object>).Invoke(parameter.objectValue); break;
                 
-                case EAnimationEventParameter.AnimatorInfo: (_callbackAction as Action<AnimatorInfo>).Invoke(parameter.animatorInfoValue); break;
+                case EAnimationEventParameter.AnimatorInfo: (_callbackAction as Action<AnimationInfo>).Invoke(parameter.animationInfoValue); break;
 
                 case EAnimationEventParameter.Customization:
                     parameter.customValue.OnBeforeEventTrigger();

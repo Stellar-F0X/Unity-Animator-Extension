@@ -7,16 +7,16 @@ namespace AnimatorExtension.Parameters
         Float,
         Bool,
         String,
+        Tag,
+        LayerMask,
+        Color,
         Vector2,
         Vector3,
         Quaternion,
-        GameObject,
-        Color,
-        AnimationCurve,
-        LayerMask,
-        Tag,
-        Customization,
         Object,
-        AnimatorInfo
+        GameObject,
+        AnimatorInfo,
+        AnimationCurve,
+        Customization,
     };
 }

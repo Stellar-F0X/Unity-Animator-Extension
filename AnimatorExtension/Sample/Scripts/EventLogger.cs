@@ -1,8 +1,6 @@
-using System;
-using AnimatorExtension;
 using AnimatorExtension.Parameters;
 using UnityEngine;
-using UnityEngine.Events;
+using AnimationInfo = AnimatorExtension.Parameters.AnimationInfo;
 using Object = UnityEngine.Object;
 
 namespace AnimatorExtension.Sample
@@ -64,7 +62,7 @@ namespace AnimatorExtension.Sample
         
         
         [AnimationEvent("get Animator Info", EAnimationEventParameter.AnimatorInfo)]
-        public void GetAnimatorInformation(AnimatorInfo a)
+        public void GetAnimatorInformation(AnimationInfo a)
         {
             Debug.Log($"Name : {a.nodeName}    Tag : {a.nodeTag}    LayerIndex : {a.layerIndex}");
         }
@@ -80,7 +78,7 @@ namespace AnimatorExtension.Sample
         [AnimationEvent("get Custom1", EAnimationEventParameter.Customization, typeof(CustomAnimEventParamExample1))]
         public void GetCustom(CustomAnimationEventParameter param)
         {
-            var p = (param as CustomAnimEventParamExample1); 
+            var p = (CustomAnimEventParamExample1)param; 
             Debug.Log($"{p.a} {p.b} {p.c} {p.d}");
         }
         

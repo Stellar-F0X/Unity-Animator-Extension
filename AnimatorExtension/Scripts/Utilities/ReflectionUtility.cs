@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using AnimatorExtension.Parameters;
-using UnityEditor.Callbacks;
 using UnityEngine;
+using AnimationInfo = AnimatorExtension.Parameters.AnimationInfo;
 using Object = UnityEngine.Object;
 
 namespace AnimatorExtension
@@ -38,7 +35,7 @@ namespace AnimatorExtension
         
         public static readonly Type AnimationCurveType = typeof(Action<AnimationCurve>);
         
-        public static readonly Type AnimationInfoType = typeof(Action<AnimatorInfo>);
+        public static readonly Type AnimationInfoType = typeof(Action<AnimationInfo>);
         
         public static readonly Type CustomizationType = typeof(Action<CustomAnimationEventParameter>);
         

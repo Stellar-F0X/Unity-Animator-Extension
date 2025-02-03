@@ -1,11 +1,10 @@
 using System;
-using System.Linq;
 using UnityEngine;
 
 namespace AnimatorExtension.Parameters
 {
     [Serializable]
-    public struct AnimatorInfo
+    public struct AnimationInfo
     {
         public int layerIndex;
         public string nodeName;

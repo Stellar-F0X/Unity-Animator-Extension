@@ -1,21 +1,41 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
-using AnimatorExtension.Parameters;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Animations;
-using UnityEditor.Callbacks;
+using UnityEditor.Graphs;
+using Object = UnityEngine.Object;
 
 namespace AnimatorExtension.Editor
 {
     public static class AnimationUtility
     {
+        #region Reference By https: //github.com/forestrf/UnityAnimatorEvents/blob/master/Assets/StateMachineBehaviours/Editor/ScrubAnimatorUtil.cs#L15
+
         public const BindingFlags ANIMATOR_BINDING_FLAGS = BindingFlags.NonPublic | BindingFlags.Instance;
 
         private readonly static Type _animatorWindowType = Type.GetType("UnityEditor.Graphs.AnimatorControllerTool, UnityEditor.Graphs");
 
+        public static bool GetAnimatorController(out AnimatorController controller)
+        {
+            EditorWindow window = EditorWindow.GetWindow(_animatorWindowType);
+
+            FieldInfo controllerField = _animatorWindowType?.GetField("m_AnimatorController", ANIMATOR_BINDING_FLAGS);
+
+            controller = controllerField?.GetValue(window) as AnimatorController;
+
+            if (controller is null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        #endregion
 
         private static ChildAnimatorState FindMatchingStateRecursion(AnimatorStateMachine stateMachine, StateMachineBehaviour behaviour)
         {
@@ -31,7 +51,7 @@ namespace AnimatorExtension.Editor
             {
                 var matchingState = FindMatchingStateRecursion(subStateMachine.stateMachine, behaviour);
 
-                if (matchingState.state != null)
+                if (matchingState.state is not null)
                 {
                     return matchingState;
                 }
@@ -114,14 +134,15 @@ namespace AnimatorExtension.Editor
                 }
 
                 Transform boneTransform = animator.GetBoneTransform(hbb);
-                if (!boneTransform)
+
+                if (boneTransform is null)
                 {
                     continue;
                 }
 
-                SkeletonBone skeletonBone = skeletonBones.FirstOrDefault(sb => sb.name == boneTransform.name);
+                SkeletonBone skeletonBone = skeletonBones.FirstOrDefault(sb => sb.name.Compare(boneTransform.name));
 
-                if (skeletonBone.name == null)
+                if (string.IsNullOrEmpty(skeletonBone.name))
                 {
                     continue;
                 }
@@ -175,25 +196,6 @@ namespace AnimatorExtension.Editor
                 .FirstOrDefault(state => state.state is not null);
 
             if (matchingState.state is null)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        
-        
-        public static bool GetAnimationController(out AnimatorController controller)
-        {
-            EditorWindow window = EditorWindow.GetWindow(_animatorWindowType);
-            
-            FieldInfo controllerField = _animatorWindowType?.GetField("m_AnimatorController", ANIMATOR_BINDING_FLAGS);
-            
-            controller = controllerField?.GetValue(window) as AnimatorController;
-
-            if (controller is null)
             {
                 return false;
             }

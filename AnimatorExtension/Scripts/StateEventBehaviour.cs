@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
@@ -152,12 +151,12 @@ namespace AnimatorExtension
                 case EAnimationEventParameter.AnimatorInfo:
                 {
                     AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(layerIndex);
-                    param.animatorInfoValue.clipInfos = animator.GetCurrentAnimatorClipInfo(layerIndex);
-                    param.animatorInfoValue.transitionInfo = animator.GetAnimatorTransitionInfo(layerIndex);
-                    param.animatorInfoValue.nodeName = animator.GetCurrentStateName(layerIndex);
-                    param.animatorInfoValue.nodeTag = animator.ResolveHash(stateInfo.tagHash);
-                    param.animatorInfoValue.layerIndex = layerIndex;
-                    param.animatorInfoValue.stateInfo = stateInfo;
+                    param.animationInfoValue.clipInfos = animator.GetCurrentAnimatorClipInfo(layerIndex);
+                    param.animationInfoValue.transitionInfo = animator.GetAnimatorTransitionInfo(layerIndex);
+                    param.animationInfoValue.nodeName = animator.GetCurrentStateName(layerIndex);
+                    param.animationInfoValue.nodeTag = animator.ResolveHash(stateInfo.tagHash);
+                    param.animationInfoValue.layerIndex = layerIndex;
+                    param.animationInfoValue.stateInfo = stateInfo;
                     break;
                 }
             }
