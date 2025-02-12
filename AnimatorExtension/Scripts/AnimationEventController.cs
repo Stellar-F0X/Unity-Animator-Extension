@@ -152,7 +152,7 @@ namespace AnimatorExtension
 
                 EAnimationEventParameter.Customization => method.CreateDelegate(ReflectionUtility.CustomizationType, mono),
 
-                EAnimationEventParameter.AnimatorInfo => method.CreateDelegate(ReflectionUtility.AnimationInfoType, mono),
+                EAnimationEventParameter.AnimatorInfo => method.CreateDelegate(ReflectionUtility.AnimationInfoType, mono)
             };
         }
     }

@@ -51,33 +51,15 @@ namespace AnimatorExtension.Editor
                 _animator = eventController.animator;
             }
         }
-
-
-
+        
+        
+        
         private void OnEnable()
         {
-            SerializedProperty property = serializedObject.FindProperty("animationEventList");
-
-            if (_controller is null)
-            {
-                bool foundAnimatorController = AnimationUtility.GetAnimatorController(out _controller);
-                Debug.Assert(foundAnimatorController, "Unable to find AnimationEventController");
-            }
-
-            if (_controller is null)
-            {
-                return;
-            }
-
-            if (_animator is null || _animator.runtimeAnimatorController != _controller)
-            {
-                this.GetAnimatorAndControllerOfReceiver(out AnimationEventController eventController);
-                ReflectionUtility.SetEventsForContainer(eventController, _eventContainer);
-            }
-
-            _animationSamplePlayer = new AnimationSamplePlayer(_animator, _controller);
             _stateEventBehaviour = target as StateEventBehaviour;
-
+            
+            SerializedProperty property = serializedObject.FindProperty("animationEventList");
+            
             _animationEventList = new ReorderableList(serializedObject, property, true, true, false, false);
 
             _animationEventDrawer.onFocusedPointSlider = i => _previewNormalizedTime = _stateEventBehaviour.animationEventList[i].triggerTime;
@@ -87,14 +69,35 @@ namespace AnimatorExtension.Editor
             _animationEventList.elementHeightCallback = this.DrawAnimationEventHeight;
             _animationEventList.drawElementCallback = this.DrawAnimationEventGUI;
         }
+        
+
+
+        private void InitializeAnimator()
+        {
+            _controller = AnimationUtility.GetAnimatorController();
+
+            if (_animator is null || _animator.runtimeAnimatorController != _controller)
+            {
+                this.GetAnimatorAndControllerOfReceiver(out AnimationEventController eventController);
+                
+                ReflectionUtility.SetEventsForContainer(eventController, _eventContainer);
+            }
+
+            _animationSamplePlayer = new AnimationSamplePlayer(_animator, _controller);
+        }
 
 
 
         public override void OnInspectorGUI()
         {
+            if (_controller is null)
+            {
+                this.InitializeAnimator();
+            }
+            
             using (new EditorGUI.DisabledScope(Application.isPlaying))
             {
-                if (this.Validate(_stateEventBehaviour))
+                if (this.Validate(_stateEventBehaviour, out string errorMessage))
                 {
                     _animationSamplePlayer.TryDestroyPlayableGraph();
                     this.DrawEventStateBehaviourGUI(_stateEventBehaviour);
@@ -102,7 +105,7 @@ namespace AnimatorExtension.Editor
                 }
                 else
                 {
-                    EditorGUILayout.HelpBox("Invalid AnimationClip found for the current state.", MessageType.Error, true);
+                    EditorGUILayout.HelpBox(errorMessage, MessageType.Error, true);
                 }
             }
         }
@@ -111,6 +114,11 @@ namespace AnimatorExtension.Editor
 
         public void OnDisable()
         {
+            if (_controller is null)
+            {
+                return;
+            }
+            
             _isPreviewing = false;
             _previewNormalizedTime = 0;
 
@@ -125,10 +133,17 @@ namespace AnimatorExtension.Editor
 
 
 
-        private bool Validate(StateEventBehaviour behaviour)
+        private bool Validate(StateEventBehaviour behaviour, out string errorMessage)
         {
+            if (_controller is null)
+            {
+                errorMessage = "Unable to find AnimatorController.";
+                return false;
+            }
+
             if (_animationEventList == null)
             {
+                errorMessage = "animation event list is null.";
                 return false;
             }
 
@@ -138,10 +153,12 @@ namespace AnimatorExtension.Editor
 
                 if (previewClip is null)
                 {
+                    errorMessage = "Unable to find AnimationClip found for the current state.";
                     return false;
                 }
             }
 
+            errorMessage = string.Empty;
             return true;
         }
 

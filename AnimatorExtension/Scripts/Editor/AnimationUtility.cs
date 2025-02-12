@@ -17,22 +17,13 @@ namespace AnimatorExtension.Editor
 
         private readonly static Type _animatorWindowType = Type.GetType("UnityEditor.Graphs.AnimatorControllerTool, UnityEditor.Graphs");
 
-        public static bool GetAnimatorController(out AnimatorController controller)
+        public static AnimatorController GetAnimatorController()
         {
             EditorWindow window = EditorWindow.GetWindow(_animatorWindowType);
 
             FieldInfo controllerField = _animatorWindowType?.GetField("m_AnimatorController", ANIMATOR_BINDING_FLAGS);
 
-            controller = controllerField?.GetValue(window) as AnimatorController;
-
-            if (controller is null)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return controllerField?.GetValue(window) as AnimatorController;
         }
 
         #endregion
