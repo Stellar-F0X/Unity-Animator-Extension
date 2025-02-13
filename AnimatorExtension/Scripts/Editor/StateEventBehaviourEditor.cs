@@ -28,38 +28,14 @@ namespace AnimatorExtension.Editor
 
         private readonly Type _customEventParameterType = typeof(CustomAnimationEventParameter);
 
-
-
-        private void GetAnimatorAndControllerOfReceiver(out AnimationEventController eventController)
-        {
-            if (Selection.activeGameObject is not null)
-            {
-                eventController = Selection.activeGameObject.GetComponent<AnimationEventController>();
-            }
-            else
-            {
-                eventController = FindObjectsByType<AnimationEventController>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)
-                    .FirstOrDefault(animEventController => animEventController.animator.runtimeAnimatorController == _controller);
-            }
-
-            if (eventController is null)
-            {
-                Debug.LogError("Unable to find AnimationEventReceiver. Please check if there are receivers linked to the controller.");
-            }
-            else
-            {
-                _animator = eventController.animator;
-            }
-        }
         
         
         
-        private void OnEnable()
+        private bool TryCreateEventList()
         {
             _stateEventBehaviour = target as StateEventBehaviour;
-            
+
             SerializedProperty property = serializedObject.FindProperty("animationEventList");
-            
             _animationEventList = new ReorderableList(serializedObject, property, true, true, false, false);
 
             _animationEventDrawer.onFocusedPointSlider = i => _previewNormalizedTime = _stateEventBehaviour.animationEventList[i].triggerTime;
@@ -68,33 +44,51 @@ namespace AnimatorExtension.Editor
             _animationEventList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Animation Event List");
             _animationEventList.elementHeightCallback = this.DrawAnimationEventHeight;
             _animationEventList.drawElementCallback = this.DrawAnimationEventGUI;
+            
+            return _animationEventList is not null;
         }
         
 
 
-        private void InitializeAnimator()
+        private bool TryInitializeAnimator()
         {
-            _controller = AnimationUtility.GetAnimatorController();
+            _controller = AnimationUtility.GetAnimatorControllerOrNull();
 
             if (_animator is null || _animator.runtimeAnimatorController != _controller)
             {
-                this.GetAnimatorAndControllerOfReceiver(out AnimationEventController eventController);
+                AnimationEventController eventController = null;
+                
+                if (Selection.activeGameObject is not null)
+                {
+                    eventController = Selection.activeGameObject.GetComponent<AnimationEventController>();
+                }
+                else
+                {
+                    eventController = FindObjectsByType<AnimationEventController>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)
+                        .FirstOrDefault(animEventController => animEventController.animator.runtimeAnimatorController == _controller);
+                }
+
+                if (eventController is null)
+                {
+                    _controller = null;
+                    return false;
+                }
+                else
+                {
+                    _animator = eventController.animator;
+                }
                 
                 ReflectionUtility.SetEventsForContainer(eventController, _eventContainer);
             }
 
             _animationSamplePlayer = new AnimationSamplePlayer(_animator, _controller);
+            return true;
         }
 
 
 
         public override void OnInspectorGUI()
         {
-            if (_controller is null)
-            {
-                this.InitializeAnimator();
-            }
-            
             using (new EditorGUI.DisabledScope(Application.isPlaying))
             {
                 if (this.Validate(_stateEventBehaviour, out string errorMessage))
@@ -122,7 +116,7 @@ namespace AnimatorExtension.Editor
             _isPreviewing = false;
             _previewNormalizedTime = 0;
 
-            if (_animator is not null)
+            if (_animator is not null && _controller is not null)
             {
                 _animationSamplePlayer?.TryDestroyPlayableGraph();
 
@@ -137,14 +131,20 @@ namespace AnimatorExtension.Editor
         {
             if (_controller is null)
             {
-                errorMessage = "Unable to find AnimatorController.";
-                return false;
+                if (this.TryInitializeAnimator() == false)
+                {
+                    errorMessage = "Unable to find AnimatorController.";
+                    return false;
+                }
             }
-
-            if (_animationEventList == null)
+            
+            if (_animationEventList is null)
             {
-                errorMessage = "animation event list is null.";
-                return false;
+                if (this.TryCreateEventList() == false)
+                {
+                    errorMessage = "animation event list is null.";
+                    return false;
+                }
             }
 
             if (AnimationUtility.TryGetChildAnimatorState(_controller, behaviour, out var matchingState))

@@ -28,6 +28,7 @@ namespace AnimatorExtension.Editor
             if (_playableGraph.IsValid())
             {
                 _playableGraph.Destroy();
+                _previewMixer.Destroy();
             }
         }
         

@@ -13,7 +13,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: -1241942381204629156}
   m_StateMachineBehaviours:
-  - {fileID: -5225080787290992052}
+  - {fileID: 8325343260932454198}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 1
   m_WriteDefaultValues: 1
@@ -40,7 +40,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 398ac83512c69bb4ba6122f7792aa538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-6868126379504657884
+--- !u!114 &-7000963464869230367
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -52,10 +52,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18af2ec660677944c852056699f54797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationEventList: []
+  animationEventList:
+  - eventName: Log
+    eventHash: 1502599712
+    triggerTime: 0
+    hasTriggered: 0
+    parameter:
+      parameterType: 0
+      intValue: 0
+      boolValue: 0
+      stringValue: 
+      floatValue: 0
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      vector2Value: {x: 0, y: 0}
+      vector3Value: {x: 0, y: 0, z: 0}
+      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
+      gameobjectValue: {fileID: 0}
+      curveValue:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      objectValue: {fileID: 0}
+      animationInfoValue:
+        layerIndex: 0
+        nodeName: 
+        nodeTag: 
+      customValue:
+        rid: 4099046734890532865
+    dispatchType: 7
+    rangeTriggerTime:
+      min: 0.468
+      max: 0.709
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 4099046734890532865
+      type: {class: CustomAnimEventParamExample1, ns: AnimatorExtension.Sample, asm: AnimatorExtension}
+      data:
+        a: 
+        b: 0
+        c: 0
+        d: 0
 --- !u!1107 &-5602963042399094863
 AnimatorStateMachine:
   serializedVersion: 6
@@ -134,120 +173,6 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
---- !u!114 &-5225080787290992052
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18af2ec660677944c852056699f54797, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animationEventList:
-  - eventName: Get Quaternion
-    eventHash: -580251994
-    triggerTime: 0
-    hasTriggered: 0
-    parameter:
-      parameterType: 10
-      intValue: 0
-      boolValue: 0
-      stringValue: 
-      floatValue: 0
-      colorValue: {r: 0, g: 0, b: 0, a: 0}
-      vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 0, z: 0}
-      quaternionValue: {x: 4, y: 3, z: 2, w: 1}
-      gameobjectValue: {fileID: 0}
-      curveValue:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      objectValue: {fileID: 0}
-      animationInfoValue:
-        layerIndex: 0
-        nodeName: 
-        nodeTag: 
-      customValue:
-        rid: -2
-    dispatchType: 7
-    rangeTriggerTime:
-      min: 0.2
-      max: 0.8
-  - eventName: get layerMask
-    eventHash: -531344931
-    triggerTime: 0
-    hasTriggered: 0
-    parameter:
-      parameterType: 6
-      intValue: 1
-      boolValue: 0
-      stringValue: 
-      floatValue: 0
-      colorValue: {r: 0, g: 0, b: 0, a: 0}
-      vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 0, z: 0}
-      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
-      gameobjectValue: {fileID: 0}
-      curveValue:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      objectValue: {fileID: 0}
-      animationInfoValue:
-        layerIndex: 0
-        nodeName: 
-        nodeTag: 
-      customValue:
-        rid: -2
-    dispatchType: 0
-    rangeTriggerTime:
-      min: 0
-      max: 0
-  - eventName: None
-    eventHash: 0
-    triggerTime: 0.583
-    hasTriggered: 0
-    parameter:
-      parameterType: 0
-      intValue: 0
-      boolValue: 0
-      stringValue: 
-      floatValue: 0
-      colorValue: {r: 0, g: 0, b: 0, a: 0}
-      vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 0, z: 0}
-      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
-      gameobjectValue: {fileID: 0}
-      curveValue:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      objectValue: {fileID: 0}
-      animationInfoValue:
-        layerIndex: 0
-        nodeName: 
-        nodeTag: 
-      customValue:
-        rid: -2
-    dispatchType: 6
-    rangeTriggerTime:
-      min: 0
-      max: 0
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
 --- !u!1101 &-4639224020698590961
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -695,7 +620,7 @@ AnimatorState:
   - {fileID: -4639224020698590961}
   - {fileID: 8635457214972911529}
   m_StateMachineBehaviours:
-  - {fileID: -6868126379504657884}
+  - {fileID: -7000963464869230367}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 1
   m_WriteDefaultValues: 1
@@ -760,6 +685,56 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &8325343260932454198
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18af2ec660677944c852056699f54797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationEventList:
+  - eventName: None
+    eventHash: 0
+    triggerTime: 0.601
+    hasTriggered: 0
+    parameter:
+      parameterType: 0
+      intValue: 0
+      boolValue: 0
+      stringValue: 
+      floatValue: 0
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      vector2Value: {x: 0, y: 0}
+      vector3Value: {x: 0, y: 0, z: 0}
+      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
+      gameobjectValue: {fileID: 0}
+      curveValue:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      objectValue: {fileID: 0}
+      animationInfoValue:
+        layerIndex: 0
+        nodeName: 
+        nodeTag: 
+      customValue:
+        rid: -2
+    dispatchType: 6
+    rangeTriggerTime:
+      min: 0
+      max: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!206 &8571049798372811705
 BlendTree:
   m_ObjectHideFlags: 1

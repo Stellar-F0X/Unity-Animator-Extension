@@ -1268,6 +1268,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 5615815007780928290, guid: 7ae956b4f54394e80818898d8f4d30c6, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 40db3173a05ae3242b1c182a09b0a183, type: 2}
     - target: {fileID: 5884608921304284710, guid: 7ae956b4f54394e80818898d8f4d30c6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.04050668
@@ -1797,7 +1801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ef8a8ce2b776804f960cdd37e69b822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log0Message: log 0
+  log0Message: print log message
 --- !u!114 &1703981318
 MonoBehaviour:
   m_ObjectHideFlags: 0

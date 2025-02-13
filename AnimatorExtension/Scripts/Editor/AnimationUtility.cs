@@ -17,7 +17,7 @@ namespace AnimatorExtension.Editor
 
         private readonly static Type _animatorWindowType = Type.GetType("UnityEditor.Graphs.AnimatorControllerTool, UnityEditor.Graphs");
 
-        public static AnimatorController GetAnimatorController()
+        public static AnimatorController GetAnimatorControllerOrNull()
         {
             EditorWindow window = EditorWindow.GetWindow(_animatorWindowType);
 
