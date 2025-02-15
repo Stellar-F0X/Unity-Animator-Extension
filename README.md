@@ -106,7 +106,7 @@ public enum EEventDispatchType
     Range
 };
 ```
-> [EEventDispatchType.cs]()
+> [EEventDispatchType.cs](https://github.com/Stellar-F0X/Unity-Animator-Extension/blob/main/AnimatorExtension/Scripts/Parameters/EEventDispatchType.cs)
 
 <br>
 
@@ -139,7 +139,7 @@ public class EventExample : MonoBehaviour
 }
 ```
 
-> [AnimationEvent.cs](https://github.com/Stellar-F0X/Unity-Animator-Extension/blob/main/AnimatorExtension/Scripts/Parameters/EEventDispatchType.cs)
+> [AnimationEvent.cs](https://github.com/Stellar-F0X/Unity-Animator-Extension/blob/main/AnimatorExtension/Sample/Scripts/EventLogger.cs)
 
 
 <br>
@@ -148,6 +148,8 @@ public class EventExample : MonoBehaviour
 
 Unity Animation Extension에서 제공하는 구조체로 해당 이벤트를 송신한 애니메이션 노드의 레이어 인덱스와 노드의 이름, 노드의 태그 등의 각종 정보를 전달합니다.
 
+![Image](https://github.com/user-attachments/assets/ebe0dc1f-5bd7-4dae-87ec-e4952b71b686)
+
 ```C#
 [Serializable]
 public struct AnimationInfo
@@ -155,14 +157,13 @@ public struct AnimationInfo
     public int layerIndex;
     public string nodeName;
     public string nodeTag;
+    public bool isTransitioning;
     
     public AnimatorStateInfo stateInfo;
-    public AnimatorTransitionInfo transitionInfo;
-    public AnimatorClipInfo[] clipInfos;
 }
 ```
 
-> [AnimationInfo.cs]()
+> [AnimationInfo.cs](https://github.com/Stellar-F0X/Unity-Animator-Extension/blob/main/AnimatorExtension/Scripts/AnimationInfo.cs)
 
 <br>
 
@@ -176,15 +177,12 @@ public struct AnimationInfo
 public abstract class CustomAnimationEventParameter
 {
     public int layerIndex { get; set; }
-
-    public AnimatorClipInfo[] clipInfo { get; set; }
-
+    
     public AnimatorStateInfo stateInfo { get; set; }
     
-    //이벤트가 발동되기 직전에 호출되는 이벤트 메서드
+    
     public virtual void OnBeforeEventTrigger() { }
 
-    //이벤트가 발동된 직후 호출되는 이벤트 메서드
     public virtual void OnAfterEventTrigger() { }
 }
 ```
