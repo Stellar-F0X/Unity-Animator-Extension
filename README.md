@@ -1,20 +1,13 @@
 # Unity Animator Extension
 
+![Image](https://github.com/user-attachments/assets/9aa62618-5454-4934-9219-1d2d6e426f19)
+
 Unity의 Animator에서 사용되는 `StateBehaviourMachine`를를 통해 이벤트를 제어하는 에셋입니다.
 
 스크립트에서 `AnimationEventAttribute`가 지정된 함수를 대상으로 애니메이터 뷰에서 이벤트를 등록할 수 있습니다.
 
 기본 데이터 타입부터 커스텀 데이터 타입까지 직접 이벤트로 전송이 가능합니다.
 
-- [사용방법]()
-    + [1]()
-    + [2]()
-    + [3]()
-    + [4]()
-- [AnimationEventController]()
-    + [1]()
-    + [2]()
-- [시스템 작동 시퀸스]()
 
 <br>
 
@@ -176,6 +169,7 @@ public struct AnimationInfo
 ## 커스텀 매개변수 타입
 `CustomAnimationEventParameter` 클래스를 상속시켜 만들 수 있습니다.
 
+![Image](https://github.com/user-attachments/assets/733e4d76-dea6-47c1-a8ee-045121e14a1f)
 
 ```C#
 [Serializable]
@@ -220,7 +214,7 @@ public class CustomAnimEventParamExample : CustomAnimationEventParameter
 ```C#
 public class EventExample : MonoBehaviour
 {
-    [AnimationEvent("Get Custom", EAnimationEventParameter.Customization, typeof(CustomAnimEventParamExample))]
+    [AnimationEvent("Get Custom2", EAnimationEventParameter.Customization, typeof(CustomAnimEventParamExample))]
     public void GetCustom(CustomAnimationEventParameter param)
     {
         CustomAnimEventParamExample p = (CustomAnimEventParamExample)param; 
@@ -241,7 +235,7 @@ public class EventExample : MonoBehaviour
 
 ### 에디터
 
-런타임에 등록된 애니메이션 이벤트 리스트를 인스펙터상에서 뷰로 제공합니다.
+등록된 모든 애니메이션 이벤트 리스트를 인스펙터상에서 뷰로 제공합니다.
 
 특정 이벤트를 디버그를 활성화 및 비활성화할 수 있습니다.
 
@@ -255,29 +249,5 @@ public void SetActiveEvent(string eventName, bool active) { ... }
 
 public void SetActiveEvent(int eventNameHash, bool active) { ... }
 ```
-<br>
-
-
-체이닝 방식으로 애니메이션 시퀸스를 등록할 수 있습니다. (미구현)
-```C#
-```
 
 <br>
-
-# 시스템 작동 시퀸스
-
-```mermaid
-sequenceDiagram
-box Purple Alice & John
-participant A
-participant J
-end
-box Another Group
-participant B
-participant C
-end
-A->>J: Hello John, how are you?
-J->>A: Great!
-A->>B: Hello Bob, how is Charley?
-B->>C: Hello Charley, how are you?
-```
