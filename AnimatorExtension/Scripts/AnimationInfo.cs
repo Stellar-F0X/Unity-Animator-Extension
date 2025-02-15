@@ -9,9 +9,8 @@ namespace AnimatorExtension.Parameters
         public int layerIndex;
         public string nodeName;
         public string nodeTag;
+        public bool isTransitioning;
         
         public AnimatorStateInfo stateInfo;
-        public AnimatorTransitionInfo transitionInfo;
-        public AnimatorClipInfo[] clipInfos;
     }
 }

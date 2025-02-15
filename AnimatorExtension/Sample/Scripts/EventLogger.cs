@@ -64,7 +64,7 @@ namespace AnimatorExtension.Sample
         [AnimationEvent("get Animator Info", EAnimationEventParameter.AnimatorInfo)]
         public void GetAnimatorInformation(AnimationInfo a)
         {
-            Debug.Log($"Name : {a.nodeName}    Tag : {a.nodeTag}    LayerIndex : {a.layerIndex}");
+            Debug.Log($"Name : {a.nodeName}    Tag : {a.nodeTag}    LayerIndex : {a.layerIndex} IsTransitioning : {a.isTransitioning}");
         }
         
         
