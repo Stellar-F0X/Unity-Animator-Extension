@@ -33,7 +33,7 @@ namespace AnimatorExtension
 
         
 
-        private void Awake()
+        public void RegisterEvents()
         {
             ReflectionUtility.FindAttributeAction<AnimationEventAttribute>(this, (attribute, method, mono) =>
             {
