@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Reflection;
-using AnimatorExtension.Parameters;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
+using System.Reflection;
+using System.Collections.Generic;
+using AnimatorExtension.Parameters;
 
 namespace AnimatorExtension
 {
@@ -12,7 +10,47 @@ namespace AnimatorExtension
     [RequireComponent(typeof(Animator))]
     public sealed class AnimationEventController : MonoBehaviour
     {
+        #region Parameter Types
+
+        private static readonly Type _voidType = typeof(Action);
+        
+        private static readonly Type _intType = typeof(Action<int>);
+        
+        private static readonly Type _floatType = typeof(Action<float>);
+        
+        private static readonly Type _boolType = typeof(Action<bool>);
+        
+        private static readonly Type _stringType = typeof(Action<string>);
+        
+        private static readonly Type _colorType = typeof(Action<Color>);
+        
+        private static readonly Type _layerMaskType = typeof(Action<LayerMask>);
+        
+        private static readonly Type _vector2Type = typeof(Action<Vector2>);
+        
+        private static readonly Type _vector3Type = typeof(Action<Vector3>);
+        
+        private static readonly Type _quaternionType = typeof(Action<Quaternion>);
+        
+        private static readonly Type _gameObjectType = typeof(Action<GameObject>);
+        
+        private static readonly Type _objectType = typeof(Action<UnityEngine.Object>);
+        
+        private static readonly Type _animationCurveType = typeof(Action<AnimationCurve>);
+        
+        private static readonly Type _animationInfoType = typeof(Action<Parameters.AnimationInfo>);
+        
+        private static readonly Type _customizationType = typeof(Action<CustomAnimationEventParameter>);
+
+        private static readonly Type _searchAttributeType = typeof(AnimationEventAttribute);
+        
+        #endregion
+        
+        
+        private const BindingFlags _EVENT_BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        
         private readonly Dictionary<int, AnimationEventCallback> _eventList = new Dictionary<int, AnimationEventCallback>();
+        
         
         public bool debug = false;
 
@@ -35,7 +73,7 @@ namespace AnimatorExtension
 
         private void Awake()
         {
-            ReflectionUtility.FindAttributeAction<AnimationEventAttribute>(this, (attribute, method, mono) =>
+            this.FindAttributeAction<AnimationEventAttribute>(this, (attribute, method, mono) =>
             {
                 int eventHash = attribute.eventName.StringToHash();
 
@@ -115,6 +153,26 @@ namespace AnimatorExtension
                 }
             }
         }
+        
+        
+        
+        private void FindAttributeAction<T>(AnimationEventController controller, Action<T, MethodInfo, MonoBehaviour> action) where T : Attribute
+        {
+            MonoBehaviour[] components = controller.GetComponentsInChildren<MonoBehaviour>(true);
+            
+            foreach (var mono in components)
+            {
+                Type currentMonoType = mono.GetType();
+
+                foreach (var method in currentMonoType.GetMethods(_EVENT_BINDING_FLAGS))
+                {
+                    if (method.GetCustomAttribute(_searchAttributeType) is T attribute)
+                    {
+                        action.Invoke(attribute, method, mono);
+                    }
+                }
+            }
+        }
 
 
 
@@ -122,37 +180,37 @@ namespace AnimatorExtension
         {
             return attribute.eventParameter switch
             {
-                EAnimationEventParameter.Void => method.CreateDelegate(ReflectionUtility.VoidType, mono),
+                EAnimationEventParameter.Void => method.CreateDelegate(_voidType, mono),
 
-                EAnimationEventParameter.Int => method.CreateDelegate(ReflectionUtility.IntType, mono),
+                EAnimationEventParameter.Int => method.CreateDelegate(_intType, mono),
 
-                EAnimationEventParameter.Float => method.CreateDelegate(ReflectionUtility.FloatType, mono),
+                EAnimationEventParameter.Float => method.CreateDelegate(_floatType, mono),
 
-                EAnimationEventParameter.Bool => method.CreateDelegate(ReflectionUtility.BoolType, mono),
+                EAnimationEventParameter.Bool => method.CreateDelegate(_boolType, mono),
 
-                EAnimationEventParameter.Tag => method.CreateDelegate(ReflectionUtility.StringType, mono),
+                EAnimationEventParameter.Tag => method.CreateDelegate(_stringType, mono),
 
-                EAnimationEventParameter.String => method.CreateDelegate(ReflectionUtility.StringType, mono),
+                EAnimationEventParameter.String => method.CreateDelegate(_stringType, mono),
 
-                EAnimationEventParameter.Color => method.CreateDelegate(ReflectionUtility.ColorType, mono),
+                EAnimationEventParameter.Color => method.CreateDelegate(_colorType, mono),
 
-                EAnimationEventParameter.LayerMask => method.CreateDelegate(ReflectionUtility.LayerMaskType, mono),
+                EAnimationEventParameter.LayerMask => method.CreateDelegate(_layerMaskType, mono),
 
-                EAnimationEventParameter.Vector2 => method.CreateDelegate(ReflectionUtility.Vector2Type, mono),
+                EAnimationEventParameter.Vector2 => method.CreateDelegate(_vector2Type, mono),
 
-                EAnimationEventParameter.Vector3 => method.CreateDelegate(ReflectionUtility.Vector3Type, mono),
+                EAnimationEventParameter.Vector3 => method.CreateDelegate(_vector3Type, mono),
 
-                EAnimationEventParameter.Quaternion => method.CreateDelegate(ReflectionUtility.QuaternionType, mono),
+                EAnimationEventParameter.Quaternion => method.CreateDelegate(_quaternionType, mono),
 
-                EAnimationEventParameter.GameObject => method.CreateDelegate(ReflectionUtility.GameObjectType, mono),
+                EAnimationEventParameter.GameObject => method.CreateDelegate(_gameObjectType, mono),
 
-                EAnimationEventParameter.Object => method.CreateDelegate(ReflectionUtility.ObjectType, mono),
+                EAnimationEventParameter.Object => method.CreateDelegate(_objectType, mono),
 
-                EAnimationEventParameter.AnimationCurve => method.CreateDelegate(ReflectionUtility.AnimationCurveType, mono),
+                EAnimationEventParameter.AnimationCurve => method.CreateDelegate(_animationCurveType, mono),
 
-                EAnimationEventParameter.Customization => method.CreateDelegate(ReflectionUtility.CustomizationType, mono),
+                EAnimationEventParameter.Customization => method.CreateDelegate(_customizationType, mono),
 
-                EAnimationEventParameter.AnimatorInfo => method.CreateDelegate(ReflectionUtility.AnimationInfoType, mono)
+                EAnimationEventParameter.AnimatorInfo => method.CreateDelegate(_animationInfoType, mono)
             };
         }
     }

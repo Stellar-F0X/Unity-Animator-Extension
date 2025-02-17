@@ -1,14 +1,21 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using AnimatorExtension.Parameters;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Animations;
 
 namespace AnimatorExtension.AnimatorEditor
 {
-    public static class AnimationUtility
+    internal static class AnimationUtility
     {
+        private const BindingFlags _EVENT_BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
+        private readonly static Type _SEARCH_ATTRIBUTE_TYPE = typeof(AnimationEventAttribute);
+        
+        
+        
         #region Reference By https: //github.com/forestrf/UnityAnimatorEvents/blob/master/Assets/StateMachineBehaviours/Editor/ScrubAnimatorUtil.cs#L15
 
         public const BindingFlags ANIMATOR_BINDING_FLAGS = BindingFlags.NonPublic | BindingFlags.Instance;
@@ -191,6 +198,30 @@ namespace AnimatorExtension.AnimatorEditor
             else
             {
                 return true;
+            }
+        }
+        
+        
+        public static void SetAnimationEventsInContainer(AnimationEventController controller, AnimationEventContainer container)
+        {
+            container.Clear();
+
+            if (controller.GetComponentsInChildren<MonoBehaviour>(true) is MonoBehaviour[] components)
+            {
+                foreach (var mono in components)
+                {
+                    Type currentMonoType = mono.GetType();
+
+                    foreach (var method in currentMonoType.GetMethods(_EVENT_BINDING_FLAGS))
+                    {
+                        if (method.GetCustomAttribute(_SEARCH_ATTRIBUTE_TYPE) is AnimationEventAttribute attribute)
+                        {
+                            container.AddInfo(attribute);
+                        }
+                    }
+                }
+
+                container.Build();
             }
         }
     }
