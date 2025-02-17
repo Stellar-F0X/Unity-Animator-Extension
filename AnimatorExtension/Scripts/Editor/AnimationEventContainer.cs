@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using AnimatorExtension.Parameters;
 
-namespace AnimatorExtension.Parameters
+namespace AnimatorExtension.AnimatorEditor
 {
-    internal class EventInfoContainer
+    internal class AnimationEventContainer
     {
         private List<Type> _customParams = new List<Type>();
         private List<int> _eventNameHashes = new List<int>();

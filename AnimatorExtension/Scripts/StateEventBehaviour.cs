@@ -5,7 +5,7 @@ using AnimatorExtension.Parameters;
 
 namespace AnimatorExtension
 {
-    internal class StateEventBehaviour : StateMachineBehaviour
+    public class StateEventBehaviour : StateMachineBehaviour
     {
         public List<AnimationEvent> animationEventList = new List<AnimationEvent>();
 

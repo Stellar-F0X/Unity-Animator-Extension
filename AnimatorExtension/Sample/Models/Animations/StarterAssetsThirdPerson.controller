@@ -53,88 +53,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationEventList:
-  - eventName: get position
-    eventHash: -594658637
-    triggerTime: 0
-    hasTriggered: 0
-    parameter:
-      parameterType: 9
-      intValue: 0
-      boolValue: 0
-      stringValue: 
-      floatValue: 0
-      colorValue: {r: 0, g: 0, b: 0, a: 0}
-      vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 0, z: 0}
-      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
-      gameobjectValue: {fileID: 0}
-      curveValue:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      objectValue: {fileID: 0}
-      animationInfoValue:
-        layerIndex: 0
-        nodeName: 
-        nodeTag: 
-      customValue:
-        rid: -2
-    dispatchType: 0
-    rangeTriggerTime:
-      min: 0
-      max: 0
-  - eventName: get Animation Curve
-    eventHash: 1033834291
-    triggerTime: 0
-    hasTriggered: 0
-    parameter:
-      parameterType: 14
-      intValue: 0
-      boolValue: 0
-      stringValue: 
-      floatValue: 0
-      colorValue: {r: 0, g: 0, b: 0, a: 0}
-      vector2Value: {x: 0, y: 0}
-      vector3Value: {x: 0, y: 0, z: 0}
-      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
-      gameobjectValue: {fileID: 0}
-      curveValue:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 1
-          outSlope: 1
-          tangentMode: 34
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 1
-          outSlope: 1
-          tangentMode: 34
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      objectValue: {fileID: 0}
-      animationInfoValue:
-        layerIndex: 0
-        nodeName: 
-        nodeTag: 
-      customValue:
-        rid: -2
-    dispatchType: 0
-    rangeTriggerTime:
-      min: 0
-      max: 0
   - eventName: get Animator Info
     eventHash: -877164093
     triggerTime: 0
@@ -161,17 +79,91 @@ MonoBehaviour:
         layerIndex: 0
         nodeName: 
         nodeTag: 
+        isTransitioning: 0
       customValue:
         rid: -2
-    dispatchType: 0
+    dispatchType: 1
     rangeTriggerTime:
       min: 0
       max: 0
+  - eventName: Print Message
+    eventHash: 382306106
+    triggerTime: 0.161
+    hasTriggered: 0
+    parameter:
+      parameterType: 4
+      intValue: 0
+      boolValue: 0
+      stringValue: sssss
+      floatValue: 0
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      vector2Value: {x: 0, y: 0}
+      vector3Value: {x: 0, y: 0, z: 0}
+      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
+      gameobjectValue: {fileID: 0}
+      curveValue:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      objectValue: {fileID: 0}
+      animationInfoValue:
+        layerIndex: 0
+        nodeName: 
+        nodeTag: 
+        isTransitioning: 0
+      customValue:
+        rid: -2
+    dispatchType: 6
+    rangeTriggerTime:
+      min: 0
+      max: 0
+  - eventName: get Custom1
+    eventHash: -1684332780
+    triggerTime: 0
+    hasTriggered: 0
+    parameter:
+      parameterType: 15
+      intValue: 0
+      boolValue: 0
+      stringValue: 
+      floatValue: 0
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      vector2Value: {x: 0, y: 0}
+      vector3Value: {x: 0, y: 0, z: 0}
+      quaternionValue: {x: 0, y: 0, z: 0, w: 0}
+      gameobjectValue: {fileID: 0}
+      curveValue:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      objectValue: {fileID: 0}
+      animationInfoValue:
+        layerIndex: 0
+        nodeName: 
+        nodeTag: 
+        isTransitioning: 0
+      customValue:
+        rid: 4099046819862937601
+    dispatchType: 7
+    rangeTriggerTime:
+      min: 0.366
+      max: 0.535
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 4099046819862937601
+      type: {class: CustomAnimEventParamExample1, ns: AnimatorExtension.Sample, asm: AnimatorExtension}
+      data:
+        a: sds
+        b: 23
+        c: 0.478
+        d: 1
 --- !u!1107 &-5602963042399094863
 AnimatorStateMachine:
   serializedVersion: 6

@@ -1,11 +1,11 @@
 using System.Linq;
 using UnityEditor;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
+using UnityEditor.Animations;
 
-namespace AnimatorExtension.Editor
+namespace AnimatorExtension.AnimatorEditor
 {
     internal class AnimationSamplePlayer
     {

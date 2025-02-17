@@ -6,10 +6,8 @@ using UnityEngine;
 using UnityEditorInternal;
 using AnimatorController = UnityEditor.Animations.AnimatorController;
 
-namespace AnimatorExtension.Editor
+namespace AnimatorExtension.AnimatorEditor
 {
-    using Editor = UnityEditor.Editor;
-
     [CustomEditor(typeof(StateEventBehaviour))]
     internal class StateEventBehaviourEditor : Editor
     {
@@ -23,7 +21,7 @@ namespace AnimatorExtension.Editor
         private StateEventBehaviour _stateEventBehaviour;
         private AnimationSamplePlayer _animationSamplePlayer;
 
-        private EventInfoContainer _eventContainer = new EventInfoContainer();
+        private AnimationEventContainer _animationEventContainer = new AnimationEventContainer();
         private AnimationEventDrawer _animationEventDrawer = new AnimationEventDrawer();
 
         private readonly Type _customEventParameterType = typeof(CustomAnimationEventParameter);
@@ -78,7 +76,7 @@ namespace AnimatorExtension.Editor
                     _animator = eventController.animator;
                 }
                 
-                ReflectionUtility.SetEventsForContainer(eventController, _eventContainer);
+                AnimationUtility.SetAnimationEventsInContainer(eventController, _animationEventContainer);
             }
 
             _animationSamplePlayer = new AnimationSamplePlayer(_animator, _controller);
@@ -190,9 +188,9 @@ namespace AnimatorExtension.Editor
             {
                 AnimationEvent animationEvent = new AnimationEvent
                 {
-                    eventName = _eventContainer.eventNames[0],
+                    eventName = _animationEventContainer.eventNames[0],
                     triggerTime = _previewNormalizedTime,
-                    eventHash = _eventContainer.eventNameHashes[0],
+                    eventHash = _animationEventContainer.eventNameHashes[0],
                     rangeTriggerTime = new MinMax(_previewNormalizedTime, _previewNormalizedTime)
                 };
 
@@ -239,16 +237,16 @@ namespace AnimatorExtension.Editor
             }
 
             position.y += 5;
-            int pickedEvent = _animationEventDrawer.DrawStringHashField(position, property, _eventContainer.eventNames, _eventContainer.eventNameHashes);
+            int pickedEvent = _animationEventDrawer.DrawStringHashField(position, property, _animationEventContainer.eventNames, _animationEventContainer.eventNameHashes);
             position.y += EditorGUIUtility.singleLineHeight + 5;
             _animationEventDrawer.DrawDropdownSliderField(position, property, index);
             position.y += EditorGUIUtility.singleLineHeight + 5;
 
-            if (pickedEvent >= 0 && pickedEvent < _eventContainer.count)
+            if (pickedEvent >= 0 && pickedEvent < _animationEventContainer.count)
             {
-                if (_eventContainer.paramTypes[pickedEvent] == EAnimationEventParameter.Customization)
+                if (_animationEventContainer.paramTypes[pickedEvent] == EAnimationEventParameter.Customization)
                 {
-                    Type castingTargetType = _eventContainer.customParamTypes[pickedEvent];
+                    Type castingTargetType = _animationEventContainer.customParamTypes[pickedEvent];
 
                     if (_customEventParameterType.IsAssignableFrom(castingTargetType) == false)
                     {
@@ -265,7 +263,7 @@ namespace AnimatorExtension.Editor
                     }
                 }
 
-                _animationEventDrawer.DrawParameterField(position, property, _eventContainer.paramTypes[pickedEvent]);
+                _animationEventDrawer.DrawParameterField(position, property, _animationEventContainer.paramTypes[pickedEvent]);
             }
         }
 
@@ -277,7 +275,7 @@ namespace AnimatorExtension.Editor
             SerializedProperty eventHashProp = property.FindPropertyRelative("eventHash");
             SerializedProperty parameter = property.FindPropertyRelative("parameter");
 
-            Type castingTargetType = _eventContainer.FindTypeByHash(eventHashProp.intValue);
+            Type castingTargetType = _animationEventContainer.FindTypeByHash(eventHashProp.intValue);
 
             if (castingTargetType is not null && _customEventParameterType.IsAssignableFrom(castingTargetType) == false)
             {
