@@ -6,10 +6,8 @@ using UnityEngine;
 using UnityEditorInternal;
 using AnimatorController = UnityEditor.Animations.AnimatorController;
 
-namespace AnimatorExtension.Editor
+namespace AnimatorExtension.AnimatorEditor
 {
-    using Editor = UnityEditor.Editor;
-
     [CustomEditor(typeof(StateEventBehaviour))]
     internal class StateEventBehaviourEditor : Editor
     {

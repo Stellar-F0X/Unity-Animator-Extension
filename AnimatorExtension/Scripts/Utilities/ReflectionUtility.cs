@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace AnimatorExtension
 {
-    internal class ReflectionUtility
+    public class ReflectionUtility
     {
         public static readonly Type VoidType = typeof(Action);
         

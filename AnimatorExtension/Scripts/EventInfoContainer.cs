@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AnimatorExtension.Parameters
 {
-    internal class EventInfoContainer
+    public class EventInfoContainer
     {
         private List<Type> _customParams = new List<Type>();
         private List<int> _eventNameHashes = new List<int>();

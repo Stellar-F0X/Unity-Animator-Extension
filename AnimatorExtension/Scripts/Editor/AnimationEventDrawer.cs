@@ -5,7 +5,7 @@ using UnityEditorInternal;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace AnimatorExtension.Editor
+namespace AnimatorExtension.AnimatorEditor
 {
     internal class AnimationEventDrawer
     {

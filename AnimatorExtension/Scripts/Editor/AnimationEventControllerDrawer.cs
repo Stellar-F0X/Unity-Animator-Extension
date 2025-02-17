@@ -2,9 +2,8 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace AnimatorExtension.Editor
+namespace AnimatorExtension.AnimatorEditor
 {
-    using Editor = UnityEditor.Editor;
 
     [CustomEditor(typeof(AnimationEventController))]
     public class AnimationEventControllerDrawer : Editor

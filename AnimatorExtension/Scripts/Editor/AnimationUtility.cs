@@ -4,10 +4,8 @@ using System.Reflection;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Animations;
-using UnityEditor.Graphs;
-using Object = UnityEngine.Object;
 
-namespace AnimatorExtension.Editor
+namespace AnimatorExtension.AnimatorEditor
 {
     public static class AnimationUtility
     {

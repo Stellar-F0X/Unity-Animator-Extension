@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using AnimatorExtension.Parameters;
 using UnityEngine;
 using AnimationInfo = AnimatorExtension.Parameters.AnimationInfo;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace AnimatorExtension.Sample
@@ -10,6 +13,8 @@ namespace AnimatorExtension.Sample
         private Animator animator;
 
         public string log0Message;
+        
+        public Text logText;
         
 
         [AnimationEvent("Log")]
@@ -22,7 +27,7 @@ namespace AnimatorExtension.Sample
         [AnimationEvent("Print Message", EAnimationEventParameter.String)]
         public void LogIntMessage(string a)
         {
-            Debug.Log(a);
+            logText.text = a;
         }
 
 
