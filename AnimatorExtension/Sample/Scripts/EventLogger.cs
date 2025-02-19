@@ -14,8 +14,6 @@ namespace AnimatorExtension.Sample
 
         public string log0Message;
         
-        public Text logText;
-        
 
         [AnimationEvent("Log")]
         public void Print()
@@ -27,7 +25,7 @@ namespace AnimatorExtension.Sample
         [AnimationEvent("Print Message", EAnimationEventParameter.String)]
         public void LogIntMessage(string a)
         {
-            logText.text = a;
+            Debug.Log(a);
         }
 
 

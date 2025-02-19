@@ -16,7 +16,12 @@ namespace AnimatorExtension.Sample
 
         public override void OnBeforeEventTrigger()
         {
-            Debug.Log($"{a} {b} {c} {d}");
+            Debug.Log($"[before event] {a} {b} {c} {d}");
+        }
+
+        public override void OnAfterEventTrigger()
+        {
+            Debug.Log($"[after event] {a} {b} {c} {d}");
         }
     }
 }

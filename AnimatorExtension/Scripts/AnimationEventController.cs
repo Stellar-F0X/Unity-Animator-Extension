@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Reflection;
 using System.Collections.Generic;
 using AnimatorExtension.Parameters;
+using UnityEngine.Profiling;
 
 namespace AnimatorExtension
 {
@@ -13,52 +14,52 @@ namespace AnimatorExtension
         #region Parameter Types
 
         private static readonly Type _voidType = typeof(Action);
-        
+
         private static readonly Type _intType = typeof(Action<int>);
-        
+
         private static readonly Type _floatType = typeof(Action<float>);
-        
+
         private static readonly Type _boolType = typeof(Action<bool>);
-        
+
         private static readonly Type _stringType = typeof(Action<string>);
-        
+
         private static readonly Type _colorType = typeof(Action<Color>);
-        
+
         private static readonly Type _layerMaskType = typeof(Action<LayerMask>);
-        
+
         private static readonly Type _vector2Type = typeof(Action<Vector2>);
-        
+
         private static readonly Type _vector3Type = typeof(Action<Vector3>);
-        
+
         private static readonly Type _quaternionType = typeof(Action<Quaternion>);
-        
+
         private static readonly Type _gameObjectType = typeof(Action<GameObject>);
-        
+
         private static readonly Type _objectType = typeof(Action<UnityEngine.Object>);
-        
+
         private static readonly Type _animationCurveType = typeof(Action<AnimationCurve>);
-        
+
         private static readonly Type _animationInfoType = typeof(Action<Parameters.AnimationInfo>);
-        
+
         private static readonly Type _customizationType = typeof(Action<CustomAnimationEventParameter>);
 
         private static readonly Type _searchAttributeType = typeof(AnimationEventAttribute);
-        
+
         #endregion
-        
-        
+
+
         private const BindingFlags _EVENT_BINDING_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-        
+
         private readonly Dictionary<int, AnimationEventCallback> _eventList = new Dictionary<int, AnimationEventCallback>();
-        
-        
+
+
         public bool debug = false;
 
         private Animator _animator;
 
         private const string _INTRO = "<color=green>[Animation Event Receiver]</color>";
 
-        
+
         public Dictionary<int, AnimationEventCallback>.ValueCollection eventList
         {
             get { return _eventList.Values; }
@@ -69,30 +70,42 @@ namespace AnimatorExtension
             get { return _animator == null ? _animator = GetComponent<Animator>() : _animator; }
         }
 
-        
 
         private void Awake()
         {
-            this.FindAttributeAction<AnimationEventAttribute>(this, (attribute, method, mono) =>
+            MonoBehaviour[] components = this.GetComponentsInChildren<MonoBehaviour>(true);
+
+            foreach (var mono in components)
             {
-                int eventHash = attribute.eventName.StringToHash();
+                Type currentMonoType = mono.GetType();
 
-                Delegate createdCallback = this.CreateDelegate(attribute, method, mono);
-
-                bool succeed = _eventList.TryAdd(eventHash, new AnimationEventCallback(attribute.eventName, createdCallback));
-
-                if (debug)
+                foreach (var method in currentMonoType.GetMethods(_EVENT_BINDING_FLAGS))
                 {
-                    if (succeed)
+                    if (method.GetCustomAttribute(_searchAttributeType) is AnimationEventAttribute attribute)
                     {
-                        Debug.Log($"{_INTRO} Register {attribute.eventName} animation event");
-                    }
-                    else
-                    {
-                        Debug.LogError($"{_INTRO} Failed registry {attribute.eventName} animation event");
+                        int eventHash = attribute.eventName.StringToHash();
+
+                        if (_eventList.ContainsKey(eventHash) == false)
+                        {
+                            Delegate createdCallback = this.CreateDelegate(attribute, method, mono);
+
+                            _eventList.Add(eventHash, new AnimationEventCallback(attribute.eventName, createdCallback));
+
+                            if (debug)
+                            {
+                                Debug.Log($"{_INTRO} Register {attribute.eventName} animation event");
+                            }
+                            
+                            continue;
+                        }
+
+                        if (debug)
+                        {
+                            Debug.Log($"{_INTRO} Failed registry {attribute.eventName} animation event");
+                        }
                     }
                 }
-            });
+            }
         }
 
 
@@ -127,9 +140,9 @@ namespace AnimatorExtension
 
             this.SetActiveEvent(eventHash, active);
         }
-        
-        
-        
+
+
+
         public void SetActiveEvent(int eventHash, bool active)
         {
             bool hasEvent = _eventList.ContainsKey(eventHash);
@@ -144,32 +157,12 @@ namespace AnimatorExtension
                 if (hasEvent)
                 {
                     string eventName = _eventList[eventHash].callbackName;
-                    
+
                     Debug.Log($"{_INTRO} {(active ? "Enable" : "Disable")} {eventName} event");
                 }
                 else
                 {
                     Debug.Log($"{_INTRO} Event does not exist.");
-                }
-            }
-        }
-        
-        
-        
-        private void FindAttributeAction<T>(AnimationEventController controller, Action<T, MethodInfo, MonoBehaviour> action) where T : Attribute
-        {
-            MonoBehaviour[] components = controller.GetComponentsInChildren<MonoBehaviour>(true);
-            
-            foreach (var mono in components)
-            {
-                Type currentMonoType = mono.GetType();
-
-                foreach (var method in currentMonoType.GetMethods(_EVENT_BINDING_FLAGS))
-                {
-                    if (method.GetCustomAttribute(_searchAttributeType) is T attribute)
-                    {
-                        action.Invoke(attribute, method, mono);
-                    }
                 }
             }
         }
